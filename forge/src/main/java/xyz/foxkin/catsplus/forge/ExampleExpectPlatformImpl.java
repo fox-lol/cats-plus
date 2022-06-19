@@ -1,6 +1,6 @@
-package net.examplemod.forge;
+package xyz.foxkin.catsplus.forge;
 
-import net.examplemod.ExampleExpectPlatform;
+import xyz.foxkin.catsplus.ExampleExpectPlatform;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;

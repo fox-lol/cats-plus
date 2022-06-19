@@ -1,4 +1,4 @@
-package net.examplemod;
+package xyz.foxkin.catsplus;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
@@ -13,7 +13,7 @@ public class ExampleExpectPlatform {
      * platform sub-package, with its class suffixed with {@code Impl}.
      * <p>
      * Example:
-     * Expect: net.examplemod.ExampleExpectPlatform#getConfigDirectory()
+     * Expect: xyz.foxkin.catsplus.ExampleExpectPlatform#getConfigDirectory()
      * Actual Fabric: net.examplemod.fabric.ExampleExpectPlatformImpl#getConfigDirectory()
      * Actual Forge: net.examplemod.forge.ExampleExpectPlatformImpl#getConfigDirectory()
      * <p>

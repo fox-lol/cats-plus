@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "xyz.foxkin.catsplus.mixin.fabric",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

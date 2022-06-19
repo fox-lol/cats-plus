@@ -1,6 +1,6 @@
-package net.examplemod.fabric;
+package xyz.foxkin.catsplus.fabric;
 
-import net.examplemod.ExampleExpectPlatform;
+import xyz.foxkin.catsplus.ExampleExpectPlatform;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
