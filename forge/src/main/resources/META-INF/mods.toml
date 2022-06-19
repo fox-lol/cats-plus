@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[41,)"
 issueTrackerURL = "https://github.com/fox-lol/cats-plus/issues"
-license = "Insert License Here"
+license = "GPL-3.0"
 
 [[mods]]
 modId = "cats_plus"
