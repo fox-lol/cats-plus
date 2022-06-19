@@ -1,32 +1,32 @@
 {
-  "schemaVersion": 1,
-  "id": "cats_plus",
-  "version": "${version}",
-  "name": "Cats Plus",
-  "description": "This is an example description! Tell everyone what your mod is about!",
-  "authors": [
-    "Me!"
-  ],
-  "contact": {
-    "homepage": "https://github.com/fox-lol/cats-plus",
-    "sources": "https://github.com/fox-lol/cats-plus",
-    "issues": "https://github.com/fox-lol/cats-plus/issues"
-  },
-  "license": "GPL-3.0",
-  "icon": "assets/catsplus/icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "xyz.foxkin.catsplus.fabric.CatsPlusFabric"
-    ]
-  },
-  "mixins": [
-    "cats-plus-fabric.mixins.json",
-    "cats-plus-common.mixins.json"
-  ],
-  "depends": {
-    "fabric": "*",
-    "minecraft": ">=1.19",
-    "architectury": ">=5.6.22"
-  }
+    "schemaVersion": 1,
+    "id": "cats_plus",
+    "version": "${version}",
+    "name": "Cats Plus",
+    "description": "This is an example description! Tell everyone what your mod is about!",
+    "authors": [
+        "Me!"
+    ],
+    "contact": {
+        "homepage": "https://github.com/fox-lol/cats-plus",
+        "sources": "https://github.com/fox-lol/cats-plus",
+        "issues": "https://github.com/fox-lol/cats-plus/issues"
+    },
+    "license": "GPL-3.0",
+    "icon": "assets/catsplus/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "xyz.foxkin.catsplus.fabric.CatsPlusFabric"
+        ]
+    },
+    "mixins": [
+        "cats-plus-fabric.mixins.json",
+        "cats-plus-common.mixins.json"
+    ],
+    "depends": {
+        "fabric": "*",
+        "minecraft": ">=1.19",
+        "architectury": ">=5.6.22"
+    }
 }
