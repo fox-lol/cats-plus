@@ -28,12 +28,18 @@ jobs:
             - name: Execute Gradle build
               run: ./gradlew build
 
-            - name: Upload build artifacts
+            - name: Upload Fabric build artifacts
               if: ${{ matrix.image == 'ubuntu-latest' && matrix.java == '17' }}
               uses: actions/upload-artifact@v2
               with:
-                  name: Artifacts
+                  name: Fabric Artifacts
                   path: |
-                      common/build/libs/
                       fabric/build/libs/
+
+            - name: Upload Forge build artifacts
+              if: ${{ matrix.image == 'ubuntu-latest' && matrix.java == '17' }}
+              uses: actions/upload-artifact@v2
+              with:
+                  name: Forge Artifacts
+                  path: |
                       forge/build/libs/
