@@ -1,23 +1,32 @@
 package xyz.foxkin.catsplus.commonside;
 
+import dev.architectury.registry.CreativeTabRegistry;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+
 public class CatsPlus {
 
-    public static final String MOD_ID = "cats_plus";
+    public static final String MOD_ID = "catsplus";
 
-    /*
-    // We can use this if we don't want to use DeferredRegister
-    public static final Supplier<Registries> REGISTRIES = Suppliers.memoize(() -> Registries.get(MOD_ID));
     // Registering a new creative tab
-    public static final CreativeModeTab EXAMPLE_TAB = CreativeTabRegistry.create(new ResourceLocation(MOD_ID, "example_tab"), () ->
-            new ItemStack(ExampleMod.EXAMPLE_ITEM.get()));
-    
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
-    public static final RegistrySupplier<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () ->
-            new Item(new Item.Properties().tab(ExampleMod.EXAMPLE_TAB)));
-     */
+    public static final ItemGroup EXAMPLE_TAB = CreativeTabRegistry.create(
+            new Identifier(MOD_ID, "example_tab"),
+            () -> new ItemStack(CatsPlus.EXAMPLE_ITEM.get())
+    );
+
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY);
+    public static final RegistrySupplier<Item> EXAMPLE_ITEM = ITEMS.register(
+            "example_item",
+            () -> new Item(new Item.Settings().group(EXAMPLE_TAB))
+    );
     
     public static void init() {
-        // ITEMS.register();
+        ITEMS.register();
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }

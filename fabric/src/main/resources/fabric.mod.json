@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "id": "cats_plus",
+    "id": "catsplus",
     "version": "${version}",
     "name": "Cats Plus",
     "description": "This is an example description! Tell everyone what your mod is about!",
@@ -21,8 +21,8 @@
         ]
     },
     "mixins": [
-        "cats-plus-fabric.mixins.json",
-        "cats-plus-common.mixins.json"
+        "catsplus-fabric.mixins.json",
+        "catsplus-common.mixins.json"
     ],
     "depends": {
         "fabric": "*",

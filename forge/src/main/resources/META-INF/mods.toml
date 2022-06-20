@@ -4,7 +4,7 @@ issueTrackerURL = "https://github.com/fox-lol/cats-plus/issues"
 license = "GPL-3.0"
 
 [[mods]]
-modId = "cats_plus"
+modId = "catsplus"
 version = "${version}"
 displayName = "Cats Plus"
 authors = "Me!"
@@ -13,21 +13,21 @@ This is an example description! Tell everyone what your mod is about!
 '''
 #logoFile = ""
 
-[[dependencies.cats_plus]]
+[[dependencies.catsplus]]
 modId = "forge"
 mandatory = true
 versionRange = "[41,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.cats_plus]]
+[[dependencies.catsplus]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.19,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.cats_plus]]
+[[dependencies.catsplus]]
 modId = "architectury"
 mandatory = true
 versionRange = "[5.6.22,)"
