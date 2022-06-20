@@ -13,6 +13,9 @@ loom {
     forge {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+
+        mixinConfig "cats-plus-common.mixins.json"
+        mixinConfig "cats-plus-forge.mixins.json"
     }
 }
 

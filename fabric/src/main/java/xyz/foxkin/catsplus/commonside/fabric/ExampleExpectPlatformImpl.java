@@ -1,11 +1,12 @@
-package xyz.foxkin.catsplus.fabric;
+package xyz.foxkin.catsplus.commonside.fabric;
 
-import xyz.foxkin.catsplus.ExampleExpectPlatform;
+import xyz.foxkin.catsplus.commonside.ExampleExpectPlatform;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.nio.file.Path;
 
 public class ExampleExpectPlatformImpl {
+
     /**
      * This is our actual method to {@link ExampleExpectPlatform#getConfigDirectory()}.
      */

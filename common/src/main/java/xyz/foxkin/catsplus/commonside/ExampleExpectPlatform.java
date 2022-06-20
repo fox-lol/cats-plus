@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus;
+package xyz.foxkin.catsplus.commonside;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;
@@ -6,6 +6,7 @@ import dev.architectury.platform.Platform;
 import java.nio.file.Path;
 
 public class ExampleExpectPlatform {
+
     /**
      * We can use {@link Platform#getConfigFolder()} but this is just an example of {@link ExpectPlatform}.
      * <p>
@@ -13,7 +14,7 @@ public class ExampleExpectPlatform {
      * platform sub-package, with its class suffixed with {@code Impl}.
      * <p>
      * Example:
-     * Expect: xyz.foxkin.catsplus.ExampleExpectPlatform#getConfigDirectory()
+     * Expect: xyz.foxkin.catsplus.commonloader.ExampleExpectPlatform#getConfigDirectory()
      * Actual Fabric: net.examplemod.fabric.ExampleExpectPlatformImpl#getConfigDirectory()
      * Actual Forge: net.examplemod.forge.ExampleExpectPlatformImpl#getConfigDirectory()
      * <p>

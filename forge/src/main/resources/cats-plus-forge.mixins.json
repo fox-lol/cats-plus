@@ -3,9 +3,10 @@
     "package": "xyz.foxkin.catsplus.mixin.forge",
     "minVersion": "0.8",
     "compatibilityLevel": "JAVA_17",
-    "client": [
-    ],
     "mixins": [
+    ],
+    "client": [
+        "MixinTitleScreen"
     ],
     "injectors": {
         "defaultRequire": 1

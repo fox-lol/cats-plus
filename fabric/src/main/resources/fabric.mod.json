@@ -17,7 +17,7 @@
     "environment": "*",
     "entrypoints": {
         "main": [
-            "xyz.foxkin.catsplus.fabric.CatsPlusFabric"
+            "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
         ]
     },
     "mixins": [

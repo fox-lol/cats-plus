@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus;
+package xyz.foxkin.catsplus.commonside;
 
 public class CatsPlus {
 
@@ -14,12 +14,10 @@ public class CatsPlus {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
     public static final RegistrySupplier<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () ->
             new Item(new Item.Properties().tab(ExampleMod.EXAMPLE_TAB)));
-
      */
     
     public static void init() {
         //ITEMS.register();
-        
-        //System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
+        System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }
