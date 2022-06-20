@@ -17,7 +17,7 @@ public class CatsPlus {
      */
     
     public static void init() {
-        //ITEMS.register();
+        // ITEMS.register();
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }
 }
