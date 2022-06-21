@@ -18,11 +18,11 @@ public class ModBlocks {
             new Block(FabricBlockSettings.of(Material.METAL).strength(6f).requiresTool()), ItemGroup.MISC);
 
     private static Block registerBlock(String name, Block block, ItemGroup group){
-        registerBLockItem(name, block, group);
+        registerBlockItem(name, block, group);
         return Registry.register(Registry.BLOCK, new Identifier(CatsPlusFabric.MOD_ID, name), block);
     }
 
-    private static Item registerBLockItem(String name, Block block, ItemGroup group){
+    private static Item registerBlockItem(String name, Block block, ItemGroup group){
         return Registry.register(Registry.ITEM, new Identifier(CatsPlusFabric.MOD_ID, name),
                 new BlockItem(block, new FabricItemSettings().group(group)));
     }
