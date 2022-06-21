@@ -3,9 +3,9 @@
     "id": "catsplus",
     "version": "${version}",
     "name": "Cats Plus",
-    "description": "This is an example description! Tell everyone what your mod is about!",
+    "description": "A funny mod about funny cats :D",
     "authors": [
-        "Me!"
+        "Foxkin, Insertish, Lutitious, ShaksterNano"
     ],
     "contact": {
         "homepage": "https://github.com/fox-lol/cats-plus",
