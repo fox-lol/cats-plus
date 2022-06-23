@@ -9,7 +9,6 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 public class CatsPlusForge {
 
     public CatsPlusForge() {
-        // Submit our event bus to let architectury register our content on the right time
         EventBuses.registerModEventBus(CatsPlus.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         CatsPlus.init();
     }
