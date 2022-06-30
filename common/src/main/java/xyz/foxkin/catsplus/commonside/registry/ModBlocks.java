@@ -11,7 +11,7 @@ import net.minecraft.util.registry.Registry;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 @SuppressWarnings("unused")
-public class CatsPlusBlocks {
+public class ModBlocks {
 
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(CatsPlus.MOD_ID, Registry.BLOCK_KEY);
 
@@ -24,7 +24,7 @@ public class CatsPlusBlocks {
                             SoundEvents.ENTITY_CAT_DEATH,
                             SoundEvents.ENTITY_CAT_STRAY_AMBIENT,
                             SoundEvents.ENTITY_CAT_AMBIENT,
-                            SoundEvents.ENTITY_CAT_HURT,
+                            ModSounds.CAT_LAUGHTER.get(),
                             SoundEvents.ENTITY_CAT_HURT
                     )
             ))
