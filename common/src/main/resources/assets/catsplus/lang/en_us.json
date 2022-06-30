@@ -1,3 +1,4 @@
 {
-    "item.examplemod.example_item": "Example Item"
+    "block.catsplus.cat_block": "Cat Block",
+    "itemGroup.catsplus.items": "Cats Plus"
 }

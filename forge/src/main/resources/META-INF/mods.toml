@@ -7,11 +7,12 @@ license = "GPL-3.0"
 modId = "catsplus"
 version = "${version}"
 displayName = "Cats Plus"
+displayURL = "https://github.com/fox-lol/cats-plus"
 authors = "Me!"
 description = '''
 This is an example description! Tell everyone what your mod is about!
 '''
-#logoFile = ""
+logoFile = "icon.png"
 
 [[dependencies.catsplus]]
 modId = "forge"

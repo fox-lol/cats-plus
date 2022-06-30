@@ -1,7 +1,8 @@
 package xyz.foxkin.catsplus.commonside.fabric;
 
-import xyz.foxkin.catsplus.commonside.CatsPlus;
+
 import net.fabricmc.api.ModInitializer;
+import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 public class CatsPlusFabric implements ModInitializer {
 
