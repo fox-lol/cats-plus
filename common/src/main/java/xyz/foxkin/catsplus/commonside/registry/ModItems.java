@@ -12,11 +12,11 @@ import net.minecraft.util.registry.Registry;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 @SuppressWarnings("unused")
-public class CatsPlusItems {
+public class ModItems {
 
     private static final ItemGroup CATS_PLUS_GROUP = CreativeTabRegistry.create(
             new Identifier(CatsPlus.MOD_ID, "items"),
-            () -> new ItemStack(CatsPlusItems.CAT_BLOCK.get())
+            () -> new ItemStack(ModItems.CAT_BLOCK.get())
     );
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(CatsPlus.MOD_ID, Registry.ITEM_KEY);
@@ -25,7 +25,7 @@ public class CatsPlusItems {
 
     public static final RegistrySupplier<Item> CAT_BLOCK = ITEMS.register(
             "cat_block",
-            () -> new BlockItem(CatsPlusBlocks.CAT_BLOCK.get(), new Item.Settings().group(CATS_PLUS_GROUP))
+            () -> new BlockItem(ModBlocks.CAT_BLOCK.get(), new Item.Settings().group(CATS_PLUS_GROUP))
     );
 
     public static void registerItems() {
