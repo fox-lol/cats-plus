@@ -24,7 +24,7 @@ public class ModBlocks {
                             SoundEvents.ENTITY_CAT_DEATH,
                             SoundEvents.ENTITY_CAT_STRAY_AMBIENT,
                             SoundEvents.ENTITY_CAT_AMBIENT,
-                            SoundEvents.ENTITY_CAT_HURT,
+                            ModSounds.CAT_LAUGHTER.get(),
                             SoundEvents.ENTITY_CAT_HURT
                     )
             ))
