@@ -7,8 +7,12 @@ TODO: description
 Clone the repository for local work:
 
 ```bash
+# Clone and navigate to repository
 git clone https://github.com/fox-lol/cats-plus
 cd cats-plus
+
+# Generate Minecraft source code
+./gradlew genSourcesWithQuiltflower
 ```
 
 Then run the mod against a specified modloader:
