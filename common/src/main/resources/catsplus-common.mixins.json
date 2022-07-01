@@ -3,10 +3,12 @@
     "package": "xyz.foxkin.catsplus.mixin.commonloader",
     "minVersion": "0.8",
     "compatibilityLevel": "JAVA_17",
+    "plugin": "xyz.foxkin.catsplus.mixin.commonloader.CatsPlusMixinPlugin",
     "mixins": [
+        "commonside.CatSitOnBlockGoalMixin",
+        "commonside.ChestBlockMixin"
     ],
     "client": [
-        "MixinTitleScreen"
     ],
     "injectors": {
         "defaultRequire": 1

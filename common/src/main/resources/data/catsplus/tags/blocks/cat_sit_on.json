@@ -1,0 +1,54 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#minecraft:chest",
+            "required": false
+        },
+        {
+            "id": "#minecraft:chests",
+            "required": false
+        },
+        {
+            "id": "#c:chest",
+            "required": false
+        },
+        {
+            "id": "#c:chests",
+            "required": false
+        },
+        {
+            "id": "#forge:chests",
+            "required": false
+        },
+        {
+            "id": "#ironchests:chests",
+            "required": false
+        },
+        {
+            "id": "#minecraft:furnace",
+            "required": false
+        },
+        {
+            "id": "#minecraft:furnaces",
+            "required": false
+        },
+        {
+            "id": "#c:furnace",
+            "required": false
+        },
+        {
+            "id": "#c:furnaces",
+            "required": false
+        },
+        {
+            "id": "#forge:furnaces",
+            "required": false
+        },
+        "#minecraft:beds",
+
+        "minecraft:furnace",
+        "minecraft:blast_furnace",
+        "minecraft:smoker"
+    ]
+}

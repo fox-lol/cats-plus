@@ -18,11 +18,14 @@
     "entrypoints": {
         "main": [
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
+        ],
+        "modmenu": [
+            "xyz.foxkin.catsplus.client.plugin.modmenu.CatsPlusModMenuPlugin"
         ]
     },
     "mixins": [
-        "catsplus-fabric.mixins.json",
-        "catsplus-common.mixins.json"
+        "catsplus-common.mixins.json",
+        "catsplus-fabric.mixins.json"
     ],
     "depends": {
         "fabric": "*",
