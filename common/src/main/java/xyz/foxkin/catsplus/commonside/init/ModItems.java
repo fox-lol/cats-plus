@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.commonside.registry;
+package xyz.foxkin.catsplus.commonside.init;
 
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;

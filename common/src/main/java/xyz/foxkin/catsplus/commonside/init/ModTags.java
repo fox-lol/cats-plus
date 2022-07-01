@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.commonside.registry;
+package xyz.foxkin.catsplus.commonside.init;
 
 import net.minecraft.block.Block;
 import net.minecraft.tag.TagKey;

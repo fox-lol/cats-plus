@@ -10,6 +10,9 @@ import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
 @Environment(EnvType.CLIENT)
 public class CatsPlusModMenuPlugin implements ModMenuApi {
 
+    /**
+     * Adds the mod's config screen to Mod Menu
+     */
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> AutoConfig.getConfigScreen(CatsPlusConfig.class, parent).get();

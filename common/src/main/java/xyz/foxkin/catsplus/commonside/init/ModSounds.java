@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.commonside.registry;
+package xyz.foxkin.catsplus.commonside.init;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
-@SuppressWarnings("unused")
 public class ModSounds {
 
     private static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(CatsPlus.MOD_ID, Registry.SOUND_EVENT_KEY);
