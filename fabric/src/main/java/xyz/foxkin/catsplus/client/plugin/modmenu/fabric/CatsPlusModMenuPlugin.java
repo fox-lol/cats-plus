@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.client.plugin.modmenu;
+package xyz.foxkin.catsplus.client.plugin.modmenu.fabric;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
