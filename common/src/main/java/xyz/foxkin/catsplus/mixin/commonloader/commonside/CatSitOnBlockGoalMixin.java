@@ -5,26 +5,36 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.enums.BedPart;
 import net.minecraft.entity.ai.goal.CatSitOnBlockGoal;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
 import org.apache.commons.lang3.function.TriFunction;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.registry.ModTags;
 
 import java.util.List;
 
 @Mixin(CatSitOnBlockGoal.class)
-public class CatSitOnBlockGoalMixin {
+public abstract class CatSitOnBlockGoalMixin {
 
-    private static final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> EXTRA_CHECKS = ImmutableList.of(
+    @Shadow
+    @Final
+    private CatEntity cat;
+    private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> EXTRA_CHECKS = ImmutableList.of(
             (world, pos, blockState) -> {
                 if (blockState.getBlock() instanceof AbstractChestBlock<?>) {
-                    if (ChestBlockEntity.getPlayersLookingInChestCount(world, pos) < 1) {
+                    boolean catIsAlreadyOnChest = cat.getBlockPos().equals(pos);
+                    if ((CatsPlus.getConfig().isCatSittingOnChestAllowsOpening() && catIsAlreadyOnChest)
+                            || ChestBlockEntity.getPlayersLookingInChestCount(world, pos) < 1
+                    ) {
                         return ActionResult.SUCCESS;
                     } else {
                         return ActionResult.FAIL;

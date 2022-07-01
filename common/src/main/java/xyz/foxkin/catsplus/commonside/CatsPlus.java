@@ -1,21 +1,35 @@
 package xyz.foxkin.catsplus.commonside;
 
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import xyz.foxkin.catsplus.commonside.config.ModConfig;
 import xyz.foxkin.catsplus.commonside.registry.ModBlocks;
 import xyz.foxkin.catsplus.commonside.registry.ModItems;
 import xyz.foxkin.catsplus.commonside.registry.ModSounds;
 
 public class CatsPlus {
 
+    private static ModConfig config;
+
     public static final String MOD_ID = "catsplus";
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Cats Plus");
 
     public static void init() {
+        registerConfig();
         ModSounds.registerSounds();
         ModBlocks.registerBlocks();
         ModItems.registerItems();
+    }
+
+    private static void registerConfig() {
+        AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
+        config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+    }
+
+    public static ModConfig getConfig() {
+        return config;
     }
 }

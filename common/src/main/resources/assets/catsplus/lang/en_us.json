@@ -1,4 +1,8 @@
 {
+    "itemGroup.catsplus.items": "Cats Plus",
     "block.catsplus.cat_block": "Cat Block",
-    "itemGroup.catsplus.items": "Cats Plus"
+
+    "text.autoconfig.catsplus.title": "Cats Plus options",
+    "text.autoconfig.catsplus.category.general": "General options",
+    "text.autoconfig.catsplus.option.catSittingOnChestAllowsOpening": "Cats sitting on chest allows opening"
 }

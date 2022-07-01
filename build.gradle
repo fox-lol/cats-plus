@@ -36,6 +36,11 @@ allprojects {
 
     repositories {
         maven {
+            name = "JitPack"
+            url = "https://jitpack.io"
+        }
+
+        maven {
             name = "TerraformersMC"
             url = "https://maven.terraformersmc.com/releases"
         }
