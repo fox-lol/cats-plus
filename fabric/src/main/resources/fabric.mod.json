@@ -20,7 +20,7 @@
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
         ],
         "modmenu": [
-            "xyz.foxkin.catsplus.client.plugin.modmenu.CatsPlusModMenuPlugin"
+            "xyz.foxkin.catsplus.client.plugin.modmenu.fabric.CatsPlusModMenuPlugin"
         ]
     },
     "mixins": [
