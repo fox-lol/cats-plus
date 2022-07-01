@@ -9,13 +9,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.foxkin.catsplus.commonside.block.InstrumentMaterial;
 
 @Mixin(Instrument.class)
-public class InstrumentMixin {
+public abstract class InstrumentMixin {
 
     /**
      * If the {@link BlockState}'s material is an instance of {@link InstrumentMaterial}, the corresponding instrument will be played.
      */
     @Inject(method = "fromBlockState", at = @At("HEAD"), cancellable = true)
-    private static void customMaterialNoteBlockInstrument(BlockState state, CallbackInfoReturnable<Instrument> cir) {
+    private static void catsPlus$customMaterialNoteBlockInstrument(BlockState state, CallbackInfoReturnable<Instrument> cir) {
         if (state.getMaterial() instanceof InstrumentMaterial instrumentMaterial) {
             cir.setReturnValue(instrumentMaterial.getInstrument());
         }

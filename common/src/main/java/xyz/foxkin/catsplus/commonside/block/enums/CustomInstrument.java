@@ -11,7 +11,7 @@ import java.util.function.Supplier;
  */
 public enum CustomInstrument {
 
-    CAT("CATSPLUS$CAT", "catsplus_cat", () -> SoundEvents.ENTITY_CAT_AMBIENT);
+    CAT("CATS_PLUS$CAT", "catsplus_cat", () -> SoundEvents.ENTITY_CAT_AMBIENT);
 
     private final String ENUM_NAME;
     private final String INSTRUMENT_NAME;
@@ -23,7 +23,8 @@ public enum CustomInstrument {
      * @param enumName                The name of the enum value that will be added to {@link Instrument}.
      * @param instrumentName          The name of the instrument.
      * @param instrumentSoundSupplier The {@code Supplier} for the sound event for the instrument.
-     *                                A {@code Supplier} is needed to prevent premature classloading of {@code SoundEvent}
+     *                                A {@code Supplier} is needed to prevent premature classloading
+     *                                of the {@code SoundEvent} class.
      */
     @SuppressWarnings("SameParameterValue")
     CustomInstrument(String enumName, String instrumentName, Supplier<SoundEvent> instrumentSoundSupplier) {

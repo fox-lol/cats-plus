@@ -10,6 +10,8 @@ public class CatsPlusEarlyRiser implements Runnable {
 
     /**
      * Adds custom {@link Instrument} enum values.
+     * Forge equivalent is
+     * {@code xyz.foxkin.catsplus.mixin.forge.commonside.InstrumentMixin#catsPlus$addCustomInstruments}
      */
     @Override
     public void run() {

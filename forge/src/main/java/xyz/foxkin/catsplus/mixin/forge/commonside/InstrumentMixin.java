@@ -9,14 +9,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.foxkin.catsplus.commonside.block.enums.CustomInstrument;
 
+/**
+ * {@link IExtensibleEnum} is implemented onto {@link Instrument} to allow for
+ * extra enum values to be added via {@link #create(String, String, SoundEvent)}
+ */
 @Mixin(Instrument.class)
-public class InstrumentMixin implements IExtensibleEnum {
+public abstract class InstrumentMixin implements IExtensibleEnum {
 
     /**
      * Adds custom {@link Instrument} enum values.
+     * Fabric equivalent is {@code xyz.foxkin.catsplus.commonside.fabricasm.fabric.CatsPlusEarlyRiser#run}
      */
     @Inject(method = "<clinit>", at = @At("RETURN"))
-    private static void catsplus$addCustomInstruments(CallbackInfo ci) {
+    private static void catsPlus$addCustomInstruments(CallbackInfo ci) {
         for (CustomInstrument instrument : CustomInstrument.values()) {
             create(instrument.getEnumName(), instrument.getInstrumentName(), instrument.getInstrumentSound());
         }

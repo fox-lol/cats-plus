@@ -16,7 +16,7 @@ public abstract class ChestBlockMixin {
      * Allows chests to be opened by a player even when a cat is sitting on it, if enabled in config.
      */
     @Inject(method = "hasCatOnTop", at = @At("HEAD"), cancellable = true)
-    private static void catsplus$allowCatSitOnChestOpen(WorldAccess world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+    private static void catsPlus$allowCatSitOnChestOpen(WorldAccess world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (CatsPlus.getConfig().isCatSittingOnChestAllowsOpening()) {
             cir.setReturnValue(false);
         }

@@ -37,7 +37,7 @@ public abstract class CatSitOnBlockGoalMixin {
      * the next check should be run.
      */
     @Unique
-    private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> CATSPLUS$EXTRA_CHECKS = ImmutableList.of(
+    private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> CATS_PLUS$EXTRA_CHECKS = ImmutableList.of(
             /*
             Cats will only sit on chests that are not currently being looked at by a player.
             If a cat is already sat on a chest and a player opens the chest, the cat will remain sitting.
@@ -88,10 +88,10 @@ public abstract class CatSitOnBlockGoalMixin {
      * Cats can sit on blocks tagged with {@link ModTags#CAT_SIT_ON}. Replaces the hardcoded block checks.
      */
     @Inject(method = "isTargetPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"), cancellable = true)
-    private void catsplus$tagBasedBlockSit(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+    private void catsPlus$tagBasedBlockSit(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.isIn(ModTags.CAT_SIT_ON)) {
-            for (TriFunction<WorldView, BlockPos, BlockState, ActionResult> check : CATSPLUS$EXTRA_CHECKS) {
+            for (TriFunction<WorldView, BlockPos, BlockState, ActionResult> check : CATS_PLUS$EXTRA_CHECKS) {
                 ActionResult result = check.apply(world, pos, blockState);
                 if (result == ActionResult.SUCCESS) {
                     cir.setReturnValue(true);
