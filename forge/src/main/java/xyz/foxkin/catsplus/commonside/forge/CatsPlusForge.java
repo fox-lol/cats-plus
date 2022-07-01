@@ -22,18 +22,21 @@ public class CatsPlusForge {
         }
     }
 
-    private void init() {
+    private static void init() {
         EventBuses.registerModEventBus(CatsPlus.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         CatsPlus.init();
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void clientInit() {
+    private static void clientInit() {
         registerConfigScreen();
     }
 
+    /**
+     * Adds the mod's config screen to the mod menu.
+     */
     @OnlyIn(Dist.CLIENT)
-    private void registerConfigScreen() {
+    private static void registerConfigScreen() {
         ModLoadingContext.get().registerExtensionPoint(
                 ConfigGuiHandler.ConfigGuiFactory.class,
                 () -> new ConfigGuiHandler.ConfigGuiFactory(

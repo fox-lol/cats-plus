@@ -6,7 +6,8 @@
     "plugin": "xyz.foxkin.catsplus.mixin.commonloader.CatsPlusMixinPlugin",
     "mixins": [
         "commonside.CatSitOnBlockGoalMixin",
-        "commonside.ChestBlockMixin"
+        "commonside.ChestBlockMixin",
+        "commonside.InstrumentMixin"
     ],
     "client": [
     ],

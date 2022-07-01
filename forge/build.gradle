@@ -19,6 +19,8 @@ loom {
     }
 }
 
+archivesBaseName = "${rootProject.archives_base_name}-forge-mc${rootProject.minecraft_version}"
+
 configurations {
     common
     shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.

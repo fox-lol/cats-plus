@@ -5,17 +5,17 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
-import xyz.foxkin.catsplus.commonside.registry.ModBlocks;
-import xyz.foxkin.catsplus.commonside.registry.ModItems;
-import xyz.foxkin.catsplus.commonside.registry.ModSounds;
+import xyz.foxkin.catsplus.commonside.init.ModBlocks;
+import xyz.foxkin.catsplus.commonside.init.ModItems;
+import xyz.foxkin.catsplus.commonside.init.ModSounds;
 
 public class CatsPlus {
-
-    private static CatsPlusConfig config;
 
     public static final String MOD_ID = "catsplus";
 
     public static final Logger LOGGER = LoggerFactory.getLogger("Cats Plus");
+
+    private static CatsPlusConfig config;
 
     public static void init() {
         registerConfig();

@@ -14,10 +14,11 @@ import org.apache.commons.lang3.function.TriFunction;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.foxkin.catsplus.commonside.registry.ModTags;
+import xyz.foxkin.catsplus.commonside.init.ModTags;
 
 import java.util.List;
 
@@ -30,12 +31,13 @@ public abstract class CatSitOnBlockGoalMixin {
 
     /**
      * Extra checks to be performed before a {@link CatEntity} can sit on a block tagged with {@link ModTags#CAT_SIT_ON}.
-     * These take in the {@link WorldView} the cat is in, the {@link BlockPos} of the block being checked,
-     * and the {@link BlockState} of the {@link Block} being checked, and return {@link ActionResult#SUCCESS}
+     * These take in the {@code WorldView} the cat is in, the {@code BlockPos} of the block being checked,
+     * and the {@code BlockState} of the {@link Block} being checked, and return {@link ActionResult#SUCCESS}
      * if the cat can sit on the block, {@link ActionResult#FAIL} if it can't, and {@link ActionResult#PASS} if
      * the next check should be run.
      */
-    private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> EXTRA_CHECKS = ImmutableList.of(
+    @Unique
+    private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> CATSPLUS$EXTRA_CHECKS = ImmutableList.of(
             /*
             Cats will only sit on chests that are not currently being looked at by a player.
             If a cat is already sat on a chest and a player opens the chest, the cat will remain sitting.
@@ -53,7 +55,7 @@ public abstract class CatSitOnBlockGoalMixin {
                 }
             },
             /*
-            Cats will only sit on furnace like blocks that are lit.
+            Cats will only sit on furnace-like blocks that are lit.
              */
             (world, pos, blockState) -> {
                 if (blockState.getBlock() instanceof AbstractFurnaceBlock) {
@@ -86,10 +88,10 @@ public abstract class CatSitOnBlockGoalMixin {
      * Cats can sit on blocks tagged with {@link ModTags#CAT_SIT_ON}. Replaces the hardcoded block checks.
      */
     @Inject(method = "isTargetPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"), cancellable = true)
-    private void tagBasedBlockSit(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+    private void catsplus$tagBasedBlockSit(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = world.getBlockState(pos);
         if (blockState.isIn(ModTags.CAT_SIT_ON)) {
-            for (TriFunction<WorldView, BlockPos, BlockState, ActionResult> check : EXTRA_CHECKS) {
+            for (TriFunction<WorldView, BlockPos, BlockState, ActionResult> check : CATSPLUS$EXTRA_CHECKS) {
                 ActionResult result = check.apply(world, pos, blockState);
                 if (result == ActionResult.SUCCESS) {
                     cir.setReturnValue(true);
