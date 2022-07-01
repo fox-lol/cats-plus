@@ -9,7 +9,7 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 @SuppressWarnings({"CanBeFinal", "FieldCanBeLocal", "FieldMayBeFinal"})
 @Config(name = CatsPlus.MOD_ID)
 @Config.Gui.Background(Config.Gui.Background.TRANSPARENT)
-public class ModConfig implements ConfigData {
+public class CatsPlusConfig implements ConfigData {
 
     @ConfigEntry.Category("general")
     @Comment("Should chests be openable when a cat is sitting on it?\n\nDefault value is false.")

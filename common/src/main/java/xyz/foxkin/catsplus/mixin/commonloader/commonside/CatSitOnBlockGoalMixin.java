@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.registry.ModTags;
 
 import java.util.List;
@@ -28,13 +27,23 @@ public abstract class CatSitOnBlockGoalMixin {
     @Shadow
     @Final
     private CatEntity cat;
+
+    /**
+     * Extra checks to be performed before a {@link CatEntity} can sit on a block tagged with {@link ModTags#CAT_SIT_ON}.
+     * These take in the {@link WorldView} the cat is in, the {@link BlockPos} of the block being checked,
+     * and the {@link BlockState} of the {@link Block} being checked, and return {@link ActionResult#SUCCESS}
+     * if the cat can sit on the block, {@link ActionResult#FAIL} if it can't, and {@link ActionResult#PASS} if
+     * the next check should be run.
+     */
     private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> EXTRA_CHECKS = ImmutableList.of(
+            /*
+            Cats will only sit on chests that are not currently being looked at by a player.
+            If a cat is already sat on a chest and a player opens the chest, the cat will remain sitting.
+             */
             (world, pos, blockState) -> {
                 if (blockState.getBlock() instanceof AbstractChestBlock<?>) {
                     boolean catIsAlreadyOnChest = cat.getBlockPos().equals(pos);
-                    if ((CatsPlus.getConfig().isCatSittingOnChestAllowsOpening() && catIsAlreadyOnChest)
-                            || ChestBlockEntity.getPlayersLookingInChestCount(world, pos) < 1
-                    ) {
+                    if (catIsAlreadyOnChest || ChestBlockEntity.getPlayersLookingInChestCount(world, pos) < 1) {
                         return ActionResult.SUCCESS;
                     } else {
                         return ActionResult.FAIL;
@@ -43,6 +52,9 @@ public abstract class CatSitOnBlockGoalMixin {
                     return ActionResult.PASS;
                 }
             },
+            /*
+            Cats will only sit on furnace like blocks that are lit.
+             */
             (world, pos, blockState) -> {
                 if (blockState.getBlock() instanceof AbstractFurnaceBlock) {
                     if (blockState.get(FurnaceBlock.LIT)) {
@@ -54,6 +66,9 @@ public abstract class CatSitOnBlockGoalMixin {
                     return ActionResult.PASS;
                 }
             },
+            /*
+            Cats will not sit on the head part of beds.
+             */
             (world, pos, blockState) -> {
                 if (blockState.isIn(BlockTags.BEDS)) {
                     if (blockState.getOrEmpty(BedBlock.PART).map(part -> part != BedPart.HEAD).orElse(true)) {
@@ -67,6 +82,9 @@ public abstract class CatSitOnBlockGoalMixin {
             }
     );
 
+    /**
+     * Cats can sit on blocks tagged with {@link ModTags#CAT_SIT_ON}. Replaces the hardcoded block checks.
+     */
     @Inject(method = "isTargetPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"), cancellable = true)
     private void tagBasedBlockSit(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = world.getBlockState(pos);
@@ -81,7 +99,6 @@ public abstract class CatSitOnBlockGoalMixin {
                     return;
                 }
             }
-
             cir.setReturnValue(true);
         } else {
             cir.setReturnValue(false);

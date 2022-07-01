@@ -12,6 +12,9 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 @Mixin(ChestBlock.class)
 public abstract class ChestBlockMixin {
 
+    /**
+     * Allows chests to be opened by a player even when a cat is sitting on it, if enabled in config.
+     */
     @Inject(method = "hasCatOnTop", at = @At("HEAD"), cancellable = true)
     private static void allowCatSitOnChestOpen(WorldAccess world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (CatsPlus.getConfig().isCatSittingOnChestAllowsOpening()) {

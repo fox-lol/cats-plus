@@ -4,14 +4,14 @@ import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xyz.foxkin.catsplus.commonside.config.ModConfig;
+import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
 import xyz.foxkin.catsplus.commonside.registry.ModBlocks;
 import xyz.foxkin.catsplus.commonside.registry.ModItems;
 import xyz.foxkin.catsplus.commonside.registry.ModSounds;
 
 public class CatsPlus {
 
-    private static ModConfig config;
+    private static CatsPlusConfig config;
 
     public static final String MOD_ID = "catsplus";
 
@@ -25,11 +25,11 @@ public class CatsPlus {
     }
 
     private static void registerConfig() {
-        AutoConfig.register(ModConfig.class, JanksonConfigSerializer::new);
-        config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+        AutoConfig.register(CatsPlusConfig.class, JanksonConfigSerializer::new);
+        config = AutoConfig.getConfigHolder(CatsPlusConfig.class).getConfig();
     }
 
-    public static ModConfig getConfig() {
+    public static CatsPlusConfig getConfig() {
         return config;
     }
 }

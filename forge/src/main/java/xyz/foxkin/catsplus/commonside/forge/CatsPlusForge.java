@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
-import xyz.foxkin.catsplus.commonside.config.ModConfig;
+import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
 
 @Mod(CatsPlus.MOD_ID)
 public class CatsPlusForge {
@@ -37,7 +37,7 @@ public class CatsPlusForge {
         ModLoadingContext.get().registerExtensionPoint(
                 ConfigGuiHandler.ConfigGuiFactory.class,
                 () -> new ConfigGuiHandler.ConfigGuiFactory(
-                        (client, parent) -> AutoConfig.getConfigScreen(ModConfig.class, parent).get()
+                        (client, parent) -> AutoConfig.getConfigScreen(CatsPlusConfig.class, parent).get()
                 )
         );
     }

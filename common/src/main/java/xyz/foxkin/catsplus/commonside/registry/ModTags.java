@@ -8,5 +8,8 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 public class ModTags {
 
+    /**
+     * Represents blocks that a cat will sit on.
+     */
     public static final TagKey<Block> CAT_SIT_ON = TagKey.of(Registry.BLOCK_KEY, new Identifier(CatsPlus.MOD_ID, "cat_sit_on"));
 }
