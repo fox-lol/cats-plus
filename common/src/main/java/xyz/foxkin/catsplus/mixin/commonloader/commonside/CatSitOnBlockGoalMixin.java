@@ -23,7 +23,7 @@ import xyz.foxkin.catsplus.commonside.init.ModTags;
 import java.util.List;
 
 @Mixin(CatSitOnBlockGoal.class)
-public abstract class CatSitOnBlockGoalMixin {
+abstract class CatSitOnBlockGoalMixin {
 
     @Shadow
     @Final

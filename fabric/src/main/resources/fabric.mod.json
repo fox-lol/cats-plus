@@ -5,7 +5,10 @@
     "name": "Cats Plus",
     "description": "A funny mod about funny cats :D",
     "authors": [
-        "Foxkin, Insertish, Lutitious, ShaksterNano"
+        "Foxkin",
+        "Insertish",
+        "Lutitious",
+        "ShaksterNano"
     ],
     "contact": {
         "homepage": "https://github.com/fox-lol/cats-plus",
@@ -18,9 +21,6 @@
     "entrypoints": {
         "main": [
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
-        ],
-        "mm:early_risers": [
-            "xyz.foxkin.catsplus.commonside.fabricasm.fabric.CatsPlusEarlyRiser"
         ],
         "modmenu": [
             "xyz.foxkin.catsplus.client.plugin.modmenu.fabric.CatsPlusModMenuPlugin"

@@ -4,5 +4,7 @@
 
     "text.autoconfig.catsplus.title": "Cats Plus options",
     "text.autoconfig.catsplus.category.general": "General options",
-    "text.autoconfig.catsplus.option.catSittingOnChestAllowsOpening": "Cats sitting on chest allows opening"
+    "text.autoconfig.catsplus.option.catSittingOnChestAllowsOpening": "Cats sitting on chest allows opening",
+
+    "catsplus.sounds.cat_laughter": "Cat laughter"
 }

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 @Mixin(ChestBlock.class)
-public abstract class ChestBlockMixin {
+abstract class ChestBlockMixin {
 
     /**
      * Allows chests to be opened by a player even when a cat is sitting on it, if enabled in config.
