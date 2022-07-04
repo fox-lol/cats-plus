@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.mixin.commonloader.commonside;
+package xyz.foxkin.catsplus.mixin.commonloader.commonside.catsitonblock;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.*;

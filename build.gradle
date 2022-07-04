@@ -41,6 +41,15 @@ allprojects {
         }
 
         maven {
+            name = "Curse Maven"
+            url = "https://cursemaven.com"
+
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+
+        maven {
             name = "TerraformersMC"
             url = "https://maven.terraformersmc.com/releases"
         }

@@ -2,6 +2,8 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+archivesBaseName = "${rootProject.archives_base_name}-fabric-mc${rootProject.minecraft_version}"
+
 architectury {
     platformSetupLoomIde()
     fabric()
@@ -10,8 +12,6 @@ architectury {
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
 }
-
-archivesBaseName = "${rootProject.archives_base_name}-fabric-mc${rootProject.minecraft_version}"
 
 configurations {
     common

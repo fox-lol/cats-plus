@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.mixin.commonloader.commonside;
+package xyz.foxkin.catsplus.mixin.commonloader.commonside.catsitonblock;
 
 import net.minecraft.block.ChestBlock;
 import net.minecraft.util.math.BlockPos;
