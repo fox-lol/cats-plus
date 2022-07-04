@@ -4,5 +4,11 @@
 
     "text.autoconfig.catsplus.title": "Cats Plus options",
     "text.autoconfig.catsplus.category.general": "General options",
-    "text.autoconfig.catsplus.option.catSittingOnChestAllowsOpening": "Cats sitting on chest allows opening"
+    "text.autoconfig.catsplus.option.catSittingOnChestAllowsOpening": "Cats sitting on chest allows opening",
+
+    "item.catsplus.cat_maid_boots": "Cat Maid Boots",
+    "item.catsplus.cat_maid_chestplate": "Cat Maid Chestplate",
+    "item.catsplus.cat_maid_helmet": "Cat Maid Helmet",
+    "item.catsplus.cat_maid_leggings": "Cat Maid Leggings",
+    "item.catsplus.cat_maid_scraps": "Cat Maid Scraps"
 }
