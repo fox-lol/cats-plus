@@ -1,15 +1,20 @@
 package xyz.foxkin.catsplus.mixin.commonloader.commonside.tameablefollow;
 
-import com.llamalad7.mixinextras.injector.WrapWithCondition;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.foxkin.catsplus.commonside.init.ModTags;
 
-@SuppressWarnings("unused")
 @Mixin(CatEntity.class)
 abstract class CatEntityMixin extends TameableEntityMixin {
 
@@ -18,16 +23,19 @@ abstract class CatEntityMixin extends TameableEntityMixin {
     }
 
     /**
-     * If the owner of a cat interacts with the cat while sneaking,
-     * it will toggle whether the cat follows the owner or not.
+     * If the owner of a cat interacts with the cat while holding an item
+     * tagged with {@link ModTags#TOGGLE_PET_FOLLOWING}, it will toggle
+     * whether the cat follows the owner or not.
      */
-    @WrapWithCondition(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;setSitting(Z)V", ordinal = 0))
-    private boolean catsPlus$setFollowing(CatEntity thisCat, boolean isSitting, PlayerEntity player) {
-        if (player.isSneaking()) {
+    @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/TameableEntity;interactMob(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/util/ActionResult;CONSUME:Lnet/minecraft/util/ActionResult;"),
+            to = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z")
+    ), cancellable = true)
+    private void catsPlus$ownerToggleFollowing(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+        ItemStack itemStack = player.getStackInHand(hand);
+        if (itemStack.isIn(ModTags.TOGGLE_CAT_FOLLOWING)) {
             catsPlus$toggleFollowing();
-            return false;
-        } else {
-            return true;
+            cir.setReturnValue(ActionResult.SUCCESS);
         }
     }
 }

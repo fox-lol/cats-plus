@@ -4,14 +4,19 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.foxkin.catsplus.commonside.init.ModTags;
 
+@Debug(export = true)
 @Mixin(WolfEntity.class)
 abstract class WolfEntityMixin extends TameableEntityMixin {
 
@@ -24,9 +29,13 @@ abstract class WolfEntityMixin extends TameableEntityMixin {
      * If the owner of a wolf interacts with the wolf while sneaking,
      * it will toggle whether the wolf follows the owner or not.
      */
-    @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/WolfEntity;setSitting(Z)V", ordinal = 0), cancellable = true)
-    private void catsPlus$setFollowing(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        if (player.isSneaking()) {
+    @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/TameableEntity;interactMob(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/util/ActionResult;SUCCESS:Lnet/minecraft/util/ActionResult;"),
+            to = @At(value = "INVOKE", target = "Lnet/minecraft/util/ActionResult;isAccepted()Z")
+    ), cancellable = true)
+    private void catsPlus$ownerToggleFollowing(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+        ItemStack itemStack = player.getStackInHand(hand);
+        if (itemStack.isIn(ModTags.TOGGLE_WOLF_FOLLOWING)) {
             catsPlus$toggleFollowing();
             cir.setReturnValue(ActionResult.SUCCESS);
         }
