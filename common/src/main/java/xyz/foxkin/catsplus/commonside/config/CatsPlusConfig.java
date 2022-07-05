@@ -12,7 +12,7 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 public class CatsPlusConfig implements ConfigData {
 
     @ConfigEntry.Category("general")
-    @Comment("Should chests be openable when a cat is sitting on it?\n\nDefault value is false.")
+    @Comment("Should chests be openable when a cat is sitting or sleeping on it?\n\nDefault value is false.")
     private boolean catSittingOnChestAllowsOpening = false;
 
     public boolean isCatSittingOnChestAllowsOpening() {

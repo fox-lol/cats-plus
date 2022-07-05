@@ -13,7 +13,7 @@ public class ModTags {
      * Represents blocks that a cat will sit on.
      */
     public static final TagKey<Block> CAT_SIT_ON = TagKey.of(Registry.BLOCK_KEY, new Identifier(CatsPlus.MOD_ID, "cat_sit_on"));
-    public static final TagKey<Item> TOGGLE_PET_FOLLOWING = TagKey.of(Registry.ITEM_KEY, new Identifier(CatsPlus.MOD_ID, "toggle_pet_following"));
+    public static final TagKey<Block> CAT_SLEEP_ON = TagKey.of(Registry.BLOCK_KEY, new Identifier(CatsPlus.MOD_ID, "cat_sleep_on"));
     public static final TagKey<Item> TOGGLE_CAT_FOLLOWING = TagKey.of(Registry.ITEM_KEY, new Identifier(CatsPlus.MOD_ID, "toggle_cat_following"));
     public static final TagKey<Item> TOGGLE_WOLF_FOLLOWING = TagKey.of(Registry.ITEM_KEY, new Identifier(CatsPlus.MOD_ID, "toggle_wolf_following"));
     public static final TagKey<Item> TOGGLE_PARROT_FOLLOWING = TagKey.of(Registry.ITEM_KEY, new Identifier(CatsPlus.MOD_ID, "toggle_parrot_following"));

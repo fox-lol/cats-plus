@@ -18,13 +18,14 @@ import xyz.foxkin.catsplus.commonside.init.ModTags;
 @Mixin(CatEntity.class)
 abstract class CatEntityMixin extends TameableEntityMixin {
 
+    @SuppressWarnings("unused")
     protected CatEntityMixin(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
 
     /**
      * If the owner of a cat interacts with the cat while holding an item
-     * tagged with {@link ModTags#TOGGLE_PET_FOLLOWING}, it will toggle
+     * tagged with {@link ModTags#TOGGLE_CAT_FOLLOWING}, it will toggle
      * whether the cat follows the owner or not.
      */
     @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/TameableEntity;interactMob(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"), slice = @Slice(

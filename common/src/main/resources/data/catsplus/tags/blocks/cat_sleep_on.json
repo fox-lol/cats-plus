@@ -1,30 +1,6 @@
 {
     "values": [
         {
-            "id": "#minecraft:chest",
-            "required": false
-        },
-        {
-            "id": "#minecraft:chests",
-            "required": false
-        },
-        {
-            "id": "#c:chest",
-            "required": false
-        },
-        {
-            "id": "#c:chests",
-            "required": false
-        },
-        {
-            "id": "#forge:chests",
-            "required": false
-        },
-        {
-            "id": "#ironchests:chests",
-            "required": false
-        },
-        {
             "id": "#minecraft:furnace",
             "required": false
         },

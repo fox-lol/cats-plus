@@ -5,8 +5,10 @@
     "compatibilityLevel": "JAVA_17",
     "plugin": "xyz.foxkin.catsplus.mixin.commonloader.CatsPlusMixinPlugin",
     "mixins": [
+        "commonside.accessor.CatSitOnBlockGoalAccessor",
         "commonside.catsitonblock.CatSitOnBlockGoalMixin",
         "commonside.catsitonblock.ChestBlockMixin",
+        "commonside.goal.CatEntityMixin",
         "commonside.tameablefollow.CatEntityMixin",
         "commonside.tameablefollow.FollowOwnerGoalMixin",
         "commonside.tameablefollow.ParrotEntityMixin",

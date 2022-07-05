@@ -31,13 +31,15 @@ abstract class ParrotEntityMixin extends TameableEntityMixin {
     @Final
     private static Set<Item> TAMING_INGREDIENTS;
 
+    @SuppressWarnings("unused")
     protected ParrotEntityMixin(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
     }
 
     /**
-     * If the owner of a parrot interacts with the parrot while sneaking,
-     * it will toggle whether the parrot follows the owner or not.
+     * If the owner of a cat interacts with the cat while holding an item
+     * tagged with {@link ModTags#TOGGLE_PARROT_FOLLOWING}, it will toggle
+     * whether the cat follows the owner or not.
      */
     @Inject(method = "interactMob", at = @At("HEAD"), cancellable = true)
     private void catsPlus$ownerToggleFollowing(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {

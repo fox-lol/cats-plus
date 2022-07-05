@@ -1,11 +1,13 @@
 package xyz.foxkin.catsplus.mixin.commonloader.commonside.catsitonblock;
 
 import net.minecraft.block.ChestBlock;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
@@ -20,5 +22,10 @@ abstract class ChestBlockMixin {
         if (CatsPlus.getConfig().isCatSittingOnChestAllowsOpening()) {
             cir.setReturnValue(false);
         }
+    }
+
+    @Redirect(method = "hasCatOnTop", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;isInSittingPose()Z"))
+    private static boolean catsPlus$preventChestOpenCatSleeping(CatEntity cat) {
+        return cat.isInSittingPose() || cat.isInSleepingPose();
     }
 }

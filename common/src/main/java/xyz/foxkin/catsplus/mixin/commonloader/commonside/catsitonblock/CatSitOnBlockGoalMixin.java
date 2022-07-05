@@ -1,12 +1,14 @@
 package xyz.foxkin.catsplus.mixin.commonloader.commonside.catsitonblock;
 
 import com.google.common.collect.ImmutableList;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.enums.BedPart;
 import net.minecraft.entity.ai.goal.CatSitOnBlockGoal;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldView;
@@ -17,30 +19,32 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.foxkin.catsplus.commonside.access.CatSitOnBlockGoalAccess;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 
 import java.util.List;
 
 @Mixin(CatSitOnBlockGoal.class)
-abstract class CatSitOnBlockGoalMixin {
+public abstract class CatSitOnBlockGoalMixin implements CatSitOnBlockGoalAccess {
 
     @Shadow
     @Final
     private CatEntity cat;
 
     /**
-     * Extra checks to be performed before a {@link CatEntity} can sit on a block tagged with {@link ModTags#CAT_SIT_ON}.
+     * Extra checks to be performed before a {@link CatEntity} can sit or sleep on a block tagged with {@link CatSitOnBlockGoalAccess#catsPlus$getBlockTag()}.
      * These take in the {@code WorldView} the cat is in, the {@code BlockPos} of the block being checked,
      * and the {@code BlockState} of the {@link Block} being checked, and return {@link ActionResult#SUCCESS}
-     * if the cat can sit on the block, {@link ActionResult#FAIL} if it can't, and {@link ActionResult#PASS} if
+     * if the cat can sit or sleep on the block, {@link ActionResult#FAIL} if it can't, and {@link ActionResult#PASS} if
      * the next check should be run.
      */
     @Unique
     private final List<TriFunction<WorldView, BlockPos, BlockState, ActionResult>> CATS_PLUS$EXTRA_CHECKS = ImmutableList.of(
             /*
-            Cats will only sit on chests that are not currently being looked at by a player.
-            If a cat is already sat on a chest and a player opens the chest, the cat will remain sitting.
+            Cats will only sit or sleep on chests that are not currently being looked at by a player.
+            If a cat is already sat on a chest and a player opens the chest, the cat will remain sitting or sleeping.
              */
             (world, pos, blockState) -> {
                 if (blockState.getBlock() instanceof AbstractChestBlock<?>) {
@@ -55,7 +59,7 @@ abstract class CatSitOnBlockGoalMixin {
                 }
             },
             /*
-            Cats will only sit on furnace-like blocks that are lit.
+            Cats will only sit or sleep on furnace-like blocks that are lit.
              */
             (world, pos, blockState) -> {
                 if (blockState.getBlock() instanceof AbstractFurnaceBlock) {
@@ -69,7 +73,7 @@ abstract class CatSitOnBlockGoalMixin {
                 }
             },
             /*
-            Cats will not sit on the head part of beds.
+            Cats will not sit or sleep on the head part of beds.
              */
             (world, pos, blockState) -> {
                 if (blockState.isIn(BlockTags.BEDS)) {
@@ -84,13 +88,24 @@ abstract class CatSitOnBlockGoalMixin {
             }
     );
 
+    @SuppressWarnings("unused")
+    @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
+    private boolean catsPlus$addExtraStartCondition(boolean canStart) {
+        return canStart && catsPlus$extraStartCondition();
+    }
+
+    @Redirect(method = {"start", "stop", "tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;setInSittingPose(Z)V"))
+    private void catsPlus$changeSetPoseMethod(CatEntity cat, boolean inSittingPose) {
+        catsPlus$setInPose(inSittingPose);
+    }
+
     /**
-     * Cats can sit on blocks tagged with {@link ModTags#CAT_SIT_ON}. Replaces the hardcoded block checks.
+     * Cats can sit or sleep on blocks tagged with {@link CatSitOnBlockGoalAccess#catsPlus$getBlockTag()}. Replaces the hardcoded block checks.
      */
     @Inject(method = "isTargetPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldView;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;"), cancellable = true)
     private void catsPlus$tagBasedBlockSit(WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         BlockState blockState = world.getBlockState(pos);
-        if (blockState.isIn(ModTags.CAT_SIT_ON)) {
+        if (blockState.isIn(catsPlus$getBlockTag())) {
             for (TriFunction<WorldView, BlockPos, BlockState, ActionResult> check : CATS_PLUS$EXTRA_CHECKS) {
                 ActionResult result = check.apply(world, pos, blockState);
                 if (result == ActionResult.SUCCESS) {
@@ -105,5 +120,20 @@ abstract class CatSitOnBlockGoalMixin {
         } else {
             cir.setReturnValue(false);
         }
+    }
+
+    @Override
+    public boolean catsPlus$extraStartCondition() {
+        return !cat.isInSleepingPose();
+    }
+
+    @Override
+    public TagKey<Block> catsPlus$getBlockTag() {
+        return ModTags.CAT_SIT_ON;
+    }
+
+    @Override
+    public void catsPlus$setInPose(boolean inPose) {
+        cat.setInSittingPose(inPose);
     }
 }

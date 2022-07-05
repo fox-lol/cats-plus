@@ -26,8 +26,9 @@ abstract class WolfEntityMixin extends TameableEntityMixin {
     }
 
     /**
-     * If the owner of a wolf interacts with the wolf while sneaking,
-     * it will toggle whether the wolf follows the owner or not.
+     * If the owner of a cat interacts with the cat while holding an item
+     * tagged with {@link ModTags#TOGGLE_WOLF_FOLLOWING}, it will toggle
+     * whether the cat follows the owner or not.
      */
     @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/TameableEntity;interactMob(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;)Lnet/minecraft/util/ActionResult;"), slice = @Slice(
             from = @At(value = "FIELD", target = "Lnet/minecraft/util/ActionResult;SUCCESS:Lnet/minecraft/util/ActionResult;"),
