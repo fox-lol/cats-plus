@@ -7,6 +7,7 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,9 +23,10 @@ import xyz.foxkin.catsplus.commonside.access.TameableEntityAccess;
 abstract class TameableEntityMixin extends AnimalEntity implements Tameable, TameableEntityAccess {
 
     @Unique
-    private boolean catsPlus$following = true;
-    @Unique
     private static final String CATS_PLUS$FOLLOWING_NBT_KEY = "catsplus:following";
+
+    @Unique
+    private boolean catsPlus$following = true;
 
     protected TameableEntityMixin(EntityType<? extends AnimalEntity> entityType, World world) {
         super(entityType, world);
@@ -35,6 +37,24 @@ abstract class TameableEntityMixin extends AnimalEntity implements Tameable, Tam
 
     @Shadow
     public abstract boolean isOwner(LivingEntity entity);
+
+    /**
+     * Saves whether the tameable entity is set to follow its owner or not to NBT.
+     */
+    @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
+    private void catsPlus$writeFollowing(NbtCompound nbt, CallbackInfo ci) {
+        nbt.putBoolean(CATS_PLUS$FOLLOWING_NBT_KEY, catsPlus$following);
+    }
+
+    /**
+     * Reads whether the tameable entity is set to follow its owner or not from NBT.
+     */
+    @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
+    private void catsPlus$readFollowing(NbtCompound nbt, CallbackInfo ci) {
+        if (nbt.contains(CATS_PLUS$FOLLOWING_NBT_KEY, NbtElement.BYTE_TYPE)) {
+            catsPlus$following = nbt.getBoolean(CATS_PLUS$FOLLOWING_NBT_KEY);
+        }
+    }
 
     @Unique
     @Override
@@ -56,21 +76,5 @@ abstract class TameableEntityMixin extends AnimalEntity implements Tameable, Tam
         } else {
             CatsPlus.LOGGER.error("Could not send following status message because the owner is not a player, this shouldn't happen");
         }
-    }
-
-    /**
-     * Saves whether the tameable entity is set to follow its owner or not to NBT.
-     */
-    @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
-    private void catsPlus$saveFollowing(NbtCompound nbt, CallbackInfo ci) {
-        nbt.putBoolean(CATS_PLUS$FOLLOWING_NBT_KEY, catsPlus$following);
-    }
-
-    /**
-     * Reads whether the tameable entity is set to follow its owner or not from NBT.
-     */
-    @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
-    private void catsPlus$readFollowing(NbtCompound nbt, CallbackInfo ci) {
-        catsPlus$following = nbt.getBoolean(CATS_PLUS$FOLLOWING_NBT_KEY);
     }
 }

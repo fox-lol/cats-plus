@@ -20,7 +20,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import xyz.foxkin.catsplus.commonside.access.CatEntityAccess;
 import xyz.foxkin.catsplus.commonside.access.CatSitOnBlockGoalAccess;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 
@@ -91,12 +93,19 @@ public abstract class CatSitOnBlockGoalMixin implements CatSitOnBlockGoalAccess 
     @SuppressWarnings("unused")
     @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
     private boolean catsPlus$addExtraStartCondition(boolean canStart) {
-        return canStart && catsPlus$extraStartCondition();
+        CatEntityAccess access = (CatEntityAccess) cat;
+        return canStart && access.catsPlus$canSitOrSleep() && catsPlus$extraStartCondition();
     }
 
     @Redirect(method = {"start", "stop", "tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;setInSittingPose(Z)V"))
     private void catsPlus$changeSetPoseMethod(CatEntity cat, boolean inSittingPose) {
         catsPlus$setInPose(inSittingPose);
+    }
+
+    @Inject(method = "stop", at = @At("HEAD"))
+    private void catsPlus$setSitOrSleepCooldown(CallbackInfo ci) {
+        CatEntityAccess access = (CatEntityAccess) cat;
+        access.catsPlus$setSitOrSleepCooldown(1200);
     }
 
     /**
@@ -122,16 +131,19 @@ public abstract class CatSitOnBlockGoalMixin implements CatSitOnBlockGoalAccess 
         }
     }
 
+    @Unique
     @Override
     public boolean catsPlus$extraStartCondition() {
         return !cat.isInSleepingPose();
     }
 
+    @Unique
     @Override
     public TagKey<Block> catsPlus$getBlockTag() {
         return ModTags.CAT_SIT_ON;
     }
 
+    @Unique
     @Override
     public void catsPlus$setInPose(boolean inPose) {
         cat.setInSittingPose(inPose);

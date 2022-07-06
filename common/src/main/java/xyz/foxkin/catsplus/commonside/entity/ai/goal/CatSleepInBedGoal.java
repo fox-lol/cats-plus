@@ -20,17 +20,20 @@ public class CatSleepInBedGoal extends CatSitOnBlockGoal implements CatSitOnBloc
         super(cat, speed);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public boolean catsPlus$extraStartCondition() {
         CatSitOnBlockGoalAccessor accessor = (CatSitOnBlockGoalAccessor) this;
         return !accessor.catsPlus$getCat().isInSittingPose();
     }
 
+    @SuppressWarnings("unused")
     @Override
     public TagKey<Block> catsPlus$getBlockTag() {
         return ModTags.CAT_SLEEP_ON;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void catsPlus$setInPose(boolean inPose) {
         CatSitOnBlockGoalAccessor accessor = (CatSitOnBlockGoalAccessor) this;
