@@ -19,6 +19,9 @@ abstract class CatEntityMixin implements CatEntityAccess {
     @Unique
     private int catsPlus$sitOrSleepCooldown = 0;
 
+    /**
+     * Decrements the sitting or sleeping cooldown every tick if it is above 0.
+     */
     @Inject(method = "tick", at = @At("HEAD"))
     private void catsPlus$decrementCooldown(CallbackInfo ci) {
         if (catsPlus$sitOrSleepCooldown > 0) {
@@ -26,11 +29,18 @@ abstract class CatEntityMixin implements CatEntityAccess {
         }
     }
 
+    /**
+     * Writes the sit or sleep cooldown to NBT,
+     * so that it persists when quitting the game.
+     */
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     private void catsPlus$writeSitOrSleepCooldown(NbtCompound nbt, CallbackInfo ci) {
         nbt.putInt(CATS_PLUS$SIT_OR_SLEEP_COOLDOWN_NBT_KEY, Math.max(catsPlus$sitOrSleepCooldown, 0));
     }
 
+    /**
+     * Reads the sit or sleep cooldown from NBT.
+     */
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     private void catsPlus$readSitOrSleepCooldown(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains(CATS_PLUS$SIT_OR_SLEEP_COOLDOWN_NBT_KEY, NbtElement.INT_TYPE)) {

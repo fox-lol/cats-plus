@@ -90,18 +90,27 @@ public abstract class CatSitOnBlockGoalMixin implements CatSitOnBlockGoalAccess 
             }
     );
 
+    /**
+     * Adds extra conditions that must be satisfied before a cat can sit or sleep on a block.
+     */
     @SuppressWarnings("unused")
     @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
-    private boolean catsPlus$addExtraStartCondition(boolean canStart) {
+    private boolean catsPlus$addExtraStartConditions(boolean canStart) {
         CatEntityAccess access = (CatEntityAccess) cat;
         return canStart && access.catsPlus$canSitOrSleep() && catsPlus$extraStartCondition();
     }
 
+    /**
+     * Lets the pose a cat is set in when it gets on top of a valid block be determined by subclasses.
+     */
     @Redirect(method = {"start", "stop", "tick"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;setInSittingPose(Z)V"))
     private void catsPlus$changeSetPoseMethod(CatEntity cat, boolean inSittingPose) {
         catsPlus$setInPose(inSittingPose);
     }
 
+    /**
+     * Sets the cooldown for sitting or sleeping when the goal is stopped.
+     */
     @Inject(method = "stop", at = @At("HEAD"))
     private void catsPlus$setSitOrSleepCooldown(CallbackInfo ci) {
         CatEntityAccess access = (CatEntityAccess) cat;

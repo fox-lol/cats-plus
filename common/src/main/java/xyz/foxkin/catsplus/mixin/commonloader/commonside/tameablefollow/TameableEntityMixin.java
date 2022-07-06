@@ -39,7 +39,8 @@ abstract class TameableEntityMixin extends AnimalEntity implements Tameable, Tam
     public abstract boolean isOwner(LivingEntity entity);
 
     /**
-     * Saves whether the tameable entity is set to follow its owner or not to NBT.
+     * Writes whether the tameable entity is set to follow its owner or not to NBT,
+     * so that it persists when quitting the game.
      */
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     private void catsPlus$writeFollowing(NbtCompound nbt, CallbackInfo ci) {

@@ -24,6 +24,9 @@ abstract class ChestBlockMixin {
         }
     }
 
+    /**
+     * A cat of top of a chest in the sleeping pose will prevent the chest from being opened.
+     */
     @Redirect(method = "hasCatOnTop", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;isInSittingPose()Z"))
     private static boolean catsPlus$preventChestOpenCatSleeping(CatEntity cat) {
         return cat.isInSittingPose() || cat.isInSleepingPose();
