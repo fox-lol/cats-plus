@@ -9,6 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -63,6 +65,11 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     }
 
     @Override
+    public void catsPlus$clearHeldEntity() {
+        catsPlus$setHeldEntity(new NbtCompound());
+    }
+
+    @Override
     public void catsPlus$dropHeldEntity(double x, double y, double z) {
         if (!getWorld().isClient() && catsPlus$isHoldingEntity()) {
             EntityType.getEntityFromNbt(catsPlus$getHeldEntity(), getWorld()).ifPresent(entity -> {
@@ -70,6 +77,35 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
                 ((ServerWorld) getWorld()).tryLoadEntity(entity);
             });
         }
-        catsPlus$setHeldEntity(new NbtCompound());
+        catsPlus$clearHeldEntity();
+    }
+
+    @Override
+    public void catsPlus$throwHeldEntity(double speed) {
+        if (!getWorld().isClient() && catsPlus$isHoldingEntity()) {
+            EntityType.getEntityFromNbt(catsPlus$getHeldEntity(), getWorld()).ifPresent(entity -> {
+                Vec3d playerPosition = getPos();
+                Vec3d playerHeading = Vec3d.fromPolar(getPitch(), getYaw());
+
+                double playerWidth = getBoundingBox().getXLength();
+                double playerBoxDiagonal = MathHelper.hypot(playerWidth, playerWidth);
+
+                double entityWidth = entity.getBoundingBox().getXLength();
+                double entityHeight = entity.getBoundingBox().getYLength();
+                double entityBoxDiagonal = MathHelper.hypot(entityWidth, entityWidth);
+
+                Vec3d throwStartDistanceFromPlayer = playerHeading.multiply((playerBoxDiagonal + entityBoxDiagonal) / 2);
+                Vec3d entityVelocity = playerHeading.multiply(speed);
+
+                entity.setPosition(
+                        playerPosition.getX() + throwStartDistanceFromPlayer.getX(),
+                        getEyeY() - entityHeight / 2,
+                        playerPosition.getZ() + throwStartDistanceFromPlayer.getZ()
+                );
+                entity.setVelocity(entityVelocity);
+                ((ServerWorld) getWorld()).tryLoadEntity(entity);
+            });
+        }
+        catsPlus$clearHeldEntity();
     }
 }

@@ -10,5 +10,9 @@ public interface PlayerEntityAccess {
 
     void catsPlus$setHeldEntity(NbtCompound nbtCompound);
 
+    void catsPlus$clearHeldEntity();
+
     void catsPlus$dropHeldEntity(double x, double y, double z);
+
+    void catsPlus$throwHeldEntity(double speed);
 }

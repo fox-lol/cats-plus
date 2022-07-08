@@ -36,29 +36,28 @@ abstract class HeldItemRendererMixin {
     @Shadow
     protected abstract void renderArmHoldingItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm);
 
+    @SuppressWarnings("ConstantConditions")
     @Inject(method = "renderArmHoldingItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;entityRenderDispatcher:Lnet/minecraft/client/render/entity/EntityRenderDispatcher;"))
     private void catsPlus$renderHoldingHands(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo ci) {
         PlayerEntity player = client.player;
-        if (player != null) {
-            PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-            if (playerAccess.catsPlus$isHoldingEntity()) {
-                boolean mainArm = arm == Arm.RIGHT;
-                float armSideMultiplier = mainArm ? 1 : -1;
+        PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
+        if (playerAccess.catsPlus$isHoldingEntity()) {
+            boolean mainArm = arm == Arm.RIGHT;
+            float armSideMultiplier = mainArm ? 1 : -1;
 
-                double xTranslation = 0.1;
-                double yTranslation = 0;
-                double zTranslation = 0.2;
+            double xTranslation = 0.1;
+            double yTranslation = 0;
+            double zTranslation = 0.2;
 
-                matrices.translate(xTranslation * armSideMultiplier, yTranslation, zTranslation);
+            matrices.translate(xTranslation * armSideMultiplier, yTranslation, zTranslation);
 
-                int xDegrees = -30;
-                int yDegrees = 0;
-                int zDegrees = -20;
+            int xDegrees = -30;
+            int yDegrees = 0;
+            int zDegrees = -20;
 
-                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(xDegrees));
-                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yDegrees * armSideMultiplier));
-                matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(zDegrees * armSideMultiplier));
-            }
+            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(xDegrees));
+            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yDegrees * armSideMultiplier));
+            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(zDegrees * armSideMultiplier));
         }
     }
 

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
 import xyz.foxkin.catsplus.commonside.init.ModBlocks;
 import xyz.foxkin.catsplus.commonside.init.ModItems;
+import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 import xyz.foxkin.catsplus.commonside.init.ModSounds;
 
 public class CatsPlus {
@@ -22,6 +23,7 @@ public class CatsPlus {
         ModSounds.registerSounds();
         ModBlocks.registerBlocks();
         ModItems.registerItems();
+        ModNetworkReceivers.registerReceivers();
     }
 
     private static void registerConfig() {
