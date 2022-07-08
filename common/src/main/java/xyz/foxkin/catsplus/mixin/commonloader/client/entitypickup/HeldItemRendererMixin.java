@@ -36,6 +36,9 @@ abstract class HeldItemRendererMixin {
     @Shadow
     protected abstract void renderArmHoldingItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm);
 
+    /**
+     * Renders the players arms in a holding position.
+     */
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "renderArmHoldingItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;entityRenderDispatcher:Lnet/minecraft/client/render/entity/EntityRenderDispatcher;"))
     private void catsPlus$renderHoldingHands(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo ci) {
@@ -61,6 +64,9 @@ abstract class HeldItemRendererMixin {
         }
     }
 
+    /**
+     * Renders the players arms in a holding position along with the held entity.
+     */
     @Inject(method = "renderFirstPersonItem", at = @At(value = "FIELD", target = "Lnet/minecraft/util/Hand;MAIN_HAND:Lnet/minecraft/util/Hand;"), cancellable = true)
     private void catsPlus$renderHoldingEntity(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;

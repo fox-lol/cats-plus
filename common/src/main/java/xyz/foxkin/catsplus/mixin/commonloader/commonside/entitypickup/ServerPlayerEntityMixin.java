@@ -25,17 +25,26 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
         super(world, pos, yaw, gameProfile, publicKey);
     }
 
+    /**
+     * Copies the held entity from the old player.
+     */
     @Inject(method = "copyFrom", at = @At("HEAD"))
     private void catsPlus$copyHeldEntity(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         PlayerEntityAccess oldPlayerAccess = (PlayerEntityAccess) oldPlayer;
         catsPlus$setHeldEntity(oldPlayerAccess.catsPlus$getHeldEntity());
     }
 
+    /**
+     * The player drops its held entity when the player dies.
+     */
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void catsPlus$dropHeldEntityOnDeath(DamageSource damageSource, CallbackInfo ci) {
         catsPlus$dropHeldEntity(getX(), getY(), getZ());
     }
 
+    /**
+     * The player drops its held entity when the player enters spectator mode.
+     */
     @Inject(method = "changeGameMode", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;dropShoulderEntities()V"))
     private void catsPlus$dropHeldEntityInSpectator(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
         catsPlus$dropHeldEntity(getX(), getY(), getZ());

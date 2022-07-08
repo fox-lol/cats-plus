@@ -19,6 +19,10 @@ abstract class MinecraftClientMixin {
 
     @Shadow @Nullable public ClientPlayerEntity player;
 
+    /**
+     * Sends a packet to the server telling it to throw the held entity
+     * and clears the held entity on the client.
+     */
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
     private void catsPlus$throwHeldEntity(CallbackInfoReturnable<Boolean> cir) {

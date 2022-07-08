@@ -17,6 +17,10 @@ import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 @Mixin(AbstractBlock.AbstractBlockState.class)
 abstract class AbstractBlockStateMixin {
 
+    /**
+     * When a player is holding an entity and interacts with a block,
+     * the entity is dropped next to the face of the block that was interacted with.
+     */
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void catsPlus$dropHeldEntity(World world, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;

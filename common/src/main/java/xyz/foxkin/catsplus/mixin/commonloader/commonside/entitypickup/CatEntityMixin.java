@@ -23,6 +23,10 @@ abstract class CatEntityMixin extends TameableEntity {
         super(entityType, world);
     }
 
+    /**
+     * If a player is sneaking and interacts with a tamed cat that is theirs,
+     * the player will pick up the cat.
+     */
     @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;setSitting(Z)V"), slice = @Slice(
             from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;isSitting()Z"),
             to = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextInt(I)I")
@@ -31,6 +35,10 @@ abstract class CatEntityMixin extends TameableEntity {
         catsPlus$pickupCat(player, cir);
     }
 
+    /**
+     * If a player is sneaking and interacts with a tamed cat that is not theirs,
+     * the player will pick up the cat.
+     */
     @Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;isTamed()Z", shift = At.Shift.AFTER), slice = @Slice(
             from = @At(value = "FIELD", target = "Lnet/minecraft/util/ActionResult;PASS:Lnet/minecraft/util/ActionResult;"),
             to = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;isFood()Z")
@@ -41,6 +49,9 @@ abstract class CatEntityMixin extends TameableEntity {
         }
     }
 
+    /**
+     * Picks up a cat.
+     */
     private void catsPlus$pickupCat(PlayerEntity player, CallbackInfoReturnable<ActionResult> cir) {
         if (player.isSneaking()) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;

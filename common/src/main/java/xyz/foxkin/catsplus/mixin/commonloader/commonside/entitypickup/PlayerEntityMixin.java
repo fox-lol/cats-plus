@@ -30,11 +30,17 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         super(entityType, world);
     }
 
+    /**
+     * Adds a held entity to the {@link DataTracker}.
+     */
     @Inject(method = "initDataTracker", at = @At("HEAD"))
     private void catsPlus$addHeldEntityTrackedData(CallbackInfo ci) {
         dataTracker.startTracking(CATS_PLUS$HELD_ENTITY, new NbtCompound());
     }
 
+    /**
+     * Writes information about the player's held entity to NBT.
+     */
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     private void catsPlus$writeHeldEntity(NbtCompound nbt, CallbackInfo ci) {
         if (catsPlus$isHoldingEntity()) {
@@ -42,6 +48,9 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         }
     }
 
+    /**
+     * Reads information about the player's held entity from NBT.
+     */
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     private void catsPlus$readHeldEntity(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains(CATS_PLUS$HELD_ENTITY_NBT_KEY, NbtElement.COMPOUND_TYPE)) {
