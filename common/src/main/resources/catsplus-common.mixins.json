@@ -10,6 +10,10 @@
         "commonside.catsitonblock.CatSitOnBlockGoalMixin",
         "commonside.catsitonblock.ChestBlockMixin",
         "commonside.goal.CatEntityMixin",
+        "commonside.entitypickup.AbstractBlockStateMixin",
+        "commonside.entitypickup.CatEntityMixin",
+        "commonside.entitypickup.PlayerEntityMixin",
+        "commonside.entitypickup.ServerPlayerEntityMixin",
         "commonside.tameablefollow.CatEntityMixin",
         "commonside.tameablefollow.FollowOwnerGoalMixin",
         "commonside.tameablefollow.ParrotEntityMixin",
@@ -17,6 +21,7 @@
         "commonside.tameablefollow.WolfEntityMixin"
     ],
     "client": [
+        "client.entitypickup.HeldItemRendererMixin"
     ],
     "injectors": {
         "defaultRequire": 1
