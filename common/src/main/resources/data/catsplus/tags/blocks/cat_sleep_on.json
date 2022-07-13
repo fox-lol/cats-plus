@@ -1,7 +1,6 @@
 {
     "values": [
         "#minecraft:beds",
-        "#catsplus:chests",
         "#catsplus:furnaces"
     ]
 }

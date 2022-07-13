@@ -5,7 +5,10 @@
     "name": "Cats Plus",
     "description": "A funny mod about funny cats :D",
     "authors": [
-        "Foxkin, Insertish, Lutitious, ShaksterNano"
+        "Foxkin",
+        "Insertish",
+        "Lutitious",
+        "ShaksterNano"
     ],
     "contact": {
         "homepage": "https://github.com/fox-lol/cats-plus",
@@ -19,9 +22,6 @@
         "main": [
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
         ],
-        "mm:early_risers": [
-            "xyz.foxkin.catsplus.commonside.fabricasm.fabric.CatsPlusEarlyRiser"
-        ],
         "modmenu": [
             "xyz.foxkin.catsplus.client.plugin.modmenu.fabric.CatsPlusModMenuPlugin"
         ]
@@ -30,6 +30,10 @@
         "catsplus-common.mixins.json",
         "catsplus-fabric.mixins.json"
     ],
+    "custom": {
+        "notify_gradle_properties_url": "https://raw.githubusercontent.com/fox-lol/cats-plus/main/gradle.properties",
+        "notify_gradle_properties_key": "mod_version"
+    },
     "depends": {
         "fabricloader": ">=0.14.0",
         "fabric": ">=0.56.0",
