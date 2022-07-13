@@ -10,8 +10,9 @@ import xyz.foxkin.catsplus.commonside.init.ModItems;
 
 
 public class CatMaidArmorMaterial implements ArmorMaterial {
-    private static final int[] BASE_DURABILITY = new int[]{8, 10, 12, 8};
-    private static final int[] PROTECTION_AMOUNT = new int[]{2, 5, 6, 2};
+
+    private static final int[] BASE_DURABILITY = {8, 10, 12, 8};
+    private static final int[] PROTECTION_AMOUNT = {2, 5, 6, 2};
 
     @Override
     public int getDurability(EquipmentSlot slot) {
@@ -45,7 +46,7 @@ public class CatMaidArmorMaterial implements ArmorMaterial {
 
     @Override
     public float getToughness() {
-        return 3.0F;
+        return 3;
     }
 
     @Override

@@ -19,13 +19,6 @@ public class ModItems {
 
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(CatsPlus.MOD_ID, Registry.ITEM_KEY);
 
-    // Block items
-
-    public static final RegistrySupplier<Item> CAT_BLOCK = ITEMS.register(
-            "cat_block",
-            () -> new BlockItem(ModBlocks.CAT_BLOCK.get(), new Item.Settings().group(CATS_PLUS_GROUP))
-    );
-
     public static final RegistrySupplier<Item> CAT_MAID_SCRAP = ITEMS.register(
             "cat_maid_scrap",
             () -> new Item(new Item.Settings().group(CATS_PLUS_GROUP))
@@ -65,6 +58,13 @@ public class ModItems {
                     EquipmentSlot.FEET,
                     new Item.Settings().group(CATS_PLUS_GROUP).maxCount(1)
             )
+    );
+
+    // Block items
+
+    public static final RegistrySupplier<Item> CAT_BLOCK = ITEMS.register(
+            "cat_block",
+            () -> new BlockItem(ModBlocks.CAT_BLOCK.get(), new Item.Settings().group(CATS_PLUS_GROUP))
     );
 
 

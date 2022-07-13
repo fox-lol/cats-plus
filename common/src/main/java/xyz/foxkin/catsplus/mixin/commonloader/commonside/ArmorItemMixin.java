@@ -1,57 +1,48 @@
 package xyz.foxkin.catsplus.mixin.commonloader.commonside;
 
 import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.Item;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.foxkin.catsplus.commonside.init.ModMaterials;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 @Mixin(ArmorItem.class)
-public abstract class ArmorItemMixin {
+abstract class ArmorItemMixin {
+
     @Shadow
     @Final
     private static UUID[] MODIFIERS;
     @Shadow
     @Final
-    @Mutable
-    private Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
-    @Shadow
-    @Final
     protected float knockbackResistance;
 
-    @Inject(method = "<init>", at = @At(value = "RETURN"))
-    private void constructor(ArmorMaterial material, EquipmentSlot slot, Item.Settings settings, CallbackInfo ci) {
-        UUID uUID = MODIFIERS[slot.getEntitySlotId()];
-
-        if (material == ModMaterials.CAT_MAID_ARMOR) {
-            ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> builder = ImmutableMultimap.builder();
-
-            this.attributeModifiers.forEach(builder::put);
-
-            builder.put(
+    /**
+     * Adds additional knockback resistance to armor whose material is {@link ModMaterials#CAT_MAID_ARMOR}.
+     */
+    @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMultimap;builder()Lcom/google/common/collect/ImmutableMultimap$Builder;"))
+    private ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> catsPlus$addCatMaidArmorModifiers(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> originalBuilder, ArmorMaterial material, EquipmentSlot slot) {
+        if (material.equals(ModMaterials.CAT_MAID_ARMOR)) {
+            UUID uuid = MODIFIERS[slot.getEntitySlotId()];
+            originalBuilder.put(
                     EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
-                    new EntityAttributeModifier(uUID,
+                    new EntityAttributeModifier(uuid,
                             "Armor knockback resistance",
-                            this.knockbackResistance,
+                            knockbackResistance,
                             EntityAttributeModifier.Operation.ADDITION
                     )
             );
-
-            this.attributeModifiers = builder.build();
         }
+        return originalBuilder;
     }
 }
