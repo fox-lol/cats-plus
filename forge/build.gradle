@@ -2,6 +2,8 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+archivesBaseName = "${rootProject.archives_base_name}-forge-mc${rootProject.minecraft_version}"
+
 architectury {
     platformSetupLoomIde()
     forge()
@@ -14,12 +16,9 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
-        mixinConfig "catsplus-common.mixins.json"
-        mixinConfig "catsplus-forge.mixins.json"
+        mixinConfig("catsplus-common.mixins.json", "catsplus-forge.mixins.json")
     }
 }
-
-archivesBaseName = "${rootProject.archives_base_name}-forge-mc${rootProject.minecraft_version}"
 
 configurations {
     common
@@ -34,14 +33,20 @@ dependencies {
 
     modApi("dev.architectury:architectury-forge:${rootProject.architectury_api_version}")
 
+    common(project(path: ":common", configuration: "namedElements")) {
+        transitive = false
+    }
+    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) {
+        transitive = false
+    }
+
     implementation(shadowCommon("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}"))
     annotationProcessor("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}")
     forgeRuntimeLibrary("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}")
 
     modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+    modRuntimeOnly("com.github.ShaksterNano.Note-Block-Library:note-block-lib-forge:${rootProject.note_block_lib_version}")
 }
 
 processResources {
@@ -59,7 +64,7 @@ shadowJar {
     configurations = [project.configurations.shadowCommon]
     classifier "dev-shadow"
 
-    relocate("com.llamalad7.mixinextras", "${rootProject.maven_group}.shadowed.com.llamalad7.mixinextras")
+    relocate("com.llamalad7.mixinextras", "${rootProject.maven_group}.catsplus.shadowed.com.llamalad7.mixinextras")
 }
 
 remapJar {
