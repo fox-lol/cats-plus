@@ -1,9 +1,7 @@
 package xyz.foxkin.catsplus.commonside.init;
 
 import io.github.shaksternano.noteblocklib.commonside.InstrumentMaterial;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
-import xyz.foxkin.catsplus.commonside.block.enums.CustomInstrument;
 import xyz.foxkin.catsplus.commonside.materials.CatMaidArmorMaterial;
 
 public class ModMaterials {

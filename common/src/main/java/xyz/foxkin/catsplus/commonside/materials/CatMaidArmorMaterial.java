@@ -1,15 +1,15 @@
 package xyz.foxkin.catsplus.commonside.materials;
 
-import net.minecraft.item.ItemConvertible;
-import xyz.foxkin.catsplus.commonside.init.ModItems;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import xyz.foxkin.catsplus.commonside.init.ModItems;
 
 
-public class CatMaidArmorMaterial implements ArmorMaterial{
+public class CatMaidArmorMaterial implements ArmorMaterial {
     private static final int[] BASE_DURABILITY = new int[]{8, 10, 12, 8};
     private static final int[] PROTECTION_AMOUNT = new int[]{2, 5, 6, 2};
 

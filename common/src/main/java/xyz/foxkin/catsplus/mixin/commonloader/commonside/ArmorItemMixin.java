@@ -1,6 +1,5 @@
 package xyz.foxkin.catsplus.mixin.commonloader.commonside;
 
-import xyz.foxkin.catsplus.commonside.init.ModItems;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.EquipmentSlot;
@@ -20,11 +19,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.foxkin.catsplus.commonside.init.ModMaterials;
 
 import java.util.UUID;
+
 @Mixin(ArmorItem.class)
 public abstract class ArmorItemMixin {
-    @Shadow @Final private static UUID[] MODIFIERS;
-    @Shadow @Final @Mutable private Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
-    @Shadow @Final protected float knockbackResistance;
+    @Shadow
+    @Final
+    private static UUID[] MODIFIERS;
+    @Shadow
+    @Final
+    @Mutable
+    private Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers;
+    @Shadow
+    @Final
+    protected float knockbackResistance;
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     private void constructor(ArmorMaterial material, EquipmentSlot slot, Item.Settings settings, CallbackInfo ci) {

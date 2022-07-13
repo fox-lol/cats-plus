@@ -8,8 +8,6 @@ import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
-import xyz.foxkin.catsplus.commonside.items.CatMaidScrap;
-import xyz.foxkin.catsplus.commonside.materials.CatMaidArmorMaterial;
 
 @SuppressWarnings("unused")
 public class ModItems {
