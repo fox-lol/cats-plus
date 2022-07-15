@@ -9,5 +9,11 @@
     "catsplus.sounds.cat_laughter": "Cat laughter",
 
     "catsplus.message.actionBar.following": "Following",
-    "catsplus.message.actionBar.wandering": "Wandering"
+    "catsplus.message.actionBar.wandering": "Wandering",
+
+    "item.catsplus.cat_maid_boots": "Cat Maid Boots",
+    "item.catsplus.cat_maid_chestplate": "Cat Maid Chestplate",
+    "item.catsplus.cat_maid_helmet": "Cat Maid Helmet",
+    "item.catsplus.cat_maid_leggings": "Cat Maid Leggings",
+    "item.catsplus.cat_maid_scraps": "Cat Maid Scraps"
 }

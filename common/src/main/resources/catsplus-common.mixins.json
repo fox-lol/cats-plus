@@ -5,6 +5,7 @@
     "compatibilityLevel": "JAVA_17",
     "plugin": "xyz.foxkin.catsplus.mixin.commonloader.CatsPlusMixinPlugin",
     "mixins": [
+        "commonside.ArmorItemMixin",
         "commonside.accessor.CatSitOnBlockGoalAccessor",
         "commonside.catsitonblock.CatEntityMixin",
         "commonside.catsitonblock.CatSitOnBlockGoalMixin",
