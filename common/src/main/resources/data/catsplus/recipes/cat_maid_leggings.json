@@ -1,0 +1,17 @@
+    {
+      "type": "minecraft:crafting_shaped",
+      "pattern": [
+        "XXX",
+        "X X",
+        "X X"
+      ],
+      "key": {
+        "X": {
+          "item": "catsplus:cat_maid_scrap"
+        }
+      },
+      "result": {
+        "item": "catsplus:cat_maid_leggings",
+        "count": 1
+      }
+    }
