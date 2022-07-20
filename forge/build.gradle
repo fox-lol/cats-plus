@@ -48,7 +48,7 @@ dependencies {
 
     modApi("me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}")
 
-    modRuntimeOnly("com.github.ShaksterNano.Note-Block-Library:note-block-lib-forge:${rootProject.note_block_lib_version}")
+    modRuntimeOnly(include("com.github.ShaksterNano.Note-Block-Library:note-block-lib-forge:${rootProject.note_block_lib_version}"))
 }
 
 processResources {

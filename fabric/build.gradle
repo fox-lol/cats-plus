@@ -45,7 +45,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modRuntimeOnly("com.github.ShaksterNano.Note-Block-Library:note-block-lib-fabric:${rootProject.note_block_lib_version}")
+    modRuntimeOnly(include("com.github.ShaksterNano.Note-Block-Library:note-block-lib-fabric:${rootProject.note_block_lib_version}"))
 
     modImplementation("com.terraformersmc:modmenu:${rootProject.modmenu_version}")
 
