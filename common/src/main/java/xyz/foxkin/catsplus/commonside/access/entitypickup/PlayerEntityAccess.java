@@ -1,6 +1,10 @@
 package xyz.foxkin.catsplus.commonside.access.entitypickup;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Vec3d;
+
+import java.util.Optional;
 
 public interface PlayerEntityAccess {
 
@@ -10,7 +14,9 @@ public interface PlayerEntityAccess {
      *
      * @return An {@code NbtCompound} containing information about the player's held entity.
      */
-    NbtCompound catsPlus$getHeldEntity();
+    NbtCompound catsPlus$getHeldEntityNbt();
+
+    Optional<Entity> catsPlus$getHeldEntity();
 
     /**
      * Gets whether the player has a held entity or not.
@@ -23,16 +29,12 @@ public interface PlayerEntityAccess {
     /**
      * Sets the player's held entity.
      *
-     * @param nbtCompound The {@code NbtCompound} containing information about the player's held entity.
+     * @param entityNbt The {@code NbtCompound} containing information about the player's held entity.
      */
 
-    void catsPlus$setHeldEntity(NbtCompound nbtCompound);
+    void catsPlus$setHeldEntityNbt(NbtCompound entityNbt);
 
-    /**
-     * Clears the player's held entity.
-     */
-
-    void catsPlus$clearHeldEntity();
+    void catsPlus$setHeldEntity(Entity entity);
 
     /**
      * Clears the player's held entity and spawns it in the world.
@@ -42,6 +44,8 @@ public interface PlayerEntityAccess {
      * @param z The initial z coordinate of the spawned entity.
      */
     void catsPlus$dropHeldEntity(double x, double y, double z);
+
+    void catsPlus$dropHeldEntity(Vec3d pos);
 
     /**
      * Clears the player's held entity and spawns it in the world

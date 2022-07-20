@@ -31,7 +31,7 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
     @Inject(method = "copyFrom", at = @At("HEAD"))
     private void catsPlus$copyHeldEntity(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         PlayerEntityAccess oldPlayerAccess = (PlayerEntityAccess) oldPlayer;
-        catsPlus$setHeldEntity(oldPlayerAccess.catsPlus$getHeldEntity());
+        catsPlus$setHeldEntityNbt(oldPlayerAccess.catsPlus$getHeldEntityNbt());
     }
 
     /**
@@ -39,7 +39,7 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
      */
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void catsPlus$dropHeldEntityOnDeath(DamageSource damageSource, CallbackInfo ci) {
-        catsPlus$dropHeldEntity(getX(), getY(), getZ());
+        catsPlus$dropHeldEntity(getPos());
     }
 
     /**
@@ -47,6 +47,13 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
      */
     @Inject(method = "changeGameMode", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;dropShoulderEntities()V"))
     private void catsPlus$dropHeldEntityInSpectator(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
-        catsPlus$dropHeldEntity(getX(), getY(), getZ());
+        catsPlus$dropHeldEntity(getPos());
+    }
+
+    @Inject(method = "dropSelectedItem", at = @At("HEAD"))
+    private void catsPlus$throwHeldEntity(boolean entireStack, CallbackInfoReturnable<Boolean> cir) {
+        if (catsPlus$isHoldingEntity()) {
+            catsPlus$throwHeldEntity(1);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package xyz.foxkin.catsplus.mixin.commonloader.client.entitypickup;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
@@ -8,10 +7,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Final;
@@ -20,7 +16,19 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import software.bernie.geckolib3.model.provider.GeoModelProvider;
+import software.bernie.geckolib3.util.RenderUtils;
+import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
+import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
+import xyz.foxkin.catsplus.client.animatable.player.FirstPersonPlayerArms;
+import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
+import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
+import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
+import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
+
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 // TODO: Replace with events on Forge.
 @Mixin(HeldItemRenderer.class)
@@ -28,41 +36,7 @@ abstract class HeldItemRendererMixin {
 
     @Shadow
     @Final
-    private MinecraftClient client;
-    @Shadow
-    @Final
     private EntityRenderDispatcher entityRenderDispatcher;
-
-    @Shadow
-    protected abstract void renderArmHoldingItem(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm);
-
-    /**
-     * Renders the players arms in a holding position.
-     */
-    @SuppressWarnings("ConstantConditions")
-    @Inject(method = "renderArmHoldingItem", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/item/HeldItemRenderer;entityRenderDispatcher:Lnet/minecraft/client/render/entity/EntityRenderDispatcher;"))
-    private void catsPlus$renderHoldingHands(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo ci) {
-        PlayerEntity player = client.player;
-        PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-        if (playerAccess.catsPlus$isHoldingEntity()) {
-            boolean mainArm = arm == Arm.RIGHT;
-            float armSideMultiplier = mainArm ? 1 : -1;
-
-            double xTranslation = 0.1;
-            double yTranslation = 0;
-            double zTranslation = 0.2;
-
-            matrices.translate(xTranslation * armSideMultiplier, yTranslation, zTranslation);
-
-            int xDegrees = -30;
-            int yDegrees = 0;
-            int zDegrees = -20;
-
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(xDegrees));
-            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yDegrees * armSideMultiplier));
-            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(zDegrees * armSideMultiplier));
-        }
-    }
 
     /**
      * Renders the players arms in a holding position along with the held entity.
@@ -71,36 +45,56 @@ abstract class HeldItemRendererMixin {
     private void catsPlus$renderHoldingEntity(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
         if (playerAccess.catsPlus$isHoldingEntity()) {
-            boolean mainArm = hand == Hand.MAIN_HAND;
-            Arm arm = mainArm ? player.getMainArm() : player.getMainArm().getOpposite();
-
-            matrices.push();
-            renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
-            matrices.pop();
-
-            EntityType.getEntityFromNbt(playerAccess.catsPlus$getHeldEntity(), player.getWorld()).ifPresent(entity -> {
-                EntityRenderer<? super Entity> renderer = entityRenderDispatcher.getRenderer(entity);
-                matrices.push();
-
-                double xTranslation = 0;
-                double yTranslation = -0.05;
-                double zTranslation = -1.2;
-
-                matrices.translate(xTranslation, yTranslation, zTranslation);
-
-                int xDegrees = 0;
-                int yDegrees = 90;
-                int zDegrees = 180;
-
-                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(xDegrees));
-                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yDegrees));
-                matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(zDegrees));
-
-                renderer.render(entity, 0, 0, matrices, vertexConsumers, light);
-                matrices.pop();
+            playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
+                if (hand == Hand.MAIN_HAND) {
+                    PlayerArms playerArms = FirstPersonPlayerArms.getInstance();
+                    catsPlus$renderHoldingArms(playerArms, matrices, vertexConsumers, light);
+                    catsPlus$renderHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                }
+                ci.cancel();
             });
-
-            ci.cancel();
         }
+    }
+
+    private void catsPlus$renderHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        matrices.push();
+        matrices.translate(0, -2, -1);
+        CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
+        renderer.render(playerArms, matrices, vertexConsumers, light);
+        matrices.pop();
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private void catsPlus$renderHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        matrices.push();
+
+        AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
+        if (heldEntity instanceof AnimatableContainer<?> container) {
+            CatsPlusAnimatable animatable = container.catsPlus$getIAnimatable();
+
+            Optional<? extends CatsPlusGeoRenderer> rendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
+            rendererOptional.ifPresentOrElse(animatableRenderer -> {
+                CatsPlusGeoRenderer<PlayerArms> holderRenderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
+                GeoModelProvider<PlayerArms> holderModelProvider = holderRenderer.getGeoModelProvider();
+
+                holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder)).getBone("entity_placeholder").ifPresentOrElse(bone -> {
+                    RenderUtils.translate(bone, matrices);
+                    RenderUtils.rotate(bone, matrices);
+                    matrices.translate(0, -0.6, -0.9);
+                    bone.setHidden(true);
+                    animatableRenderer.render(animatable, matrices, vertexConsumers, light);
+                    renderedHeldEntity.set(true);
+                }, () -> CatsPlus.LOGGER.error("Could not find bone \"entity_placeholder\" in model!"));
+            }, () -> CatsPlus.LOGGER.error("Could not find renderer for animatable " + animatable.getClass().getName()));
+        }
+
+        if (!renderedHeldEntity.get()) {
+            matrices.translate(0, -0.5, -1);
+            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+            EntityRenderer<? super Entity> entityRenderer = entityRenderDispatcher.getRenderer(heldEntity);
+            entityRenderer.render(heldEntity, 0, 0, matrices, vertexConsumers, light);
+        }
+
+        matrices.pop();
     }
 }

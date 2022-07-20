@@ -1,7 +1,6 @@
 package xyz.foxkin.catsplus.mixin.commonloader.commonside.entitypickup;
 
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -25,7 +24,7 @@ abstract class AbstractBlockStateMixin {
     private void catsPlus$dropHeldEntity(World world, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
         if (playerAccess.catsPlus$isHoldingEntity()) {
-            EntityType.getEntityFromNbt(playerAccess.catsPlus$getHeldEntity(), player.getWorld()).ifPresent(entity -> {
+            playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
                 Vec3d position = hit.getPos();
 
                 double x = position.getX();
