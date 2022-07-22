@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
+import xyz.foxkin.catsplus.commonside.animation.AnimationSyncing;
 import xyz.foxkin.catsplus.commonside.init.ModEntityHeldPoses;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 
@@ -73,6 +75,10 @@ abstract class EntityMixin implements EntityAccess {
 
             setPitch(0);
             playerAccess.catsPlus$setHeldEntity((Entity) (Object) this);
+
+            Identifier entityId = EntityType.getId(getType());
+            AnimationSyncing.syncArmsAnimations(player, false, "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".picking_up." + catsPlus$getHeldPoseNumber());
+
             discard();
             cir.setReturnValue(ActionResult.SUCCESS);
         }

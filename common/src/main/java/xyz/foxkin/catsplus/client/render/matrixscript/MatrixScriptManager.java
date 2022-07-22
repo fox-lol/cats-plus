@@ -45,6 +45,7 @@ public enum MatrixScriptManager implements SynchronousResourceReloader {
         return Optional.ofNullable(scripts.get(path));
     }
 
+    @SuppressWarnings("unused")
     public void executeIfPresent(String path, MatrixStack matrices) {
         getScript(path).ifPresent(script -> script.execute(matrices));
     }

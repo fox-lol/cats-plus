@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.util.RenderUtils;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
@@ -70,21 +71,24 @@ abstract class HeldItemRendererMixin {
 
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
         if (heldEntity instanceof AnimatableContainer<?> container) {
-            CatsPlusAnimatable animatable = container.catsPlus$getIAnimatable();
+            CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
 
             Optional<? extends CatsPlusGeoRenderer> rendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
             rendererOptional.ifPresentOrElse(animatableRenderer -> {
                 CatsPlusGeoRenderer<PlayerArms> holderRenderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
                 GeoModelProvider<PlayerArms> holderModelProvider = holderRenderer.getGeoModelProvider();
 
-                holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder)).getBone("entity_placeholder").ifPresentOrElse(bone -> {
-                    RenderUtils.translate(bone, matrices);
-                    RenderUtils.rotate(bone, matrices);
+                GeoModel model = holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder));
+                model.getBone("root").ifPresentOrElse(root -> holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder)).getBone("entity_placeholder").ifPresentOrElse(entityPlaceholder -> {
+                    RenderUtils.translate(root, matrices);
+                    RenderUtils.translate(entityPlaceholder, matrices);
+                    RenderUtils.rotate(root, matrices);
+                    RenderUtils.rotate(entityPlaceholder, matrices);
                     matrices.translate(0, -0.6, -0.9);
-                    bone.setHidden(true);
+                    entityPlaceholder.setHidden(true);
                     animatableRenderer.render(animatable, matrices, vertexConsumers, light);
                     renderedHeldEntity.set(true);
-                }, () -> CatsPlus.LOGGER.error("Could not find bone \"entity_placeholder\" in model!"));
+                }, () -> CatsPlus.LOGGER.error("Could not find bone \"entity_placeholder\" in model!")), () -> CatsPlus.LOGGER.error("Could not find bone \"root\" in model!"));
             }, () -> CatsPlus.LOGGER.error("Could not find renderer for animatable " + animatable.getClass().getName()));
         }
 

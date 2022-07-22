@@ -54,6 +54,7 @@ public class MatrixScript {
 
         private final ImmutableList.Builder<MatrixInstruction> instructions = new ImmutableList.Builder<>();
 
+        @SuppressWarnings("UnusedReturnValue")
         public Builder addInstruction(MatrixInstruction instruction) {
             instructions.add(instruction);
             return this;

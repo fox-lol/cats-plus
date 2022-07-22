@@ -4,6 +4,8 @@
     "minVersion": "0.8",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
+        "commonside.accessor.playertracking.ThreadedAnvilChunkStorageAccessor",
+        "commonside.accessor.playertracking.EntityTrackerAccessor"
     ],
     "client": [
     ],

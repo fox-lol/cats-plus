@@ -2,8 +2,10 @@ package xyz.foxkin.catsplus.client.animatable.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import org.jetbrains.annotations.Nullable;
+import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
 
 @Environment(EnvType.CLIENT)
 public class FirstPersonPlayerArms extends PlayerArms {
@@ -11,11 +13,22 @@ public class FirstPersonPlayerArms extends PlayerArms {
     @Nullable
     public static FirstPersonPlayerArms instance;
 
-    public FirstPersonPlayerArms(AbstractClientPlayerEntity player) {
+    protected FirstPersonPlayerArms(ClientPlayerEntity player) {
         super(player, true);
     }
 
-    public static void createInstance(AbstractClientPlayerEntity player) {
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void clearOtherPerspectiveAnimations() {
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player != null) {
+            AnimatableContainer<ThirdPersonPlayerArms> container = (AnimatableContainer<ThirdPersonPlayerArms>) player;
+            PlayerArms arms = container.catsPlus$getAnimatable();
+            arms.setPendingAnimations();
+        }
+    }
+
+    public static void createInstance(ClientPlayerEntity player) {
         instance = new FirstPersonPlayerArms(player);
     }
 

@@ -7,5 +7,5 @@ import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 @Environment(EnvType.CLIENT)
 public interface AnimatableContainer<T extends CatsPlusAnimatable> {
 
-    T catsPlus$getIAnimatable();
+    T catsPlus$getAnimatable();
 }

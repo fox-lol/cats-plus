@@ -13,7 +13,7 @@ abstract class AbstractPlayerEntityMixin implements AnimatableContainer<ThirdPer
     private final ThirdPersonPlayerArms catsPlus$playerArms = new ThirdPersonPlayerArms((AbstractClientPlayerEntity) (Object) this);
 
     @Override
-    public ThirdPersonPlayerArms catsPlus$getIAnimatable() {
+    public ThirdPersonPlayerArms catsPlus$getAnimatable() {
         return catsPlus$playerArms;
     }
 }

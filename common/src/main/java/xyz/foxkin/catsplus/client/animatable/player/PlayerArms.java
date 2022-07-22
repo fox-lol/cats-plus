@@ -14,7 +14,7 @@ import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 
 @Environment(EnvType.CLIENT)
-public class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
+public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
 
     private final boolean firstPerson;
 
@@ -25,7 +25,8 @@ public class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
 
     @Override
     protected <T extends IAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
-        if (event.getController().getAnimationState() != AnimationState.Running) {
+        super.animationPredicate(event);
+        if (event.getController().getAnimationState() == AnimationState.Stopped) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) getEntity();
             if (playerAccess.catsPlus$isHoldingEntity()) {
                 playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
@@ -33,7 +34,7 @@ public class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
                     int heldPoseNumber = entityAccess.catsPlus$getHeldPoseNumber();
                     if (heldPoseNumber > 0) {
                         Identifier entityId = EntityType.getId(entity.getType());
-                        playAnimations(true, "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".idle." + heldPoseNumber);
+                        playAnimations(true, getAnimationPrefix() + "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".idle." + heldPoseNumber);
                     }
                 });
             }
@@ -43,15 +44,26 @@ public class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
 
     @Override
     public void playAnimations(boolean lastShouldLoop, String... animationNames) {
-        for (int i = 0; i < animationNames.length; i++) {
-            String animationName = animationNames[i];
-            animationNames[i] = (firstPerson ? "first" : "third") + "_person." + animationName;
-        }
         super.playAnimations(lastShouldLoop, animationNames);
+        clearOtherPerspectiveAnimations();
     }
+
+    protected abstract void clearOtherPerspectiveAnimations();
 
     @Override
     public Identifier getTexture() {
         return getEntity().getSkinTexture();
+    }
+
+    public boolean isSlimArms() {
+        return getEntity().getModel().equals("slim");
+    }
+
+    public boolean isInSneakingPose() {
+        return getEntity().isInSneakingPose();
+    }
+
+    private String getAnimationPrefix() {
+        return (firstPerson ? "first" : "third") + "_person.";
     }
 }

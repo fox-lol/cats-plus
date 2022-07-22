@@ -2,7 +2,6 @@ package xyz.foxkin.catsplus.client.model.entity.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
@@ -21,8 +20,7 @@ public class PlayerArmsModel extends CatsPlusModel<PlayerArms> {
     }
 
     private void setArmThickness(PlayerArms playerArms) {
-        AbstractClientPlayerEntity player = playerArms.getEntity();
-        boolean slimArms = player.getModel().equals("slim");
+        boolean slimArms = playerArms.isSlimArms();
         try {
             if (slimArms) {
                 getBone("right_arm_wide").setHidden(true);

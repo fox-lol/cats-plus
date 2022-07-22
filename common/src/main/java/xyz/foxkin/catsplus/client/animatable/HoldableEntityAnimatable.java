@@ -18,7 +18,8 @@ public abstract class HoldableEntityAnimatable<U extends Entity> extends EntityA
 
     @Override
     protected <T extends IAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
-        if (event.getController().getAnimationState() != AnimationState.Running) {
+        super.animationPredicate(event);
+        if (event.getController().getAnimationState() == AnimationState.Stopped) {
             EntityAccess entityAccess = (EntityAccess) getEntity();
             int heldPoseNumber = entityAccess.catsPlus$getHeldPoseNumber();
             if (heldPoseNumber > 0) {

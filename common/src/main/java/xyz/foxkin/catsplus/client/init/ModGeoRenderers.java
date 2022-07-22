@@ -26,13 +26,13 @@ public class ModGeoRenderers {
         registerRenderer(ReplacedCatEntity.class, new ReplacedCatRenderer(new ReplacedCatModel()));
     }
 
-    private static <T extends CatsPlusAnimatable> void registerRenderer(Class<T> clazz, CatsPlusGeoRenderer<T> renderer) {
-        RENDERERS.put(clazz, renderer);
+    private static <T extends CatsPlusAnimatable> void registerRenderer(Class<T> animatableClass, CatsPlusGeoRenderer<T> renderer) {
+        RENDERERS.put(animatableClass, renderer);
         AnimationController.addModelFetcher(renderer::modelFetcher);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends CatsPlusAnimatable> Optional<CatsPlusGeoRenderer<T>> getRenderer(Class<T> clazz) {
-        return Optional.ofNullable((CatsPlusGeoRenderer<T>) RENDERERS.get(clazz));
+    public static <T extends CatsPlusAnimatable> Optional<CatsPlusGeoRenderer<T>> getRenderer(Class<T> animatableClass) {
+        return Optional.ofNullable((CatsPlusGeoRenderer<T>) RENDERERS.get(animatableClass));
     }
 }

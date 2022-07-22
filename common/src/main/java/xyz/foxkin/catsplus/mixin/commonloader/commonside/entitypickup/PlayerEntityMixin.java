@@ -15,6 +15,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -23,11 +24,13 @@ import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 
 import java.util.Optional;
 
+@SuppressWarnings("WrongEntityDataParameterClass")
 @Mixin(PlayerEntity.class)
 abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAccess {
 
-    @SuppressWarnings("WrongEntityDataParameterClass")
+    @Unique
     private static final TrackedData<NbtCompound> CATS_PLUS$HELD_ENTITY_TRACKER_KEY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+    @Unique
     private static final String CATS_PLUS$HELD_ENTITY_NBT_KEY = "catsplus:heldEntity";
 
     @SuppressWarnings("unused")
@@ -35,15 +38,12 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         super(entityType, world);
     }
 
-    /**
-     * Adds a held entity to the {@link DataTracker}.
-     */
     @Inject(method = "initDataTracker", at = @At("HEAD"))
-    private void catsPlus$addHeldEntityTrackedData(CallbackInfo ci) {
+    private void catsPlus$trackCustomData(CallbackInfo ci) {
         dataTracker.startTracking(CATS_PLUS$HELD_ENTITY_TRACKER_KEY, new NbtCompound());
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("RETURN"))
     private void catsPlus$dropHeldEntityIfItemEquipped(CallbackInfo ci) {
         if (!getMainHandStack().isEmpty() || !getOffHandStack().isEmpty()) {
             catsPlus$dropHeldEntity(getPos());

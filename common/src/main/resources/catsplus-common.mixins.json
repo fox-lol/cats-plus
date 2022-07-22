@@ -33,6 +33,7 @@
         "client.entitypickup.CatEntityMixin",
         "client.entitypickup.HeldItemRendererMixin",
         "client.entitypickup.LivingEntityRendererMixin",
+        "client.entitypickup.MinecraftClientMixin",
         "client.entitypickup.PlayerEntityModelMixin",
         "client.entitypickup.PlayerEntityRendererMixin"
     ],

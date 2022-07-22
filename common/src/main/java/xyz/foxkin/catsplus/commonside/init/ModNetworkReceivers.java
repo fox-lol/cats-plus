@@ -1,17 +1,16 @@
 package xyz.foxkin.catsplus.commonside.init;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
+import net.minecraft.util.Identifier;
+import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 public class ModNetworkReceivers {
+
+    public static final Identifier PLAY_FIRST_PERSON_ARMS_ANIMATIONS = new Identifier(CatsPlus.MOD_ID, "play_first_person_arms_animation");
+    public static final Identifier PLAY_ENTITY_ANIMATIONS = new Identifier(CatsPlus.MOD_ID, "play_entity_animation");
 
     /**
      * Registers the logical server receivers.
      */
-    public static void registerServerReceivers() {
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static void registerClientReceivers() {
+    public static void registerReceivers() {
     }
 }

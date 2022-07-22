@@ -12,7 +12,7 @@ abstract class CatEntityMixin implements AnimatableContainer<ReplacedCatEntity> 
     private final ReplacedCatEntity catsPlus$replacedCat = new ReplacedCatEntity((CatEntity) (Object) this);
 
     @Override
-    public ReplacedCatEntity catsPlus$getIAnimatable() {
+    public ReplacedCatEntity catsPlus$getAnimatable() {
         return catsPlus$replacedCat;
     }
 }

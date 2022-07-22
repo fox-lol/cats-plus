@@ -1,5 +1,5 @@
-translate 0 0.2 -0.1
-rotate z 180
+translate 0 -0.22 0.1
+rotate x -23
 // rotate x 160
 // rotate y 170
 // rotate z 40

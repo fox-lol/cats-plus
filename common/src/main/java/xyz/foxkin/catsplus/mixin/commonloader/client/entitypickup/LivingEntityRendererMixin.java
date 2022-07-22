@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.util.RenderUtils;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
@@ -42,7 +43,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
             if (playerAccess.catsPlus$isHoldingEntity()) {
                 playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
                     AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) entity;
-                    PlayerArms playerArms = animatableContainer.catsPlus$getIAnimatable();
+                    PlayerArms playerArms = animatableContainer.catsPlus$getAnimatable();
 
                     catsPlus$renderHoldingArms(playerArms, matrices, vertexConsumers, light);
                     catsPlus$renderHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
@@ -53,10 +54,13 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 
     private void catsPlus$renderHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
-
         matrices.push();
         matrices.translate(0, 1.764, -0.1);
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+        if (playerArms.isInSneakingPose()) {
+            matrices.translate(0, -0.1, 0.7);
+            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-23));
+        }
         renderer.render(playerArms, matrices, vertexConsumers, light);
         matrices.pop();
     }
@@ -67,22 +71,29 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
 
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
         if (heldEntity instanceof AnimatableContainer<?> container) {
-            CatsPlusAnimatable animatable = container.catsPlus$getIAnimatable();
+            CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
 
             Optional<? extends CatsPlusGeoRenderer> rendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
             rendererOptional.ifPresentOrElse(renderer -> {
                 CatsPlusGeoRenderer<PlayerArms> holderRenderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
                 GeoModelProvider<PlayerArms> holderModelProvider = holderRenderer.getGeoModelProvider();
 
-                holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder)).getBone("entity_placeholder").ifPresentOrElse(bone -> {
-                    RenderUtils.translate(bone, matrices);
-                    RenderUtils.rotate(bone, matrices);
+                GeoModel model = holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder));
+                model.getBone("root").ifPresentOrElse(root -> model.getBone("entity_placeholder").ifPresentOrElse(entityPlaceholder -> {
                     matrices.translate(0, 0.2, -0.1);
                     matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
-                    bone.setHidden(true);
+                    if (holder.isInSneakingPose()) {
+                        matrices.translate(0, -0.22, 0.1);
+                        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-23));
+                    }
+                    RenderUtils.translate(root, matrices);
+                    RenderUtils.translate(entityPlaceholder, matrices);
+                    RenderUtils.rotate(root, matrices);
+                    RenderUtils.rotate(entityPlaceholder, matrices);
+                    entityPlaceholder.setHidden(true);
                     renderer.render(animatable, matrices, vertexConsumers, light);
                     renderedHeldEntity.set(true);
-                }, () -> CatsPlus.LOGGER.error("Could not find bone \"entity_placeholder\" in model!"));
+                }, () -> CatsPlus.LOGGER.error("Could not find bone \"entity_placeholder\" in model!")), () -> CatsPlus.LOGGER.error("Could not find bone \"root\" in model!"));
             }, () -> CatsPlus.LOGGER.error("Could not find renderer for animatable " + animatable.getClass().getName()));
         }
 

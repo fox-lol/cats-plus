@@ -6,6 +6,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.foxkin.catsplus.client.init.ModClientEventHandlers;
+import xyz.foxkin.catsplus.client.init.ModClientNetworkReceivers;
+import xyz.foxkin.catsplus.client.init.ModClientResourceReloaders;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
 import xyz.foxkin.catsplus.commonside.init.*;
@@ -13,7 +16,6 @@ import xyz.foxkin.catsplus.commonside.init.*;
 public class CatsPlus {
 
     public static final String MOD_ID = "catsplus";
-
     public static final Logger LOGGER = LoggerFactory.getLogger("Cats Plus");
 
     private static CatsPlusConfig config;
@@ -23,15 +25,16 @@ public class CatsPlus {
         ModSounds.registerSounds();
         ModBlocks.registerBlocks();
         ModItems.registerItems();
-        ModNetworkReceivers.registerServerReceivers();
+        ModEventHandlers.registerEventHandlers();
+        ModNetworkReceivers.registerReceivers();
         ModEntityHeldPoses.addEntityHeldPosesCounts();
     }
 
     @Environment(EnvType.CLIENT)
     public static void clientInit() {
-        ModResourceReloaders.registerClientReloaders();
-        ModEventHandlers.registerClientEventHandlers();
-        ModNetworkReceivers.registerClientReceivers();
+        ModClientResourceReloaders.registerClientReloaders();
+        ModClientEventHandlers.registerEventHandlers();
+        ModClientNetworkReceivers.registerReceivers();
         ModGeoRenderers.registerRenderers();
     }
 

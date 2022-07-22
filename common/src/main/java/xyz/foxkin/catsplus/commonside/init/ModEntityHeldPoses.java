@@ -13,6 +13,7 @@ public class ModEntityHeldPoses {
         addEntityHeldPosesCount(EntityType.CAT, 1);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void addEntityHeldPosesCount(EntityType<?> entityType, int heldPosesCount) {
         ENTITY_HELD_POSES_COUNTS.put(entityType, heldPosesCount);
     }

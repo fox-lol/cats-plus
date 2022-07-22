@@ -23,7 +23,7 @@ public interface CatSitOnBlockGoalAccess {
     /**
      * Sets the pose that a cat will be set in once it gets on a valid block.
      *
-     * @param inPose Wether to enter or exit the pose.
+     * @param inPose Whether to enter or exit the pose.
      */
     void catsPlus$setInPose(boolean inPose);
 }

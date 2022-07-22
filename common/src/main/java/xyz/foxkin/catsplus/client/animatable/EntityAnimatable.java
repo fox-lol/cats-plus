@@ -18,7 +18,7 @@ public abstract class EntityAnimatable<T extends Entity> extends CatsPlusAnimata
         return entity.getUuid().hashCode();
     }
 
-    public T getEntity() {
+    protected T getEntity() {
         return entity;
     }
 }

@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.commonside.init;
+package xyz.foxkin.catsplus.client.init;
 
 import dev.architectury.registry.ReloadListenerRegistry;
 import net.fabricmc.api.EnvType;
@@ -6,7 +6,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.resource.ResourceType;
 import xyz.foxkin.catsplus.client.render.matrixscript.MatrixScriptManager;
 
-public class ModResourceReloaders {
+public class ModClientResourceReloaders {
 
     @Environment(EnvType.CLIENT)
     public static void registerClientReloaders() {
