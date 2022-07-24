@@ -1,0 +1,8 @@
+{
+    "cat_laughter": {
+        "subtitle": "catsplus.sounds.cat_laughter",
+        "sounds": [
+            "catsplus:cat_laughter"
+        ]
+    }
+}

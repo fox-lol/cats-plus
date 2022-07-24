@@ -3,9 +3,12 @@
     "id": "catsplus",
     "version": "${version}",
     "name": "Cats Plus",
-    "description": "This is an example description! Tell everyone what your mod is about!",
+    "description": "A funny mod about funny cats :D",
     "authors": [
-        "Me!"
+        "Foxkin",
+        "Insertish",
+        "Lutitious",
+        "ShaksterNano"
     ],
     "contact": {
         "homepage": "https://github.com/fox-lol/cats-plus",
@@ -18,15 +21,25 @@
     "entrypoints": {
         "main": [
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
+        ],
+        "modmenu": [
+            "xyz.foxkin.catsplus.client.plugin.modmenu.fabric.CatsPlusModMenuPlugin"
         ]
     },
     "mixins": [
-        "catsplus-fabric.mixins.json",
-        "catsplus-common.mixins.json"
+        "catsplus-common.mixins.json",
+        "catsplus-fabric.mixins.json"
     ],
+    "custom": {
+        "notify_gradle_properties_url": "https://raw.githubusercontent.com/fox-lol/cats-plus/main/gradle.properties",
+        "notify_gradle_properties_key": "mod_version"
+    },
     "depends": {
-        "fabric": "*",
+        "fabricloader": ">=0.14.0",
+        "fabric": ">=0.56.0",
         "minecraft": ">=1.19",
-        "architectury": ">=5.6.22"
+        "java": ">=17",
+        "architectury": ">=5.7.0",
+        "cloth-config": ">=7.0.0"
     }
 }

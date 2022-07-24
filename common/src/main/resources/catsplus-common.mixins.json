@@ -3,10 +3,21 @@
     "package": "xyz.foxkin.catsplus.mixin.commonloader",
     "minVersion": "0.8",
     "compatibilityLevel": "JAVA_17",
+    "plugin": "xyz.foxkin.catsplus.mixin.commonloader.CatsPlusMixinPlugin",
     "mixins": [
+        "commonside.ArmorItemMixin",
+        "commonside.accessor.CatSitOnBlockGoalAccessor",
+        "commonside.catsitonblock.CatEntityMixin",
+        "commonside.catsitonblock.CatSitOnBlockGoalMixin",
+        "commonside.catsitonblock.ChestBlockMixin",
+        "commonside.goal.CatEntityMixin",
+        "commonside.tameablefollow.CatEntityMixin",
+        "commonside.tameablefollow.FollowOwnerGoalMixin",
+        "commonside.tameablefollow.ParrotEntityMixin",
+        "commonside.tameablefollow.TameableEntityMixin",
+        "commonside.tameablefollow.WolfEntityMixin"
     ],
     "client": [
-        "MixinTitleScreen"
     ],
     "injectors": {
         "defaultRequire": 1

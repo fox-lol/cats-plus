@@ -1,7 +1,7 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
     id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
-    id 'io.github.juuxel.loom-quiltflower' version '1.7.3' apply false
+    id "io.github.juuxel.loom-quiltflower" version "1.7.3" apply false
 }
 
 architectury {
@@ -35,6 +35,20 @@ allprojects {
     group = rootProject.maven_group
 
     repositories {
+        maven {
+            name = "JitPack"
+            url = "https://jitpack.io"
+        }
+
+        maven {
+            name = "Curse Maven"
+            url = "https://cursemaven.com"
+
+            content {
+                includeGroup "curse.maven"
+            }
+        }
+
         maven {
             name = "TerraformersMC"
             url = "https://maven.terraformersmc.com/releases"

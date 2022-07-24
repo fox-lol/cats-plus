@@ -1,3 +1,5 @@
+archivesBaseName = "${rootProject.archives_base_name}-common-mc${rootProject.minecraft_version}"
+
 architectury {
     common(rootProject.enabled_platforms.split(","))
 }
@@ -11,7 +13,14 @@ dependencies {
     // Do NOT use other classes from fabric loader
     modImplementation("net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}")
 
-    modApi("dev.architectury:architectury:${rootProject.architectury_version}")
+    modApi("dev.architectury:architectury:${rootProject.architectury_api_version}")
+
+    compileOnly("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}")
+    annotationProcessor("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}")
+
+    modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}")
+
+    modCompileOnly("com.github.ShaksterNano.Note-Block-Library:note-block-lib:${rootProject.note_block_lib_version}")
 }
 
 publishing {
