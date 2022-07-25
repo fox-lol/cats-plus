@@ -14,15 +14,18 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
+import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 
 @Environment(EnvType.CLIENT)
 public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable> implements IGeoRenderer<T> {
 
     private final CatsPlusModel<T> modelProvider;
+    private final Class<T> animatableClass;
 
-    public CatsPlusGeoRenderer(CatsPlusModel<T> modelProvider) {
+    public CatsPlusGeoRenderer(CatsPlusModel<T> modelProvider, Class<T> animatableClass) {
         this.modelProvider = modelProvider;
+        this.animatableClass = animatableClass;
     }
 
     public void render(T animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
@@ -47,8 +50,16 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable> implemen
         return animatable.getUniqueId();
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
-    public abstract IAnimatableModel<Object> modelFetcher(IAnimatable animatable);
+    public IAnimatableModel<Object> modelFetcher(IAnimatable animatable) {
+        if (animatableClass.isInstance(animatable)) {
+            CatsPlusGeoRenderer<T> renderer = ModGeoRenderers.getRenderer(animatableClass).orElseThrow();
+            return (IAnimatableModel<Object>) renderer.getGeoModelProvider();
+        } else {
+            return null;
+        }
+    }
 
     protected GeoModel getGeoModel(T animatable) {
         return modelProvider.getModel(modelProvider.getModelResource(animatable));

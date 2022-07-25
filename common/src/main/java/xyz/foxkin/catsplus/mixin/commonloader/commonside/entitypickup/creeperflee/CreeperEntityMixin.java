@@ -72,12 +72,11 @@ abstract class CreeperEntityMixin extends HostileEntity {
 
     private boolean catsPlus$isPlayerHoldingCat(Entity entity) {
         if (entity instanceof PlayerEntityAccess playerAccess) {
-            if (playerAccess.catsPlus$isHoldingEntity()) {
-                return playerAccess.catsPlus$getHeldEntity()
-                        .map(heldEntity -> heldEntity instanceof OcelotEntity || heldEntity instanceof CatEntity)
-                        .orElse(false);
-            }
+            return playerAccess.catsPlus$getHeldEntity()
+                    .map(heldEntity -> heldEntity instanceof OcelotEntity || heldEntity instanceof CatEntity)
+                    .orElse(false);
+        } else {
+            return false;
         }
-        return false;
     }
 }

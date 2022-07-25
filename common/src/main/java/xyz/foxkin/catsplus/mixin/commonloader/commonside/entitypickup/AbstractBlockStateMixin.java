@@ -23,28 +23,26 @@ abstract class AbstractBlockStateMixin {
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void catsPlus$dropHeldEntity(World world, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-        if (playerAccess.catsPlus$isHoldingEntity()) {
-            playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
-                Vec3d position = hit.getPos();
+        playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
+            Vec3d position = hit.getPos();
 
-                double x = position.getX();
-                double y = position.getY();
-                double z = position.getZ();
+            double x = position.getX();
+            double y = position.getY();
+            double z = position.getZ();
 
-                double halfEntityLength = entity.getBoundingBox().getXLength() / 2;
-                double entityHeight = entity.getBoundingBox().getYLength();
+            double halfEntityLength = entity.getBoundingBox().getXLength() / 2;
+            double entityHeight = entity.getBoundingBox().getYLength();
 
-                switch (hit.getSide()) {
-                    case NORTH -> z -= halfEntityLength;
-                    case SOUTH -> z += halfEntityLength;
-                    case EAST -> x += halfEntityLength;
-                    case WEST -> x -= halfEntityLength;
-                    case DOWN -> y -= entityHeight;
-                }
+            switch (hit.getSide()) {
+                case NORTH -> z -= halfEntityLength;
+                case SOUTH -> z += halfEntityLength;
+                case EAST -> x += halfEntityLength;
+                case WEST -> x -= halfEntityLength;
+                case DOWN -> y -= entityHeight;
+            }
 
-                playerAccess.catsPlus$dropHeldEntity(x, y, z);
-                cir.setReturnValue(ActionResult.SUCCESS);
-            });
-        }
+            playerAccess.catsPlus$dropHeldEntity(x, y, z);
+            cir.setReturnValue(ActionResult.SUCCESS);
+        });
     }
 }

@@ -35,11 +35,17 @@
 					"position": {
 						"vector": [0, -2, 5]
 					}
+				},
+				"root": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
 		"third_person.holding.minecraft_cat.idle.1": {
 			"loop": true,
+			"animation_length": 4,
 			"bones": {
 				"entity_placeholder": {
 					"rotation": {
@@ -63,6 +69,21 @@
 					},
 					"position": {
 						"vector": [-3, 2.5, -2.2]
+					}
+				},
+				"root": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"4.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
 					}
 				}
 			}

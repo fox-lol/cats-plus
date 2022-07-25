@@ -35,7 +35,7 @@ abstract class MinecraftClientMixin {
     private boolean catsPlus$isHoldingEntity() {
         if (player != null) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-            return playerAccess.catsPlus$isHoldingEntity();
+            return playerAccess.catsPlus$getHeldEntity().isPresent();
         }
         return false;
     }

@@ -28,16 +28,14 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
         super.animationPredicate(event);
         if (event.getController().getAnimationState() == AnimationState.Stopped) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) getEntity();
-            if (playerAccess.catsPlus$isHoldingEntity()) {
-                playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
-                    EntityAccess entityAccess = (EntityAccess) entity;
-                    int heldPoseNumber = entityAccess.catsPlus$getHeldPoseNumber();
-                    if (heldPoseNumber > 0) {
-                        Identifier entityId = EntityType.getId(entity.getType());
-                        playAnimations(true, getAnimationPrefix() + "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".idle." + heldPoseNumber);
-                    }
-                });
-            }
+            playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
+                EntityAccess entityAccess = (EntityAccess) entity;
+                int heldPoseNumber = entityAccess.catsPlus$getHeldPoseNumber();
+                if (heldPoseNumber > 0) {
+                    Identifier entityId = EntityType.getId(entity.getType());
+                    playAnimations(true, getAnimationPrefix() + "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".idle." + heldPoseNumber);
+                }
+            });
         }
         return PlayState.CONTINUE;
     }

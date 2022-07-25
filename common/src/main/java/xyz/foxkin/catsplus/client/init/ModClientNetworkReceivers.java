@@ -5,6 +5,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.world.World;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
@@ -12,6 +15,7 @@ import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.animatable.player.FirstPersonPlayerArms;
 import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
+import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 
 @Environment(EnvType.CLIENT)
@@ -22,8 +26,8 @@ public class ModClientNetworkReceivers {
             AnimationData animationData = decodeAnimationData(buf);
             context.queue(() -> {
                 PlayerArms firstPersonArms = FirstPersonPlayerArms.getInstance();
-                firstPersonArms.setPendingAnimations(animationData.animationNames);
-                firstPersonArms.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop);
+                firstPersonArms.setPendingAnimations(animationData.animationNames());
+                firstPersonArms.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop());
             });
         });
 
@@ -38,11 +42,27 @@ public class ModClientNetworkReceivers {
                     Entity entity = world.getEntityById(entityId);
                     if (entity instanceof AnimatableContainer<?> container) {
                         CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
-                        animatable.setPendingAnimations(animationData.animationNames);
-                        animatable.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop);
+                        animatable.setPendingAnimations(animationData.animationNames());
+                        animatable.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop());
                     } else {
                         CatsPlus.LOGGER.error("Could not find an animatable entity with id {}", entityId);
                     }
+                }
+            });
+        });
+
+        NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, (buf, context) -> {
+            NbtCompound heldEntityNbt = buf.readNbt();
+            PlayerEntity player = context.getPlayer();
+            context.queue(() -> {
+                PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
+                if (heldEntityNbt == null || heldEntityNbt.isEmpty()) {
+                    playerAccess.catsPlus$clearHeldEntity();
+                } else {
+                    EntityType.getEntityFromNbt(heldEntityNbt, player.getEntityWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
+                        CatsPlus.LOGGER.error("Could not create entity from nbt {}", heldEntityNbt);
+                        playerAccess.catsPlus$clearHeldEntity();
+                    });
                 }
             });
         });

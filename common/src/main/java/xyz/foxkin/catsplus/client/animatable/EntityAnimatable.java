@@ -15,7 +15,11 @@ public abstract class EntityAnimatable<T extends Entity> extends CatsPlusAnimata
 
     @Override
     public int getUniqueId() {
-        return entity.getUuid().hashCode();
+        if (entity == null) {
+            return 0;
+        } else {
+            return entity.getUuid().hashCode();
+        }
     }
 
     protected T getEntity() {

@@ -14,6 +14,7 @@
         "commonside.entitypickup.AbstractBlockStateMixin",
         "commonside.entitypickup.EntityMixin",
         "commonside.entitypickup.PlayerEntityMixin",
+        "commonside.entitypickup.PlayerInventoryMixin",
         "commonside.entitypickup.ServerPlayerEntityMixin",
         "commonside.entitypickup.creeperflee.CreeperEntityMixin",
         "commonside.entitypickup.creeperflee.TargetPredicateMixin",

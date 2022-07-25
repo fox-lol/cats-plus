@@ -38,17 +38,15 @@ abstract class PlayerEntityModelMixin extends BipedEntityModelMixin implements E
     protected Iterable<ModelPart> catsPlus$removeVanillaArms(Iterable<ModelPart> bodyParts, MatrixStack matrices, VertexConsumer vertices, int light) {
         if (catsPlus$player != null) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) catsPlus$player;
-            if (playerAccess.catsPlus$isHoldingEntity()) {
-                Optional<Entity> entityOptional = playerAccess.catsPlus$getHeldEntity();
-                if (entityOptional.isPresent()) {
-                    return StreamSupport.stream(bodyParts.spliterator(), false)
-                            .filter(modelPart -> !Objects.equals(modelPart, rightArm)
-                                    && !Objects.equals(modelPart, leftArm)
-                                    && !Objects.equals(modelPart, rightSleeve)
-                                    && !Objects.equals(modelPart, leftSleeve)
-                            )
-                            .collect(ImmutableList.toImmutableList());
-                }
+            Optional<Entity> entityOptional = playerAccess.catsPlus$getHeldEntity();
+            if (entityOptional.isPresent()) {
+                return StreamSupport.stream(bodyParts.spliterator(), false)
+                        .filter(modelPart -> !Objects.equals(modelPart, rightArm)
+                                && !Objects.equals(modelPart, leftArm)
+                                && !Objects.equals(modelPart, rightSleeve)
+                                && !Objects.equals(modelPart, leftSleeve)
+                        )
+                        .collect(ImmutableList.toImmutableList());
             }
         }
         return super.catsPlus$removeVanillaArms(bodyParts, matrices, vertices, light);

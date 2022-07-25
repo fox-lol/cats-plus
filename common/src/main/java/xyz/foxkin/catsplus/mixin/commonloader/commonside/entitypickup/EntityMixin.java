@@ -52,7 +52,7 @@ abstract class EntityMixin implements EntityAccess {
                 && player.isSneaking()
                 && player.getMainHandStack().isEmpty()
                 && player.getOffHandStack().isEmpty()
-                && !playerAccess.catsPlus$isHoldingEntity()
+                && playerAccess.catsPlus$getHeldEntity().isEmpty()
         ) {
             if ((Object) this instanceof TameableEntity thisTameable) {
                 if (thisTameable.isTamed()) {
@@ -77,7 +77,7 @@ abstract class EntityMixin implements EntityAccess {
             playerAccess.catsPlus$setHeldEntity((Entity) (Object) this);
 
             Identifier entityId = EntityType.getId(getType());
-            AnimationSyncing.syncArmsAnimations(player, false, "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".picking_up." + catsPlus$getHeldPoseNumber());
+            AnimationSyncing.syncArmsAnimationsFromServer(player, false, "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".picking_up." + catsPlus$getHeldPoseNumber());
 
             discard();
             cir.setReturnValue(ActionResult.SUCCESS);

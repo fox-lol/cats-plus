@@ -1,40 +1,18 @@
 package xyz.foxkin.catsplus.commonside.access.entitypickup;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public interface PlayerEntityAccess {
 
-    /**
-     * Gets an {@code NbtCompound} containing information about the player's held entity.
-     * If the player has no held entity, the {@code NbtCompound} will be empty.
-     *
-     * @return An {@code NbtCompound} containing information about the player's held entity.
-     */
-    NbtCompound catsPlus$getHeldEntityNbt();
-
     Optional<Entity> catsPlus$getHeldEntity();
 
-    /**
-     * Gets whether the player has a held entity or not.
-     *
-     * @return Whether the player has a held entity or not.
-     */
+    void catsPlus$setHeldEntity(@Nullable Entity entity);
 
-    boolean catsPlus$isHoldingEntity();
-
-    /**
-     * Sets the player's held entity.
-     *
-     * @param entityNbt The {@code NbtCompound} containing information about the player's held entity.
-     */
-
-    void catsPlus$setHeldEntityNbt(NbtCompound entityNbt);
-
-    void catsPlus$setHeldEntity(Entity entity);
+    void catsPlus$clearHeldEntity();
 
     /**
      * Clears the player's held entity and spawns it in the world.

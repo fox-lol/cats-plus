@@ -5,7 +5,6 @@ import io.github.shaksternano.noteblocklib.commonside.CustomInstrumentRegistry;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-import software.bernie.example.GeckoLibMod;
 import xyz.foxkin.catsplus.commonside.init.ModCustomInstruments;
 
 import java.util.List;
@@ -23,8 +22,6 @@ public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
         CustomInstrumentRegistry.registerInstruments(
                 ModCustomInstruments.CAT
         );
-
-        GeckoLibMod.DISABLE_IN_DEV = true;
     }
 
     @Override

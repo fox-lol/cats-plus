@@ -9,11 +9,9 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 import xyz.foxkin.catsplus.commonside.util.PlayerLookup;
 
-import java.util.Collection;
-
 public class AnimationSyncing {
 
-    public static void syncArmsAnimations(PlayerEntity player, boolean lastShouldLoop, String... animationNamesWithoutPrefix) {
+    public static void syncArmsAnimationsFromServer(PlayerEntity player, boolean lastShouldLoop, String... animationNamesWithoutPrefix) {
         if (player.getWorld().isClient()) {
             throw new IllegalStateException("Cannot sync animations from the client");
         } else {
@@ -26,22 +24,21 @@ public class AnimationSyncing {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             writeAnimationData(buf, lastShouldLoop, firstPersonAnimationNames);
             NetworkManager.sendToPlayer((ServerPlayerEntity) player, ModNetworkReceivers.PLAY_FIRST_PERSON_ARMS_ANIMATIONS, buf);
-            syncAnimationsToPlayers(player, lastShouldLoop, thirdPersonAnimationNames);
+            syncAnimationsToPlayersFromServer(player, lastShouldLoop, thirdPersonAnimationNames);
         }
     }
 
-    public static void syncAnimationsToPlayers(Entity toBeAnimated, boolean lastShouldLoop, String... animationNames) {
+    public static void syncAnimationsToPlayersFromServer(Entity toBeAnimated, boolean lastShouldLoop, String... animationNames) {
         if (toBeAnimated.getWorld().isClient()) {
             throw new IllegalStateException("Cannot sync animations from the client");
         } else {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeInt(toBeAnimated.getId());
             writeAnimationData(buf, lastShouldLoop, animationNames);
-            Collection<ServerPlayerEntity> trackingPlayers = PlayerLookup.tracking(toBeAnimated);
-            if (toBeAnimated instanceof ServerPlayerEntity player) {
-                NetworkManager.sendToPlayer(player, ModNetworkReceivers.PLAY_ENTITY_ANIMATIONS, buf);
+            if (toBeAnimated instanceof ServerPlayerEntity toBeAnimatedPlayer) {
+                NetworkManager.sendToPlayer(toBeAnimatedPlayer, ModNetworkReceivers.PLAY_ENTITY_ANIMATIONS, buf);
             }
-            for (ServerPlayerEntity player : trackingPlayers) {
+            for (ServerPlayerEntity player : PlayerLookup.tracking(toBeAnimated)) {
                 NetworkManager.sendToPlayer(player, ModNetworkReceivers.PLAY_ENTITY_ANIMATIONS, buf);
             }
         }

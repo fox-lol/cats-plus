@@ -31,7 +31,9 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
     @Inject(method = "copyFrom", at = @At("HEAD"))
     private void catsPlus$copyHeldEntity(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         PlayerEntityAccess oldPlayerAccess = (PlayerEntityAccess) oldPlayer;
-        catsPlus$setHeldEntityNbt(oldPlayerAccess.catsPlus$getHeldEntityNbt());
+        oldPlayerAccess.catsPlus$getHeldEntity().ifPresent(this::catsPlus$setHeldEntity);
+
+        // catsPlus$setHeldEntityNbt(oldPlayerAccess.catsPlus$getHeldEntityNbt());
     }
 
     /**
@@ -52,7 +54,7 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
 
     @Inject(method = "dropSelectedItem", at = @At("HEAD"))
     private void catsPlus$throwHeldEntity(boolean entireStack, CallbackInfoReturnable<Boolean> cir) {
-        if (catsPlus$isHoldingEntity()) {
+        if (catsPlus$getHeldEntity().isPresent()) {
             catsPlus$throwHeldEntity(1);
         }
     }

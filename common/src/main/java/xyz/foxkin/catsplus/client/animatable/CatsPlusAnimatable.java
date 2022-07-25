@@ -12,13 +12,14 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+// TODO: reason for animation not working might be because the entity is recreated every frame.
 @Environment(EnvType.CLIENT)
 public abstract class CatsPlusAnimatable implements IAnimatable {
 
     private static final String ANIMATION_CONTROLLER_NAME = "controller";
     private static final int ANIMATION_TRANSITION_LENGTH_TICKS = 0;
     private final AnimationFactory factory = new AnimationFactory(this);
-    private String[] pendingAnimationNames = new String[0];
+    protected String[] pendingAnimationNames = new String[0];
     private boolean lastPendingAnimationShouldLoop = false;
 
     @Override
