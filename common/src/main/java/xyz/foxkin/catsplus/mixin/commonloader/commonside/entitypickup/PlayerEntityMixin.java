@@ -5,11 +5,13 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -26,6 +28,7 @@ import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 import xyz.foxkin.catsplus.commonside.util.EntityUtil;
 import xyz.foxkin.catsplus.commonside.util.PlayerLookup;
+import xyz.foxkin.catsplus.mixin.commonloader.commonside.accessor.MobEntityAccessor;
 
 import java.util.Optional;
 
@@ -45,11 +48,11 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     }
 
     /**
-     * Updates information about the player's held entity.
+     * Runs custom code every tick.
      */
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "tick", at = @At("RETURN"))
-    private void catsPlus$updateHeldEntity(CallbackInfo ci) {
+    private void catsPlus$tick(CallbackInfo ci) {
         // Drops the held entity is an item is equipped in either hand.
         if (!getMainHandStack().isEmpty() || !getOffHandStack().isEmpty()) {
             catsPlus$dropHeldEntity(getPos());
@@ -64,6 +67,18 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             NetworkManager.sendToPlayer((ServerPlayerEntity) (Object) this, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
             for (ServerPlayerEntity player : PlayerLookup.tracking(this)) {
                 NetworkManager.sendToPlayer(player, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
+            }
+        }
+
+        // Play the ambient sound of the held entity if it is a mob entity.
+        if (catsPlus$heldEntity instanceof MobEntity mob) {
+            if (mob.getRandom().nextInt(1000) < mob.ambientSoundChance++) {
+                MobEntityAccessor mobAccessor = (MobEntityAccessor) mob;
+                mobAccessor.catsPlus$invokeResetSoundDelay();
+                SoundEvent soundEvent = mobAccessor.catsPlus$invokeGetAmbientSound();
+                if (soundEvent != null) {
+                    playSound(soundEvent, mobAccessor.catsPlus$invokeGetSoundVolume(), mob.getSoundPitch());
+                }
             }
         }
     }
