@@ -10,6 +10,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,6 +45,9 @@ abstract class EntityMixin implements EntityAccess {
 
     @Shadow
     public abstract void discard();
+
+    @Shadow
+    public abstract World getWorld();
 
     /**
      * A player will pick up an entity if they are sneaking when they interact with it
@@ -88,13 +92,15 @@ abstract class EntityMixin implements EntityAccess {
             } else {
                 isBaby = false;
             }
-            AnimationSyncing.syncArmsAnimationsToClients(player, false,
-                    "holding."
-                            + (isBaby ? "baby." : "")
-                            + entityId.getNamespace()
-                            + "_" + entityId.getPath()
-                            + ".picking_up."
-                            + catsPlus$getHeldPoseNumber());
+            if (!getWorld().isClient()) {
+                AnimationSyncing.syncArmsAnimationsToClients(player, false,
+                        "holding."
+                                + (isBaby ? "baby." : "")
+                                + entityId.getNamespace()
+                                + "_" + entityId.getPath()
+                                + ".picking_up."
+                                + catsPlus$getHeldPoseNumber());
+            }
 
             discard();
             cir.setReturnValue(ActionResult.SUCCESS);

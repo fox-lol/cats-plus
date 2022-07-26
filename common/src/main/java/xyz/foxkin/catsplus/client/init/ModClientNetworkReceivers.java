@@ -18,6 +18,10 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
 @Environment(EnvType.CLIENT)
 public class ModClientNetworkReceivers {
 
@@ -38,16 +42,14 @@ public class ModClientNetworkReceivers {
             AnimationData animationData = decodeAnimationData(buf);
             context.queue(() -> {
                 World world = MinecraftClient.getInstance().world;
-                if (world == null) {
-                    CatsPlus.LOGGER.error("World is null, this shouldn't happen");
-                } else {
+                if (world != null) {
                     Entity entity = world.getEntityById(entityId);
                     if (entity instanceof AnimatableContainer<?> container) {
                         CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
                         animatable.setPendingAnimations(animationData.animationNames());
                         animatable.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop());
                     } else {
-                        CatsPlus.LOGGER.error("Could not find an animatable entity with id {}", entityId);
+                        CatsPlus.LOGGER.error("Entity {} is not an animatable container.", entity);
                     }
                 }
             });
@@ -55,18 +57,32 @@ public class ModClientNetworkReceivers {
 
         // Syncs the held entity to the client.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, (buf, context) -> {
-            NbtCompound heldEntityNbt = buf.readNbt();
-            PlayerEntity player = context.getPlayer();
+            UUID holdingPlayerUuid = buf.readUuid();
+            NbtCompound newHeldEntityNbt = buf.readNbt();
             context.queue(() -> {
-                if (player != null) {
-                    PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-                    if (heldEntityNbt == null || heldEntityNbt.isEmpty()) {
-                        playerAccess.catsPlus$clearHeldEntity();
-                    } else {
-                        EntityType.getEntityFromNbt(heldEntityNbt, player.getEntityWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
-                            CatsPlus.LOGGER.error("Could not create entity from nbt {}", heldEntityNbt);
-                            playerAccess.catsPlus$clearHeldEntity();
+                World world = MinecraftClient.getInstance().world;
+                if (world != null) {
+                    PlayerEntity holdingPlayer = world.getPlayerByUuid(holdingPlayerUuid);
+                    if (holdingPlayer != null && newHeldEntityNbt != null) {
+                        PlayerEntityAccess playerAccess = (PlayerEntityAccess) holdingPlayer;
+                        Optional<UUID> currentHeldEntityUuidOptional = playerAccess.catsPlus$getHeldEntity().map(Entity::getUuid);
+                        Optional<UUID> newHeldEntityUuidOptional = Optional.of(newHeldEntityNbt).map(nbt -> {
+                            if (nbt.containsUuid("UUID")) {
+                                return nbt.getUuid("UUID");
+                            } else {
+                                return null;
+                            }
                         });
+                        if (!Objects.equals(currentHeldEntityUuidOptional, newHeldEntityUuidOptional)) {
+                            if (newHeldEntityNbt.isEmpty()) {
+                                playerAccess.catsPlus$setHeldEntity(null);
+                            } else {
+                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
+                                    CatsPlus.LOGGER.error("Could not create entity from nbt {}", newHeldEntityNbt);
+                                    playerAccess.catsPlus$clearHeldEntity();
+                                });
+                            }
+                        }
                     }
                 }
             });

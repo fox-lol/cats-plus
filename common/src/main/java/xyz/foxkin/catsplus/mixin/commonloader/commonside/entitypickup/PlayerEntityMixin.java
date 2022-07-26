@@ -11,7 +11,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -25,6 +24,8 @@ import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
+import xyz.foxkin.catsplus.commonside.util.EntityUtil;
+import xyz.foxkin.catsplus.commonside.util.PlayerLookup;
 
 import java.util.Optional;
 
@@ -44,12 +45,26 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     }
 
     /**
-     * Drops the held entity is an item is equipped in either hand.
+     * Updates information about the player's held entity.
      */
+    @SuppressWarnings("ConstantConditions")
     @Inject(method = "tick", at = @At("RETURN"))
-    private void catsPlus$dropHeldEntityIfItemEquipped(CallbackInfo ci) {
+    private void catsPlus$updateHeldEntity(CallbackInfo ci) {
+        // Drops the held entity is an item is equipped in either hand.
         if (!getMainHandStack().isEmpty() || !getOffHandStack().isEmpty()) {
             catsPlus$dropHeldEntity(getPos());
+        }
+
+        // Syncs the held entity to clients.
+        if (!getWorld().isClient()) {
+            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+            buf.writeUuid(getUuid());
+            NbtCompound entityNbt = catsPlus$heldEntity == null ? new NbtCompound() : EntityUtil.serializeEntity(catsPlus$heldEntity);
+            buf.writeNbt(entityNbt);
+            NetworkManager.sendToPlayer((ServerPlayerEntity) (Object) this, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
+            for (ServerPlayerEntity player : PlayerLookup.tracking(this)) {
+                NetworkManager.sendToPlayer(player, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
+            }
         }
     }
 
@@ -59,7 +74,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     private void catsPlus$writeHeldEntity(NbtCompound nbt, CallbackInfo ci) {
         if (catsPlus$heldEntity != null) {
-            NbtCompound entityNbt = catsPlus$serializeEntity(catsPlus$heldEntity);
+            NbtCompound entityNbt = EntityUtil.serializeEntity(catsPlus$heldEntity);
             nbt.put(CATS_PLUS$HELD_ENTITY_NBT_KEY, entityNbt);
         }
     }
@@ -85,16 +100,9 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         return Optional.ofNullable(catsPlus$heldEntity);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public void catsPlus$setHeldEntity(@Nullable Entity entity) {
         catsPlus$heldEntity = entity;
-        if (!getWorld().isClient()) {
-            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            NbtCompound entityNbt = entity == null ? new NbtCompound() : catsPlus$serializeEntity(entity);
-            buf.writeNbt(entityNbt);
-            NetworkManager.sendToPlayer((ServerPlayerEntity) (Object) this, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
-        }
     }
 
     @Override
@@ -106,7 +114,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     public void catsPlus$dropHeldEntity(double x, double y, double z) {
         if (!getWorld().isClient()) {
             catsPlus$getHeldEntity().ifPresent(entity -> {
-                Entity copy = catsPlus$copyEntity(entity, getWorld());
+                Entity copy = EntityUtil.copyEntity(entity, getWorld());
                 EntityAccess copyAccess = (EntityAccess) copy;
                 copyAccess.catsPlus$setHeldPoseNumber(0);
                 copy.setPosition(x, y, z);
@@ -125,7 +133,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     public void catsPlus$throwHeldEntity(double speed) {
         if (!getWorld().isClient()) {
             catsPlus$getHeldEntity().ifPresent(entity -> {
-                Entity copy = catsPlus$copyEntity(entity, getWorld());
+                Entity copy = EntityUtil.copyEntity(entity, getWorld());
 
                 Vec3d playerPosition = getPos();
                 Vec3d playerHeading = Vec3d.fromPolar(getPitch(), getYaw());
@@ -153,31 +161,5 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             });
         }
         catsPlus$clearHeldEntity();
-    }
-
-    /**
-     * Writes information about the player's held entity to NBT.
-     *
-     * @param entity The entity to serialize.
-     * @return The NBT representation of the entity.
-     */
-    private static NbtCompound catsPlus$serializeEntity(Entity entity) {
-        NbtCompound entityNbt = new NbtCompound();
-        Identifier entityId = EntityType.getId(entity.getType());
-        entityNbt.putString("id", entityId.toString());
-        entity.writeNbt(entityNbt);
-        return entityNbt;
-    }
-
-    /**
-     * Copies an entity.
-     *
-     * @param entity The entity to copy.
-     * @param world  The world the copied entity will be in.
-     * @return The copied entity.
-     */
-    private static Entity catsPlus$copyEntity(Entity entity, World world) {
-        NbtCompound entityNbt = catsPlus$serializeEntity(entity);
-        return EntityType.getEntityFromNbt(entityNbt, world).orElseThrow();
     }
 }
