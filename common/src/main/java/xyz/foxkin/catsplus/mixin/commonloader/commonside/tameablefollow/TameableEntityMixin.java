@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
-import xyz.foxkin.catsplus.commonside.access.TameableEntityAccess;
+import xyz.foxkin.catsplus.commonside.access.tameablefollow.TameableEntityAccess;
 
 @Mixin(TameableEntity.class)
 abstract class TameableEntityMixin extends AnimalEntity implements Tameable, TameableEntityAccess {

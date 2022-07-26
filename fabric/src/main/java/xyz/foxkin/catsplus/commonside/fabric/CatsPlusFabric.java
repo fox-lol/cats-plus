@@ -1,6 +1,5 @@
 package xyz.foxkin.catsplus.commonside.fabric;
 
-
 import net.fabricmc.api.ModInitializer;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 

@@ -29,6 +29,7 @@ public class CatsPlusForge {
 
     @OnlyIn(Dist.CLIENT)
     private static void clientInit() {
+        CatsPlus.clientInit();
         registerConfigScreen();
     }
 

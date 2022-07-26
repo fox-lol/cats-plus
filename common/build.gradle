@@ -18,6 +18,8 @@ dependencies {
     compileOnly("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}")
     annotationProcessor("com.github.LlamaLad7:MixinExtras:${rootProject.mixin_extras_version}")
 
+    modCompileOnly("software.bernie.geckolib:geckolib-fabric-${rootProject.minecraft_version}:${rootProject.gecko_lib_version}")
+
     modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}")
 
     modCompileOnly("com.github.ShaksterNano.Note-Block-Library:note-block-lib:${rootProject.note_block_lib_version}")

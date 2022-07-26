@@ -22,6 +22,9 @@
         "main": [
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
         ],
+        "client": [
+            "xyz.foxkin.catsplus.client.fabric.CatsPlusFabricClient"
+        ],
         "modmenu": [
             "xyz.foxkin.catsplus.client.plugin.modmenu.fabric.CatsPlusModMenuPlugin"
         ]

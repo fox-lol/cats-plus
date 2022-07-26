@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.commonside.access;
+package xyz.foxkin.catsplus.commonside.access.tameablefollow;
 
 public interface TameableEntityAccess {
 
