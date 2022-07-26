@@ -12,7 +12,6 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-// TODO: reason for animation not working might be because the entity is recreated every frame.
 @Environment(EnvType.CLIENT)
 public abstract class CatsPlusAnimatable implements IAnimatable {
 

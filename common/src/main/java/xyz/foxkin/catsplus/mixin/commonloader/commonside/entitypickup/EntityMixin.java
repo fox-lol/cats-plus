@@ -2,6 +2,7 @@ package xyz.foxkin.catsplus.mixin.commonloader.commonside.entitypickup;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -77,7 +78,19 @@ abstract class EntityMixin implements EntityAccess {
             playerAccess.catsPlus$setHeldEntity((Entity) (Object) this);
 
             Identifier entityId = EntityType.getId(getType());
-            AnimationSyncing.syncArmsAnimationsFromServer(player, false, "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".picking_up." + catsPlus$getHeldPoseNumber());
+            boolean isBaby;
+            if ((Object) this instanceof LivingEntity livingEntity) {
+                isBaby = livingEntity.isBaby();
+            } else {
+                isBaby = false;
+            }
+            AnimationSyncing.syncArmsAnimationsFromServer(player, false,
+                    "holding."
+                            + (isBaby ? "baby." : "")
+                            + entityId.getNamespace()
+                            + "_" + entityId.getPath()
+                            + ".picking_up."
+                            + catsPlus$getHeldPoseNumber());
 
             discard();
             cir.setReturnValue(ActionResult.SUCCESS);

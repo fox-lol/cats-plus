@@ -39,6 +39,9 @@
 				"root": {
 					"rotation": {
 						"vector": [0, 0, 0]
+					},
+					"position": {
+						"vector": [0, 0, 2]
 					}
 				}
 			}
@@ -127,10 +130,10 @@
 				"root": {
 					"position": {
 						"0.0": {
-							"vector": [0, -15, 0]
+							"vector": [0, -15, 2]
 						},
 						"0.3333": {
-							"vector": [0, 0, 0],
+							"vector": [0, 0, 2],
 							"easing": "easeOutSine"
 						}
 					}
@@ -143,72 +146,217 @@
 			"bones": {
 				"entity_placeholder": {
 					"rotation": {
-						"0.0": {
-							"vector": [57.72267, -4.02155, -2.33586]
-						},
-						"0.125": {
-							"vector": [32.5, 0, 4]
-						},
-						"0.25": {
-							"vector": [8.31, 0, 4]
-						},
-						"0.3333": {
-							"vector": [-2.5, 0, 4],
-							"easing": "easeOutSine"
-						}
+						"vector": [0, 0, 4]
 					},
 					"position": {
+						"vector": [0, 0.5, -6]
+					}
+				},
+				"right_arm": {
+					"rotation": {
+						"vector": [-68.17341, 13.71493, -55.02243]
+					},
+					"position": {
+						"vector": [3, 2.5, -2]
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"vector": [-66.3126, -18.22916, 61.93515]
+					},
+					"position": {
+						"vector": [-3, 2.5, -2.2]
+					}
+				},
+				"root": {
+					"rotation": {
 						"0.0": {
-							"vector": [0, -5.5, -1.5]
-						},
-						"0.125": {
-							"vector": [0, -3.5, -4.5]
-						},
-						"0.25": {
-							"vector": [0, 0, -6]
+							"vector": [60, 0, 0]
 						},
 						"0.3333": {
-							"vector": [0, 0.5, -6],
+							"vector": [0, 0, 0],
 							"easing": "easeOutSine"
 						}
+					}
+				}
+			}
+		},
+		"first_person.holding.baby.minecraft_cat.idle.1": {
+			"loop": true,
+			"bones": {
+				"right_arm": {
+					"rotation": {
+						"vector": [-21.3776, 50.35423, -35.48941]
+					},
+					"position": {
+						"vector": [3, 0, 0]
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"vector": [-10.0975, -51.02928, 26.78277]
+					},
+					"position": {
+						"vector": [-3, 0, 0]
+					}
+				},
+				"entity_placeholder": {
+					"rotation": {
+						"vector": [-10, 0, 4]
+					},
+					"position": {
+						"vector": [0, 1, 1]
+					}
+				},
+				"arms": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					},
+					"position": {
+						"vector": [0, -2, 5]
+					}
+				},
+				"root": {
+					"position": {
+						"vector": [0, 2, 2]
+					}
+				}
+			}
+		},
+		"third_person.holding.baby.minecraft_cat.idle.1": {
+			"loop": true,
+			"animation_length": 4,
+			"bones": {
+				"entity_placeholder": {
+					"rotation": {
+						"vector": [0, 0, 4]
+					},
+					"position": {
+						"vector": [0, 0.5, -6]
+					}
+				},
+				"right_arm": {
+					"rotation": {
+						"vector": [-63.17341, 13.71493, -55.02243]
+					},
+					"position": {
+						"vector": [3, 2.5, -2]
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"vector": [-58.8126, -18.22916, 61.93515]
+					},
+					"position": {
+						"vector": [-3, 2.5, -2.2]
+					}
+				},
+				"root": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"2.0": {
+							"vector": [5, 0, 0],
+							"easing": "easeInOutSine"
+						},
+						"4.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutSine"
+						}
+					}
+				}
+			}
+		},
+		"first_person.holding.baby.minecraft_cat.picking_up.1": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.33333,
+			"bones": {
+				"right_arm": {
+					"rotation": {
+						"vector": [-21.3776, 50.35423, -35.48941]
+					},
+					"position": {
+						"vector": [3, 0, 0]
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"vector": [-10.0975, -51.02928, 26.78277]
+					},
+					"position": {
+						"vector": [-3, 0, 0]
+					}
+				},
+				"entity_placeholder": {
+					"rotation": {
+						"vector": [-10, 0, 4]
+					},
+					"position": {
+						"vector": [0, 1, 1]
+					}
+				},
+				"arms": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					},
+					"position": {
+						"vector": [0, -2, 5]
+					}
+				},
+				"root": {
+					"position": {
+						"0.0": {
+							"vector": [0, -13, 2]
+						},
+						"0.3333": {
+							"vector": [0, 2, 2],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		},
+		"third_person.holding.baby.minecraft_cat.picking_up.1": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.33333,
+			"bones": {
+				"entity_placeholder": {
+					"rotation": {
+						"vector": [0, 0, 4]
+					},
+					"position": {
+						"vector": [0, 0.5, -6]
 					}
 				},
 				"right_arm": {
 					"rotation": {
 						"0.0": {
-							"vector": [-18.76217, 56.10094, -21.1163]
+							"vector": [-63.17341, 13.71493, -55.02243]
 						},
-						"0.3333": {
-							"vector": [-68.17, 13.71, -55.02],
-							"easing": "easeOutSine"
+						"0.2083": {
+							"vector": [-60.67341, 13.71493, -55.02243]
 						}
 					},
 					"position": {
-						"0.0": {
-							"vector": [3, 1.5, -2]
-						},
-						"0.3333": {
-							"vector": [3, 2.5, -2],
-							"easing": "easeOutSine"
-						}
+						"vector": [3, 2.5, -2]
 					}
 				},
 				"left_arm": {
 					"rotation": {
-						"0.0": {
-							"vector": [-8.97309, -61.98348, 8.18232]
-						},
-						"0.3333": {
-							"vector": [-66.31, -18.23, 61.94],
-							"easing": "easeOutSine"
-						}
+						"vector": [-58.8126, -18.22916, 61.93515]
 					},
 					"position": {
+						"vector": [-3, 2.5, -2.2]
+					}
+				},
+				"root": {
+					"rotation": {
 						"0.0": {
-							"vector": [-3, 1.5, -2.2]
+							"vector": [60, 0, 0]
 						},
 						"0.3333": {
-							"vector": [-3, 2.5, -2.2],
+							"vector": [0, 0, 0],
 							"easing": "easeOutSine"
 						}
 					}

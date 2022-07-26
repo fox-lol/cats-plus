@@ -4,9 +4,13 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import software.bernie.geckolib3.geo.render.built.GeoBone;
+import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.util.RenderUtils;
 import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatEntity;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
@@ -21,10 +25,14 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
 
     @Override
     public void render(ReplacedCatEntity animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        matrices.push();
+        float modelScale = 0.8F;
+        matrices.scale(modelScale, modelScale, modelScale);
         super.render(animatable, matrices, vertexConsumers, light);
         if (animatable.isTamed()) {
             renderCollar(animatable, matrices, vertexConsumers, light);
         }
+        matrices.pop();
     }
 
     private void renderCollar(ReplacedCatEntity animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
@@ -32,5 +40,85 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
         RenderLayer collarLayer = RenderLayer.getEntityCutoutNoCull(CatCollarFeatureRendererAccessor.catsPlus$getSkin());
         float[] collarColor = animatable.getCollarColor();
         render(model, animatable, 0, collarLayer, matrices, vertexConsumers, null, light, OverlayTexture.DEFAULT_UV, collarColor[0], collarColor[1], collarColor[2], 1);
+    }
+
+    @Override
+    public void render(GeoModel model, ReplacedCatEntity animatable, float tickDelta, RenderLayer renderLayer, MatrixStack matrices, VertexConsumerProvider vertexConsumers, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+        renderEarly(animatable, matrices, tickDelta, vertexConsumers, vertices, light, overlay, red, green, blue, alpha);
+
+        if (vertexConsumers != null) {
+            vertices = vertexConsumers.getBuffer(renderLayer);
+        }
+        renderLate(animatable, matrices, tickDelta, vertexConsumers, vertices, light, overlay, red, green, blue, alpha);
+        boolean isBaby = animatable.isBaby();
+
+        matrices.push();
+        if (isBaby) {
+            matrices.translate(0, -0.85, 0);
+        }
+        for (GeoBone group : model.topLevelBones) {
+            renderRecursively(group, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby);
+        }
+        matrices.pop();
+    }
+
+    private void renderRecursively(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby) {
+        renderRecursively(bone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, true, true);
+    }
+
+    private void renderRecursively(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby, boolean needToTransformBabyBody, boolean needToTransformBabyHead) {
+        matrices.push();
+
+        if (isBaby) {
+            float childHeadYOffset = 10;
+            float childHeadZOffset = 4;
+            float invertedChildHeadScale = 2;
+            float invertedChildBodyScale = 2;
+            float childBodyYOffset = 24;
+
+            if ((bone.getName().equals("head_root")
+                    || bone.getName().equals("right_ear")
+                    || bone.getName().equals("left_ear"))
+                    && needToTransformBabyHead
+            ) {
+                // Undo body transformations
+                matrices.translate(0, -childBodyYOffset / 16, 0);
+                matrices.scale(invertedChildBodyScale, invertedChildBodyScale, invertedChildBodyScale);
+
+                float headScale = 1.5F / invertedChildHeadScale;
+                matrices.scale(headScale, headScale, headScale);
+                matrices.translate(0, childHeadYOffset / 16, childHeadZOffset / 16);
+                matrices.translate(0, 0.3, -0.1);
+                needToTransformBabyHead = false;
+            } else if (needToTransformBabyBody) {
+                float bodyScale = 1 / invertedChildBodyScale;
+                matrices.scale(bodyScale, bodyScale, bodyScale);
+                matrices.translate(0, childBodyYOffset / 16, 0);
+                needToTransformBabyBody = false;
+            }
+        }
+
+        RenderUtils.translate(bone, matrices);
+        RenderUtils.moveToPivot(bone, matrices);
+        RenderUtils.rotate(bone, matrices);
+        RenderUtils.scale(bone, matrices);
+        RenderUtils.moveBackFromPivot(bone, matrices);
+
+        if (!bone.isHidden()) {
+            for (GeoCube cube : bone.childCubes) {
+                matrices.push();
+                if (!bone.cubesAreHidden()) {
+                    renderCube(cube, matrices, vertices, light, overlay, red, green, blue, alpha);
+                }
+                matrices.pop();
+            }
+        }
+        if (!bone.childBonesAreHiddenToo()) {
+            for (GeoBone childBone : bone.childBones) {
+                renderRecursively(childBone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, needToTransformBabyBody, needToTransformBabyHead);
+            }
+        }
+
+        matrices.pop();
     }
 }

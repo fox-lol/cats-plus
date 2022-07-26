@@ -55,14 +55,16 @@ public class ModClientNetworkReceivers {
             NbtCompound heldEntityNbt = buf.readNbt();
             PlayerEntity player = context.getPlayer();
             context.queue(() -> {
-                PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-                if (heldEntityNbt == null || heldEntityNbt.isEmpty()) {
-                    playerAccess.catsPlus$clearHeldEntity();
-                } else {
-                    EntityType.getEntityFromNbt(heldEntityNbt, player.getEntityWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
-                        CatsPlus.LOGGER.error("Could not create entity from nbt {}", heldEntityNbt);
+                if (player != null) {
+                    PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
+                    if (heldEntityNbt == null || heldEntityNbt.isEmpty()) {
                         playerAccess.catsPlus$clearHeldEntity();
-                    });
+                    } else {
+                        EntityType.getEntityFromNbt(heldEntityNbt, player.getEntityWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
+                            CatsPlus.LOGGER.error("Could not create entity from nbt {}", heldEntityNbt);
+                            playerAccess.catsPlus$clearHeldEntity();
+                        });
+                    }
                 }
             });
         });

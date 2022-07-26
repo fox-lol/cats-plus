@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -28,12 +29,25 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
         super.animationPredicate(event);
         if (event.getController().getAnimationState() == AnimationState.Stopped) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) getEntity();
-            playerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
-                EntityAccess entityAccess = (EntityAccess) entity;
-                int heldPoseNumber = entityAccess.catsPlus$getHeldPoseNumber();
+            playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
+                EntityAccess heldEntityAccess = (EntityAccess) heldEntity;
+                int heldPoseNumber = heldEntityAccess.catsPlus$getHeldPoseNumber();
                 if (heldPoseNumber > 0) {
-                    Identifier entityId = EntityType.getId(entity.getType());
-                    playAnimations(true, getAnimationPrefix() + "holding." + entityId.getNamespace() + "_" + entityId.getPath() + ".idle." + heldPoseNumber);
+                    Identifier entityId = EntityType.getId(heldEntity.getType());
+                    boolean isBaby;
+                    if (heldEntity instanceof LivingEntity livingEntity) {
+                        isBaby = livingEntity.isBaby();
+                    } else {
+                        isBaby = false;
+                    }
+                    playAnimations(true,
+                            getAnimationPrefix()
+                                    + "holding."
+                                    + (isBaby ? "baby." : "")
+                                    + entityId.getNamespace()
+                                    + "_" + entityId.getPath()
+                                    + ".idle."
+                                    + heldPoseNumber);
                 }
             });
         }
