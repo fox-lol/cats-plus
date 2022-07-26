@@ -48,12 +48,9 @@ public enum EntityHeldPosesManager implements SynchronousResourceReloader {
     public void parseEntityHeldPosesCounts(InputStream inputStream, Identifier identifier) {
         Reader reader = new InputStreamReader(inputStream);
         JsonElement jsonElement = JsonParser.parseReader(reader);
-        if (jsonElement.isJsonObject()) {
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
-
+        if (jsonElement instanceof JsonObject jsonObject) {
             JsonElement replaceElement = jsonObject.get("replace");
-            if (replaceElement.isJsonPrimitive()) {
-                JsonPrimitive replacePrimitive = replaceElement.getAsJsonPrimitive();
+            if (replaceElement instanceof JsonPrimitive replacePrimitive) {
                 if (replacePrimitive.isBoolean()) {
                     if (replacePrimitive.getAsBoolean()) {
                         entityHeldPosesCounts.clear();
@@ -62,12 +59,10 @@ public enum EntityHeldPosesManager implements SynchronousResourceReloader {
             }
 
             JsonElement heldPosesCountsElement = jsonObject.get("held_poses_counts");
-            if (heldPosesCountsElement.isJsonObject()) {
-                JsonObject heldPosesCountsObject = heldPosesCountsElement.getAsJsonObject();
+            if (heldPosesCountsElement instanceof JsonObject heldPosesCountsObject) {
                 for (String key : heldPosesCountsObject.keySet()) {
                     JsonElement valueElement = heldPosesCountsObject.get(key);
-                    if (valueElement.isJsonPrimitive()) {
-                        JsonPrimitive valuePrimitive = valueElement.getAsJsonPrimitive();
+                    if (valueElement instanceof JsonPrimitive valuePrimitive) {
                         if (valuePrimitive.isNumber()) {
                             int value = valuePrimitive.getAsInt();
                             EntityType.get(key).ifPresentOrElse(

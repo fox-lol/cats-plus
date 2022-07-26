@@ -31,10 +31,10 @@ abstract class ArmorItemMixin {
      * Adds additional knockback resistance to armor whose material is {@link ModMaterials#CAT_MAID_ARMOR}.
      */
     @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMultimap;builder()Lcom/google/common/collect/ImmutableMultimap$Builder;"))
-    private ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> catsPlus$addCatMaidArmorModifiers(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> originalBuilder, ArmorMaterial material, EquipmentSlot slot) {
+    private ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> catsPlus$addCatMaidArmorModifiers(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> attributeBuilder, ArmorMaterial material, EquipmentSlot slot) {
         if (material.equals(ModMaterials.CAT_MAID_ARMOR)) {
             UUID uuid = MODIFIERS[slot.getEntitySlotId()];
-            originalBuilder.put(
+            attributeBuilder.put(
                     EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
                     new EntityAttributeModifier(uuid,
                             "Armor knockback resistance",
@@ -43,6 +43,6 @@ abstract class ArmorItemMixin {
                     )
             );
         }
-        return originalBuilder;
+        return attributeBuilder;
     }
 }
