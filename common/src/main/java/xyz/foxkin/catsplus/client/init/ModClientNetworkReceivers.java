@@ -57,12 +57,12 @@ public class ModClientNetworkReceivers {
 
         // Syncs the held entity to the client.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, (buf, context) -> {
-            UUID playerUuid = buf.readUuid();
+            UUID holdingPlayerUuid = buf.readUuid();
             NbtCompound newHeldEntityNbt = buf.readNbt();
             context.queue(() -> {
                 World world = MinecraftClient.getInstance().world;
                 if (world != null) {
-                    PlayerEntity holdingPlayer = world.getPlayerByUuid(playerUuid);
+                    PlayerEntity holdingPlayer = world.getPlayerByUuid(holdingPlayerUuid);
                     if (holdingPlayer != null && newHeldEntityNbt != null) {
                         PlayerEntityAccess playerAccess = (PlayerEntityAccess) holdingPlayer;
                         Optional<UUID> currentHeldEntityUuidOptional = playerAccess.catsPlus$getHeldEntity().map(Entity::getUuid);
