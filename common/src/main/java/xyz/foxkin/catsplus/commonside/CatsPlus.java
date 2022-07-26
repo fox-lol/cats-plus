@@ -27,7 +27,7 @@ public class CatsPlus {
         ModItems.registerItems();
         ModEventHandlers.registerEventHandlers();
         ModNetworkReceivers.registerReceivers();
-        ModEntityHeldPoses.addEntityHeldPosesCounts();
+        ModResourceReloaders.registerResourceReloaders();
     }
 
     @Environment(EnvType.CLIENT)

@@ -36,7 +36,7 @@ public enum MatrixScriptManager implements SynchronousResourceReloader {
             } catch (InvalidScriptLineException e) {
                 CatsPlus.LOGGER.error("Line {} in script {} is invalid! Details: {}", e.getLine(), identifier.getPath(), e.getMessage());
             } catch (IOException e) {
-                CatsPlus.LOGGER.error("Error occurred while loading resource file " + identifier.toString(), e);
+                CatsPlus.LOGGER.error("Error occurred while loading resource file " + identifier, e);
             }
         }
     }

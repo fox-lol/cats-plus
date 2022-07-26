@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.animation.AnimationSyncing;
-import xyz.foxkin.catsplus.commonside.init.ModEntityHeldPoses;
+import xyz.foxkin.catsplus.commonside.animation.EntityHeldPosesManager;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 
 import java.util.Random;
@@ -67,7 +67,7 @@ abstract class EntityMixin implements EntityAccess {
                 }
             }
 
-            int heldPosesCount = ModEntityHeldPoses.getEntityHeldPosesCount(getType());
+            int heldPosesCount = EntityHeldPosesManager.INSTANCE.getEntityHeldPosesCount(getType());
             if (heldPosesCount > 0) {
                 int heldPoseNumber;
                 if (heldPosesCount == 1) {
