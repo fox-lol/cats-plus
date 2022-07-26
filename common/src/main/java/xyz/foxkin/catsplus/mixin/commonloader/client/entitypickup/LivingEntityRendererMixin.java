@@ -36,20 +36,31 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
         super(ctx);
     }
 
+    /**
+     * Renders the third-person perspective of the players arms in a holding position along with the held entity.
+     */
     @SuppressWarnings("unchecked")
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;pop()V"))
-    protected void catsPlus$renderHoldingArmsAndEntity(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+    protected void catsPlus$renderThirdPersonHoldingArmsAndEntity(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (entity instanceof PlayerEntityAccess playerAccess) {
             playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
                 AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) entity;
                 PlayerArms playerArms = animatableContainer.catsPlus$getAnimatable();
-                catsPlus$renderHoldingArms(playerArms, matrices, vertexConsumers, light);
-                catsPlus$renderHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                catsPlus$renderThirdPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
+                catsPlus$renderThirdPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
             });
         }
     }
 
-    private void catsPlus$renderHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    /**
+     * Renders the third-person perspective of the players arms in a holding position.
+     *
+     * @param playerArms      The animatable representing the player's arms.
+     * @param matrices        The matrix transformations stack.
+     * @param vertexConsumers The vertex consumer provider.
+     * @param light           The light level.
+     */
+    private void catsPlus$renderThirdPersonHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
         matrices.push();
         matrices.translate(0, 1.764, -0.1);
@@ -62,8 +73,17 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
         matrices.pop();
     }
 
+    /**
+     * Renders the third-person perspective of the held entity.
+     *
+     * @param holder          The animatable representing the player's arms.
+     * @param heldEntity      The held entity.
+     * @param matrices        The matrix transformations stack.
+     * @param vertexConsumers The vertex consumer provider.
+     * @param light           The light level.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void catsPlus$renderHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void catsPlus$renderThirdPersonHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
         if (heldEntity instanceof AnimatableContainer<?> container) {

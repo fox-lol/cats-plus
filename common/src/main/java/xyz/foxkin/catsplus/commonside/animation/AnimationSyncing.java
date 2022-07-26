@@ -6,12 +6,20 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
+import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 import xyz.foxkin.catsplus.commonside.util.PlayerLookup;
 
 public class AnimationSyncing {
 
-    public static void syncArmsAnimationsFromServer(PlayerEntity player, boolean lastShouldLoop, String... animationNamesWithoutPrefix) {
+    /**
+     * Syncs {@link PlayerArms} animations to clients.
+     *
+     * @param player                      The player the arms belong to.
+     * @param lastShouldLoop              Whether the last animation should loop.
+     * @param animationNamesWithoutPrefix The names of the animations without the perspective prefix.
+     */
+    public static void syncArmsAnimationsToClients(PlayerEntity player, boolean lastShouldLoop, String... animationNamesWithoutPrefix) {
         if (player.getWorld().isClient()) {
             throw new IllegalStateException("Cannot sync animations from the client");
         } else {
@@ -24,11 +32,18 @@ public class AnimationSyncing {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             writeAnimationData(buf, lastShouldLoop, firstPersonAnimationNames);
             NetworkManager.sendToPlayer((ServerPlayerEntity) player, ModNetworkReceivers.PLAY_FIRST_PERSON_ARMS_ANIMATIONS, buf);
-            syncAnimationsToPlayersFromServer(player, lastShouldLoop, thirdPersonAnimationNames);
+            syncAnimationsToPlayersToClients(player, lastShouldLoop, thirdPersonAnimationNames);
         }
     }
 
-    public static void syncAnimationsToPlayersFromServer(Entity toBeAnimated, boolean lastShouldLoop, String... animationNames) {
+    /**
+     * Syncs entity animations to clients.
+     *
+     * @param toBeAnimated   The entity to be animated.
+     * @param lastShouldLoop Whether the last animation should loop.
+     * @param animationNames The names of the animations.
+     */
+    public static void syncAnimationsToPlayersToClients(Entity toBeAnimated, boolean lastShouldLoop, String... animationNames) {
         if (toBeAnimated.getWorld().isClient()) {
             throw new IllegalStateException("Cannot sync animations from the client");
         } else {
@@ -44,6 +59,13 @@ public class AnimationSyncing {
         }
     }
 
+    /**
+     * Encodes the animation data into a packet.
+     *
+     * @param buf            The packet to write to.
+     * @param lastShouldLoop Whether the last animation should loop.
+     * @param animationNames The names of the animations.
+     */
     private static void writeAnimationData(PacketByteBuf buf, boolean lastShouldLoop, String... animationNames) {
         buf.writeBoolean(lastShouldLoop);
         buf.writeInt(animationNames.length);

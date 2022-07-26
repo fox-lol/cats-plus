@@ -60,6 +60,12 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
         clearOtherPerspectiveAnimations();
     }
 
+    /**
+     * Clears all animations from the other perspective when the
+     * animations from this perspective have been played. This
+     * is to prevent the animations from being played a second time
+     * when the player switches perspectives.
+     */
     protected abstract void clearOtherPerspectiveAnimations();
 
     @Override
@@ -67,14 +73,29 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
         return getEntity().getSkinTexture();
     }
 
+    /**
+     * Whether the player's skin has slim arms or not.
+     *
+     * @return Whether the player's skin has slim arms or not.
+     */
     public boolean isSlimArms() {
         return getEntity().getModel().equals("slim");
     }
 
+    /**
+     * Whether the player is in the sneaking pose or not.
+     *
+     * @return Whether the player is in the sneaking pose or not.
+     */
     public boolean isInSneakingPose() {
         return getEntity().isInSneakingPose();
     }
 
+    /**
+     * Gets the animation name prefix corresponding to the arm perspective.
+     *
+     * @return The animation name prefix corresponding to the arm perspective.
+     */
     private String getAnimationPrefix() {
         return (firstPerson ? "first" : "third") + "_person.";
     }

@@ -40,22 +40,30 @@ abstract class HeldItemRendererMixin {
     private EntityRenderDispatcher entityRenderDispatcher;
 
     /**
-     * Renders the players arms in a holding position along with the held entity.
+     * Renders the first-person perspective of the players arms in a holding position along with the held entity.
      */
     @Inject(method = "renderFirstPersonItem", at = @At(value = "FIELD", target = "Lnet/minecraft/util/Hand;MAIN_HAND:Lnet/minecraft/util/Hand;"), cancellable = true)
-    private void catsPlus$renderHoldingEntity(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+    private void catsPlus$renderFirstPersonHoldingEntity(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
         playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
             if (hand == Hand.MAIN_HAND) {
                 PlayerArms playerArms = FirstPersonPlayerArms.getInstance();
-                catsPlus$renderHoldingArms(playerArms, matrices, vertexConsumers, light);
-                catsPlus$renderHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                catsPlus$renderFirstPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
+                catsPlus$renderFirstPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
             }
             ci.cancel();
         });
     }
 
-    private void catsPlus$renderHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    /**
+     * Renders the first-person perspective of the players arms in a holding position.
+     *
+     * @param playerArms      The animatable representing the player's arms.
+     * @param matrices        The matrix transformations stack.
+     * @param vertexConsumers The vertex consumer provider.
+     * @param light           The light level.
+     */
+    private void catsPlus$renderFirstPersonHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         matrices.translate(0, -2, -1);
         CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
@@ -63,8 +71,17 @@ abstract class HeldItemRendererMixin {
         matrices.pop();
     }
 
+    /**
+     * Renders the first-person perspective of the held entity.
+     *
+     * @param holder          The animatable representing the player's arms.
+     * @param heldEntity      The held entity.
+     * @param matrices        The matrix transformations stack.
+     * @param vertexConsumers The vertex consumer provider.
+     * @param light           The light level.
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void catsPlus$renderHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void catsPlus$renderFirstPersonHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);

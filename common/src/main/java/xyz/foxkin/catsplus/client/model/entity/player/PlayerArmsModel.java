@@ -19,6 +19,11 @@ public class PlayerArmsModel extends CatsPlusModel<PlayerArms> {
         setArmThickness(animatable);
     }
 
+    /**
+     * Sets the arm thickness of the model.
+     *
+     * @param playerArms The arms to set the thickness of.
+     */
     private void setArmThickness(PlayerArms playerArms) {
         boolean slimArms = playerArms.isSlimArms();
         try {

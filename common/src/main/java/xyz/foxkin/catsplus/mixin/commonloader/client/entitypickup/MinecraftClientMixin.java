@@ -18,20 +18,31 @@ abstract class MinecraftClientMixin {
     @Nullable
     public ClientPlayerEntity player;
 
+    /**
+     * Prevents attacking while the player is holding an entity.
+     */
     @Inject(method = "doAttack", at = @At("HEAD"), cancellable = true)
-    private void catsPlus$cancelAttackIfHoldingEntity(CallbackInfoReturnable<Boolean> cir) {
+    private void catsPlus$preventAttackIfHoldingEntity(CallbackInfoReturnable<Boolean> cir) {
         if (catsPlus$isHoldingEntity()) {
             cir.setReturnValue(false);
         }
     }
 
+    /**
+     * Prevents breaking blocks while the player is holding an entity.
+     */
     @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
-    private void catsPlus$cancelBlockBreakingIfHoldingEntity(boolean bl, CallbackInfo ci) {
+    private void catsPlus$preventBlockBreakingIfHoldingEntity(boolean bl, CallbackInfo ci) {
         if (catsPlus$isHoldingEntity()) {
             ci.cancel();
         }
     }
 
+    /**
+     * Whether the player is holding an entity.
+     *
+     * @return Whether the player is holding an entity.
+     */
     private boolean catsPlus$isHoldingEntity() {
         if (player != null) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;

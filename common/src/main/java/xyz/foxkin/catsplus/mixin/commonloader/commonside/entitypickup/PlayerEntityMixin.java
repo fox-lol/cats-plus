@@ -5,9 +5,6 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -31,12 +28,8 @@ import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 
 import java.util.Optional;
 
-@SuppressWarnings("WrongEntityDataParameterClass")
 @Mixin(PlayerEntity.class)
 abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAccess {
-
-    @Unique
-    private static final TrackedData<NbtCompound> CATS_PLUS$HELD_ENTITY_TRACKER_KEY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 
     @Unique
     private static final String CATS_PLUS$HELD_ENTITY_NBT_KEY = "catsplus:heldEntity";
@@ -50,11 +43,9 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         super(entityType, world);
     }
 
-    @Inject(method = "initDataTracker", at = @At("HEAD"))
-    private void catsPlus$trackCustomData(CallbackInfo ci) {
-        dataTracker.startTracking(CATS_PLUS$HELD_ENTITY_TRACKER_KEY, new NbtCompound());
-    }
-
+    /**
+     * Drops the held entity is an item is equipped in either hand.
+     */
     @Inject(method = "tick", at = @At("RETURN"))
     private void catsPlus$dropHeldEntityIfItemEquipped(CallbackInfo ci) {
         if (!getMainHandStack().isEmpty() || !getOffHandStack().isEmpty()) {
@@ -164,6 +155,12 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         catsPlus$clearHeldEntity();
     }
 
+    /**
+     * Writes information about the player's held entity to NBT.
+     *
+     * @param entity The entity to serialize.
+     * @return The NBT representation of the entity.
+     */
     private static NbtCompound catsPlus$serializeEntity(Entity entity) {
         NbtCompound entityNbt = new NbtCompound();
         Identifier entityId = EntityType.getId(entity.getType());
@@ -172,6 +169,13 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         return entityNbt;
     }
 
+    /**
+     * Copies an entity.
+     *
+     * @param entity The entity to copy.
+     * @param world  The world the copied entity will be in.
+     * @return The copied entity.
+     */
     private static Entity catsPlus$copyEntity(Entity entity, World world) {
         NbtCompound entityNbt = catsPlus$serializeEntity(entity);
         return EntityType.getEntityFromNbt(entityNbt, world).orElseThrow();

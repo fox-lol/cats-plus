@@ -52,6 +52,9 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity implements PlayerEnt
         catsPlus$dropHeldEntity(getPos());
     }
 
+    /**
+     * Throws the player's held entity.
+     */
     @Inject(method = "dropSelectedItem", at = @At("HEAD"))
     private void catsPlus$throwHeldEntity(boolean entireStack, CallbackInfoReturnable<Boolean> cir) {
         if (catsPlus$getHeldEntity().isPresent()) {

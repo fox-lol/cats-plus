@@ -8,10 +8,24 @@ import java.util.Optional;
 
 public interface PlayerEntityAccess {
 
+    /**
+     * Gets an {@code Optional} representing the held entity.
+     * If there is no held entity, the {@code Optional} will be empty.
+     *
+     * @return An {@code Optional} representing the held entity.
+     */
     Optional<Entity> catsPlus$getHeldEntity();
 
+    /**
+     * Sets the held entity.
+     *
+     * @param entity The entity to set.
+     */
     void catsPlus$setHeldEntity(@Nullable Entity entity);
 
+    /**
+     * Clears the held entity.
+     */
     void catsPlus$clearHeldEntity();
 
     /**
@@ -23,6 +37,11 @@ public interface PlayerEntityAccess {
      */
     void catsPlus$dropHeldEntity(double x, double y, double z);
 
+    /**
+     * Drops the held entity in the world.
+     *
+     * @param pos The position to drop the entity at.
+     */
     void catsPlus$dropHeldEntity(Vec3d pos);
 
     /**

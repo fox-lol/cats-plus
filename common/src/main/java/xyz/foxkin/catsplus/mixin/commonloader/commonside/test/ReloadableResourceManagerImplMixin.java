@@ -29,6 +29,9 @@ import java.util.concurrent.Executor;
 @Mixin(ReloadableResourceManagerImpl.class)
 abstract class ReloadableResourceManagerImplMixin {
 
+    /**
+     * Copies the mod's assets folder to a resource pack to allow for resource reloading to work.
+     */
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @Inject(method = "reload", at = @At("HEAD"))
     private void catsPlus$copyResourcesToResourcePack(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir) {
@@ -64,6 +67,11 @@ abstract class ReloadableResourceManagerImplMixin {
         }
     }
 
+    /**
+     * Creates a {@code JsonElement} representing a resource pack's pack.mcmeta file.
+     *
+     * @return A {@code JsonElement} representing the pack.mcmeta file.
+     */
     private static JsonElement catsPlus$createPackMcMeta() {
         JsonObject packObject = new JsonObject();
         packObject.addProperty("description", "Mod assets copied to a resource pack");

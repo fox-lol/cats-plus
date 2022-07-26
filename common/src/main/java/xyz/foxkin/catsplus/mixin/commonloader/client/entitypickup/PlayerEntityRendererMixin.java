@@ -21,6 +21,9 @@ abstract class PlayerEntityRendererMixin extends LivingEntityRendererMixin<Abstr
         super(ctx);
     }
 
+    /**
+     * Sets the player instance in the player model for more context when rendering.
+     */
     @SuppressWarnings("unchecked")
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
     private void catsPlus$setModelPlayer(AbstractClientPlayerEntity player, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {

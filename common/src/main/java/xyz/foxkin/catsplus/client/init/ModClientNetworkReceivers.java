@@ -22,6 +22,7 @@ import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 public class ModClientNetworkReceivers {
 
     public static void registerReceivers() {
+        // Plays first person arm animations.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.PLAY_FIRST_PERSON_ARMS_ANIMATIONS, (buf, context) -> {
             AnimationData animationData = decodeAnimationData(buf);
             context.queue(() -> {
@@ -31,6 +32,7 @@ public class ModClientNetworkReceivers {
             });
         });
 
+        // Plays entity animations if the entity contains an animatable component.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.PLAY_ENTITY_ANIMATIONS, (buf, context) -> {
             int entityId = buf.readInt();
             AnimationData animationData = decodeAnimationData(buf);
@@ -51,6 +53,7 @@ public class ModClientNetworkReceivers {
             });
         });
 
+        // Syncs the held entity to the client.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, (buf, context) -> {
             NbtCompound heldEntityNbt = buf.readNbt();
             PlayerEntity player = context.getPlayer();
@@ -70,6 +73,12 @@ public class ModClientNetworkReceivers {
         });
     }
 
+    /**
+     * Decodes animation data from a packet.
+     *
+     * @param buf The packet to decode from.
+     * @return The decoded animation data.
+     */
     private static AnimationData decodeAnimationData(PacketByteBuf buf) {
         boolean lastShouldLoop = buf.readBoolean();
         int animationCount = buf.readInt();
@@ -80,6 +89,12 @@ public class ModClientNetworkReceivers {
         return new AnimationData(lastShouldLoop, animationNames);
     }
 
+    /**
+     * Represents animation data.
+     *
+     * @param lastShouldLoop Whether the last animation should loop.
+     * @param animationNames The names of the animations.
+     */
     private record AnimationData(boolean lastShouldLoop, String[] animationNames) {
     }
 }

@@ -23,6 +23,11 @@ public abstract class EntityAnimatable<T extends Entity> extends CatsPlusAnimata
         }
     }
 
+    /**
+     * Whether the entity is a baby or not.
+     *
+     * @return Whether the entity is a baby or not.
+     */
     public boolean isBaby() {
         if (entity instanceof LivingEntity livingEntity) {
             return livingEntity.isBaby();
@@ -31,6 +36,11 @@ public abstract class EntityAnimatable<T extends Entity> extends CatsPlusAnimata
         }
     }
 
+    /**
+     * Gets the entity this animatable is representing.
+     *
+     * @return The entity this animatable is representing.
+     */
     protected T getEntity() {
         return entity;
     }

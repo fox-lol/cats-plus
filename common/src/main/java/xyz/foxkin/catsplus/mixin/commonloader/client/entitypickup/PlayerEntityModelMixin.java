@@ -34,6 +34,9 @@ abstract class PlayerEntityModelMixin extends BipedEntityModelMixin implements E
     @Nullable
     private PlayerEntity catsPlus$player;
 
+    /**
+     * Prevents rendering of the player's arms so that a custom model can be rendered instead.
+     */
     @Override
     protected Iterable<ModelPart> catsPlus$removeVanillaArms(Iterable<ModelPart> bodyParts, MatrixStack matrices, VertexConsumer vertices, int light) {
         if (catsPlus$player != null) {

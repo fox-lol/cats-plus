@@ -45,6 +45,10 @@ abstract class EntityMixin implements EntityAccess {
     @Shadow
     public abstract void discard();
 
+    /**
+     * A player will pick up an entity if they are sneaking when they interact with it
+     * and the entity is set to be able to be picked up.
+     */
     @SuppressWarnings("ConstantConditions")
     @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
     private void catsPlus$pickupEntity(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
@@ -84,7 +88,7 @@ abstract class EntityMixin implements EntityAccess {
             } else {
                 isBaby = false;
             }
-            AnimationSyncing.syncArmsAnimationsFromServer(player, false,
+            AnimationSyncing.syncArmsAnimationsToClients(player, false,
                     "holding."
                             + (isBaby ? "baby." : "")
                             + entityId.getNamespace()
@@ -97,11 +101,17 @@ abstract class EntityMixin implements EntityAccess {
         }
     }
 
+    /**
+     * Writes the held pose number to NBT.
+     */
     @Inject(method = "writeNbt", at = @At("HEAD"))
     private void catsPlus$writeBeingHeld(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
         nbt.putInt(CATS_PLUS$HELD_POSE_NBT_KEY, catsPlus$heldPoseNumber);
     }
 
+    /**
+     * Reads the held pose number from NBT.
+     */
     @Inject(method = "readNbt", at = @At("HEAD"))
     private void catsPlus$readBeingHeld(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains(CATS_PLUS$HELD_POSE_NBT_KEY, NbtElement.INT_TYPE)) {

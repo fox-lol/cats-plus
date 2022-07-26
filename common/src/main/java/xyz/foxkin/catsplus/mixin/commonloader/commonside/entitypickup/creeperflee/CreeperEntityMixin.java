@@ -34,6 +34,9 @@ abstract class CreeperEntityMixin extends HostileEntity {
         super(entityType, world);
     }
 
+    /**
+     * Creepers flee from player's holding a cat or ocelot.
+     */
     @Inject(method = "initGoals", at = @At("HEAD"))
     private void catsPlus$addFleeFromPlayerHoldingCatGoal(CallbackInfo ci) {
         goalSelector.add(3, new FleeEntityGoal<>(
@@ -46,6 +49,9 @@ abstract class CreeperEntityMixin extends HostileEntity {
         ));
     }
 
+    /**
+     * Creepers don't look at players holding a cat or ocelot.
+     */
     @SuppressWarnings("unused")
     @ModifyExpressionValue(method = "initGoals", at = @At(value = "NEW", target = "net/minecraft/entity/ai/goal/LookAtEntityGoal"))
     private LookAtEntityGoal catsPlus$onlyLookIfNotHoldingCat(LookAtEntityGoal goal) {
@@ -58,6 +64,9 @@ abstract class CreeperEntityMixin extends HostileEntity {
         return goal;
     }
 
+    /**
+     * Creepers don't target players holding a cat or ocelot.
+     */
     @SuppressWarnings("unused")
     @ModifyExpressionValue(method = "initGoals", at = @At(value = "NEW", target = "net/minecraft/entity/ai/goal/ActiveTargetGoal"))
     private <T extends LivingEntity> ActiveTargetGoal<T> catsPlus$onlyTargetIfNotHoldingCat(ActiveTargetGoal<T> goal) {
@@ -70,6 +79,12 @@ abstract class CreeperEntityMixin extends HostileEntity {
         return goal;
     }
 
+    /**
+     * Checks if an entity is a player and is holding a cat or ocelot.
+     *
+     * @param entity The entity to check.
+     * @return Whether the entity is a player and is holding a cat or ocelot.
+     */
     private boolean catsPlus$isPlayerHoldingCat(Entity entity) {
         if (entity instanceof PlayerEntityAccess playerAccess) {
             return playerAccess.catsPlus$getHeldEntity()

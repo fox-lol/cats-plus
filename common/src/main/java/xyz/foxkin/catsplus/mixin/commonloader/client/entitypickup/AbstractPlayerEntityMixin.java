@@ -17,6 +17,9 @@ abstract class AbstractPlayerEntityMixin implements AnimatableContainer<ThirdPer
 
     private ThirdPersonPlayerArms catsPlus$playerArms;
 
+    /**
+     * Sets the animatable instance.
+     */
     @Inject(method = "<init>", at = @At("RETURN"))
     private void catsPlus$setAnimatable(ClientWorld world, GameProfile profile, PlayerPublicKey publicKey, CallbackInfo ci) {
         catsPlus$playerArms = new ThirdPersonPlayerArms((AbstractClientPlayerEntity) (Object) this);

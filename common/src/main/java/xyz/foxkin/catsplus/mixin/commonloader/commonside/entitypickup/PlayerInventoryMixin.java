@@ -21,6 +21,9 @@ abstract class PlayerInventoryMixin {
     @Shadow
     public int selectedSlot;
 
+    /**
+     * If the player is holding an entity, the player's selected slot will be treated as occupied.
+     */
     @Redirect(method = "getEmptySlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/DefaultedList;get(I)Ljava/lang/Object;"))
     private Object catsPlus$preventSelectedSlotPickupIfHoldingEntity(DefaultedList<ItemStack> mainInventory, int slotIndex) {
         if (slotIndex == selectedSlot) {

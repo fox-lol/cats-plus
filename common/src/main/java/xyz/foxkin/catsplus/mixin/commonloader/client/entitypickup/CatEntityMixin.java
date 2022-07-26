@@ -16,6 +16,9 @@ abstract class CatEntityMixin implements AnimatableContainer<ReplacedCatEntity> 
 
     private ReplacedCatEntity catsPlus$replacedCat;
 
+    /**
+     * Sets the animatable instance.
+     */
     @Inject(method = "<init>", at = @At("RETURN"))
     private void catsPlus$setAnimatable(EntityType<? extends CatEntity> entityType, World world, CallbackInfo ci) {
         catsPlus$replacedCat = new ReplacedCatEntity((CatEntity) (Object) this);

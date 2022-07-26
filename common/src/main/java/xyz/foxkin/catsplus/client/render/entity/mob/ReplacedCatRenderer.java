@@ -35,6 +35,14 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
         matrices.pop();
     }
 
+    /**
+     * Renders the collar of the cat
+     *
+     * @param animatable      The animatable representing the cat.
+     * @param matrices        The matrix transformations stack.
+     * @param vertexConsumers The vertex consumer provider.
+     * @param light           The light level.
+     */
     private void renderCollar(ReplacedCatEntity animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         GeoModel model = getGeoModel(animatable);
         RenderLayer collarLayer = RenderLayer.getEntityCutoutNoCull(CatCollarFeatureRendererAccessor.catsPlus$getSkin());
@@ -57,16 +65,46 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
             matrices.translate(0, -0.85, 0);
         }
         for (GeoBone group : model.topLevelBones) {
-            renderRecursively(group, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby);
+            renderBones(group, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby);
         }
         matrices.pop();
     }
 
-    private void renderRecursively(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby) {
-        renderRecursively(bone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, true, true);
+    /**
+     * Renders the bones of the model.
+     *
+     * @param bone     The parent of all the bones to render.
+     * @param matrices The matrix transformations stack.
+     * @param vertices The vertex consumer.
+     * @param light    The light level.
+     * @param overlay  The overlay.
+     * @param red      The red tint level.
+     * @param green    The green tint level.
+     * @param blue     The blue tint level.
+     * @param alpha    The alpha level.
+     * @param isBaby   Whether the cat is a baby.
+     */
+    private void renderBones(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby) {
+        renderBones(bone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, true, true);
     }
 
-    private void renderRecursively(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby, boolean needToTransformBabyBody, boolean needToTransformBabyHead) {
+    /**
+     * Renders the bones of the model.
+     *
+     * @param bone                    The parent of all the bones to render.
+     * @param matrices                The matrix transformations stack.
+     * @param vertices                The vertex consumer.
+     * @param light                   The light level.
+     * @param overlay                 The overlay.
+     * @param red                     The red tint level.
+     * @param green                   The green tint level.
+     * @param blue                    The blue tint level.
+     * @param alpha                   The alpha level.
+     * @param isBaby                  Whether the cat is a baby.
+     * @param needToTransformBabyBody Whether the body needs to be transformed when the cat is a baby.
+     * @param needToTransformBabyHead Whether the head needs to be transformed when the cat is a baby.
+     */
+    private void renderBones(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby, boolean needToTransformBabyBody, boolean needToTransformBabyHead) {
         matrices.push();
 
         if (isBaby) {
@@ -115,7 +153,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
         }
         if (!bone.childBonesAreHiddenToo()) {
             for (GeoBone childBone : bone.childBones) {
-                renderRecursively(childBone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, needToTransformBabyBody, needToTransformBabyHead);
+                renderBones(childBone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, needToTransformBabyBody, needToTransformBabyHead);
             }
         }
 
