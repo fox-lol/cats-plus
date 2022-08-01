@@ -14,6 +14,7 @@ import software.bernie.geckolib3.util.RenderUtils;
 import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatEntity;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
+import xyz.foxkin.catsplus.client.util.GeckoUtil;
 import xyz.foxkin.catsplus.mixin.commonloader.client.accessor.CatCollarFeatureRendererAccessor;
 
 @Environment(EnvType.CLIENT)
@@ -65,7 +66,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
             matrices.translate(0, -0.85, 0);
         }
         for (GeoBone group : model.topLevelBones) {
-            renderBones(group, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby);
+            renderRecursively(group, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby);
         }
         matrices.pop();
     }
@@ -84,8 +85,8 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
      * @param alpha    The alpha level.
      * @param isBaby   Whether the cat is a baby.
      */
-    private void renderBones(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby) {
-        renderBones(bone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, true, true);
+    private void renderRecursively(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby) {
+        renderRecursively(bone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, true, true);
     }
 
     /**
@@ -104,7 +105,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
      * @param needToTransformBabyBody Whether the body needs to be transformed when the cat is a baby.
      * @param needToTransformBabyHead Whether the head needs to be transformed when the cat is a baby.
      */
-    private void renderBones(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby, boolean needToTransformBabyBody, boolean needToTransformBabyHead) {
+    private void renderRecursively(GeoBone bone, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha, boolean isBaby, boolean needToTransformBabyBody, boolean needToTransformBabyHead) {
         matrices.push();
 
         if (isBaby) {
@@ -114,11 +115,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
             float invertedChildBodyScale = 2;
             float childBodyYOffset = 24;
 
-            if ((bone.getName().equals("head_root")
-                    || bone.getName().equals("right_ear")
-                    || bone.getName().equals("left_ear"))
-                    && needToTransformBabyHead
-            ) {
+            if (GeckoUtil.isBonePartOf(bone, "head_root") && needToTransformBabyHead) {
                 // Undo body transformations
                 matrices.translate(0, -childBodyYOffset / 16, 0);
                 matrices.scale(invertedChildBodyScale, invertedChildBodyScale, invertedChildBodyScale);
@@ -153,7 +150,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
         }
         if (!bone.childBonesAreHiddenToo()) {
             for (GeoBone childBone : bone.childBones) {
-                renderBones(childBone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, needToTransformBabyBody, needToTransformBabyHead);
+                renderRecursively(childBone, matrices, vertices, light, overlay, red, green, blue, alpha, isBaby, needToTransformBabyBody, needToTransformBabyHead);
             }
         }
 
