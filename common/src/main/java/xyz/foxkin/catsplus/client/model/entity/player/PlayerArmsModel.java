@@ -16,7 +16,16 @@ public class PlayerArmsModel extends CatsPlusModel<PlayerArms> {
     @Override
     public void setUpModel(PlayerArms animatable) {
         super.setUpModel(animatable);
+        hideParts();
         setArmThickness(animatable);
+    }
+
+    private void hideParts() {
+        try {
+            getBone("entity_placeholder").setHidden(true);
+            getBone("body").setHidden(true);
+        } catch (RuntimeException ignored) {
+        }
     }
 
     /**

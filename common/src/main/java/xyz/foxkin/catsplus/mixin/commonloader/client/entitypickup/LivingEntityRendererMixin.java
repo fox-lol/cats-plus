@@ -15,16 +15,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.animatable.player.ThirdPersonPlayerArms;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
+import xyz.foxkin.catsplus.client.util.GeckoUtil;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
-import xyz.foxkin.catsplus.commonside.util.GeckoUtil;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -46,8 +45,16 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
             playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
                 AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) entity;
                 PlayerArms playerArms = animatableContainer.catsPlus$getAnimatable();
+                matrices.push();
+                matrices.translate(0, 1.5, 0);
+                matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+                if (playerArms.isInSneakingPose()) {
+                    matrices.translate(0, -0.08, 0.6);
+                    matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(-0.4F));
+                }
                 catsPlus$renderThirdPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
                 catsPlus$renderThirdPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                matrices.pop();
             });
         }
     }
@@ -62,15 +69,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
      */
     private void catsPlus$renderThirdPersonHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
-        matrices.push();
-        matrices.translate(0, 1.764, -0.1);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
-        if (playerArms.isInSneakingPose()) {
-            matrices.translate(0, -0.1, 0.7);
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-23));
-        }
         renderer.render(playerArms, matrices, vertexConsumers, light);
-        matrices.pop();
     }
 
     /**
@@ -88,25 +87,13 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
         if (heldEntity instanceof AnimatableContainer<?> container) {
             CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
-            Optional<? extends CatsPlusGeoRenderer> rendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
-            rendererOptional.ifPresentOrElse(renderer -> {
+            Optional<? extends CatsPlusGeoRenderer> heldEntityRendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
+            heldEntityRendererOptional.ifPresentOrElse(heldEntityRenderer -> {
                 CatsPlusGeoRenderer<PlayerArms> holderRenderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
-                GeoModelProvider<PlayerArms> holderModelProvider = holderRenderer.getGeoModelProvider();
-                GeoModel model = holderModelProvider.getModel(holderRenderer.getGeoModelProvider().getModelResource(holder));
-                model.getBone("entity_placeholder").ifPresentOrElse(entityPlaceholder -> {
-                    if (holder.isInSneakingPose()) {
-                        matrices.translate(0, 0.2, 0);
-                        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(23));
-                    }
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
+                GeoModel playerArmsModel = holderRenderer.getGeoModel(holder);
+                playerArmsModel.getBone("entity_placeholder").ifPresentOrElse(entityPlaceholder -> {
                     GeckoUtil.applyBoneTransformations(entityPlaceholder, matrices);
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(-180));
-                    matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
-                    matrices.translate(0, 0.5, -0.5);
-                    matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
-                    entityPlaceholder.setHidden(true);
-                    renderer.render(animatable, matrices, vertexConsumers, light);
+                    heldEntityRenderer.render(animatable, matrices, vertexConsumers, light);
                     renderedHeldEntity.set(true);
                 }, () -> CatsPlus.LOGGER.error("Could not find bone \"entity_placeholder\" in model!"));
             }, () -> CatsPlus.LOGGER.error("Could not find renderer for animatable " + animatable.getClass().getName()));

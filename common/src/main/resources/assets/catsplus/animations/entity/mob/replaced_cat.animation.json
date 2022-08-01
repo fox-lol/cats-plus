@@ -235,7 +235,7 @@
 				}
 			}
 		},
-		"test": {
+		"no_change": {
 			"loop": true,
 			"bones": {
 				"root": {

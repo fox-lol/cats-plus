@@ -47,7 +47,8 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
                                     + entityId.getNamespace()
                                     + "_" + entityId.getPath()
                                     + ".idle."
-                                    + heldPoseNumber);
+                                    + heldPoseNumber
+                    );
                 }
             });
         }
