@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
-import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.animatable.player.ThirdPersonPlayerArms;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
@@ -44,11 +43,11 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
         if (entity instanceof PlayerEntityAccess playerAccess) {
             playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
                 AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) entity;
-                PlayerArms playerArms = animatableContainer.catsPlus$getAnimatable();
+                ThirdPersonPlayerArms playerArms = animatableContainer.catsPlus$getAnimatable();
                 matrices.push();
                 matrices.translate(0, 1.5, 0);
                 matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(180));
-                if (playerArms.isInSneakingPose()) {
+                if (playerArms.getEntity().isInSneakingPose()) {
                     matrices.translate(0, -0.08, 0.6);
                     matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(-0.4F));
                 }
@@ -67,8 +66,8 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
      * @param vertexConsumers The vertex consumer provider.
      * @param light           The light level.
      */
-    private void catsPlus$renderThirdPersonHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
+    private void catsPlus$renderThirdPersonHoldingArms(ThirdPersonPlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        var renderer = ModGeoRenderers.getRenderer(ThirdPersonPlayerArms.class).orElseThrow();
         renderer.render(playerArms, matrices, vertexConsumers, light);
     }
 
@@ -82,14 +81,14 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
      * @param light           The light level.
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void catsPlus$renderThirdPersonHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void catsPlus$renderThirdPersonHeldEntity(ThirdPersonPlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
         if (heldEntity instanceof AnimatableContainer<?> container) {
             CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
             Optional<? extends CatsPlusGeoRenderer> heldEntityRendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
             heldEntityRendererOptional.ifPresentOrElse(heldEntityRenderer -> {
-                CatsPlusGeoRenderer<PlayerArms> holderRenderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
+                var holderRenderer = ModGeoRenderers.getRenderer(ThirdPersonPlayerArms.class).orElseThrow();
                 GeoModel playerArmsModel = holderRenderer.getGeoModel(holder);
                 playerArmsModel.getBone("entity_placeholder").ifPresentOrElse(entityPlaceholder -> {
                     GeckoUtil.applyBoneTransformations(entityPlaceholder, matrices);

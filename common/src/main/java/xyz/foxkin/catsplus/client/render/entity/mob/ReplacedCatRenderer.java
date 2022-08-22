@@ -12,15 +12,15 @@ import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.util.RenderUtils;
 import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatEntity;
-import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
+import xyz.foxkin.catsplus.client.model.entity.mob.ReplacedCatModel;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;
 import xyz.foxkin.catsplus.mixin.commonloader.client.accessor.CatCollarFeatureRendererAccessor;
 
 @Environment(EnvType.CLIENT)
-public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> {
+public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity, ReplacedCatModel> {
 
-    public ReplacedCatRenderer(CatsPlusModel<ReplacedCatEntity> modelProvider) {
+    public ReplacedCatRenderer(ReplacedCatModel modelProvider) {
         super(modelProvider, ReplacedCatEntity.class);
     }
 
@@ -30,7 +30,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
         float modelScale = 0.8F;
         matrices.scale(modelScale, modelScale, modelScale);
         super.render(animatable, matrices, vertexConsumers, light);
-        if (animatable.isTamed()) {
+        if (animatable.getEntity().isTamed()) {
             renderCollar(animatable, matrices, vertexConsumers, light);
         }
         matrices.pop();
@@ -47,7 +47,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
     private void renderCollar(ReplacedCatEntity animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         GeoModel model = getGeoModel(animatable);
         RenderLayer collarLayer = RenderLayer.getEntityCutoutNoCull(CatCollarFeatureRendererAccessor.catsPlus$getSkin());
-        float[] collarColor = animatable.getCollarColor();
+        float[] collarColor = animatable.getEntity().getCollarColor().getColorComponents();
         render(model, animatable, 0, collarLayer, matrices, vertexConsumers, null, light, OverlayTexture.DEFAULT_UV, collarColor[0], collarColor[1], collarColor[2], 1);
     }
 
@@ -59,7 +59,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity> 
             vertices = vertexConsumers.getBuffer(renderLayer);
         }
         renderLate(animatable, matrices, tickDelta, vertexConsumers, vertices, light, overlay, red, green, blue, alpha);
-        boolean isBaby = animatable.isBaby();
+        boolean isBaby = animatable.getEntity().isBaby();
 
         matrices.push();
         if (isBaby) {

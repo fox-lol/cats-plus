@@ -2,30 +2,28 @@ package xyz.foxkin.catsplus.client.model.entity.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import software.bernie.geckolib3.core.processor.IBone;
 import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 @Environment(EnvType.CLIENT)
-public class PlayerArmsModel extends CatsPlusModel<PlayerArms> {
+public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusModel<T> {
 
     public PlayerArmsModel() {
         super(CatsPlus.MOD_ID, "geo/entity/player/entity_holding_arms.geo.json", "animations/entity/player/entity_holding_arms.animation.json");
     }
 
     @Override
-    public void setUpModel(PlayerArms animatable) {
+    public void setUpModel(T animatable) {
         super.setUpModel(animatable);
         hideParts();
         setArmThickness(animatable);
     }
 
     private void hideParts() {
-        try {
-            getBone("entity_placeholder").setHidden(true);
-            getBone("body").setHidden(true);
-        } catch (RuntimeException ignored) {
-        }
+        setBoneHidden("entity_placeholder", true);
+        setBoneHidden("body", true);
     }
 
     /**
@@ -34,30 +32,23 @@ public class PlayerArmsModel extends CatsPlusModel<PlayerArms> {
      * @param playerArms The arms to set the thickness of.
      */
     private void setArmThickness(PlayerArms playerArms) {
-        boolean slimArms = playerArms.isSlimArms();
-        try {
-            if (slimArms) {
-                getBone("right_arm_wide").setHidden(true);
-                getBone("left_arm_wide").setHidden(true);
-                getBone("right_arm_layer_wide").setHidden(true);
-                getBone("left_arm_layer_wide").setHidden(true);
+        boolean slimArms = playerArms.getEntity().getModel().equals("slim");
 
-                getBone("right_arm_slim").setHidden(false);
-                getBone("left_arm_slim").setHidden(false);
-                getBone("right_arm_layer_slim").setHidden(false);
-                getBone("left_arm_layer_slim").setHidden(false);
-            } else {
-                getBone("right_arm_wide").setHidden(false);
-                getBone("left_arm_wide").setHidden(false);
-                getBone("right_arm_layer_wide").setHidden(false);
-                getBone("left_arm_layer_wide").setHidden(false);
+        setBoneHidden("arm_right", slimArms);
+        setBoneHidden("left_arm_wide", slimArms);
+        setBoneHidden("right_arm_layer_wide", slimArms);
+        setBoneHidden("left_arm_layer_wide", slimArms);
 
-                getBone("right_arm_slim").setHidden(true);
-                getBone("left_arm_slim").setHidden(true);
-                getBone("right_arm_layer_slim").setHidden(true);
-                getBone("left_arm_layer_slim").setHidden(true);
-            }
-        } catch (RuntimeException ignored) {
+        setBoneHidden("right_arm_slim", !slimArms);
+        setBoneHidden("left_arm_slim", !slimArms);
+        setBoneHidden("right_arm_layer_slim", !slimArms);
+        setBoneHidden("left_arm_layer_slim", !slimArms);
+    }
+
+    private void setBoneHidden(String boneName, boolean hidden) {
+        IBone bone = getAnimationProcessor().getBone(boneName);
+        if (bone != null) {
+            bone.setHidden(hidden);
         }
     }
 }

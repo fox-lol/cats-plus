@@ -23,6 +23,8 @@ public interface PlayerEntityAccess {
      */
     void catsPlus$setHeldEntity(@Nullable Entity entity);
 
+    void catsPlus$setRandomHeldPoseNumber();
+
     /**
      * Clears the held entity.
      */
@@ -51,4 +53,16 @@ public interface PlayerEntityAccess {
      * @param speed The initial speed of the thrown entity.
      */
     void catsPlus$throwHeldEntity(double speed);
+
+    /**
+     * Gets the held pose number. Different numbers mean the
+     * entity will be seen held in a different pose.
+     *
+     * @return The held pose number.
+     */
+    int catsPlus$getHeldPoseNumber();
+
+    boolean catsPlus$isInteractingWithHeldEntity();
+
+    void catsPlus$setInteractingWithHeldEntity(boolean interacting);
 }
