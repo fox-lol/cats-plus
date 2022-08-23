@@ -11,6 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(AnimalModel.class)
 abstract class AnimalModelMixin {
 
+    /**
+     * See {@link PlayerEntityModelMixin#catsPlus$removeVanillaArms(Iterable, MatrixStack, VertexConsumer, int)}.
+     */
     @ModifyExpressionValue(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/AnimalModel;getBodyParts()Ljava/lang/Iterable;"))
     protected Iterable<ModelPart> catsPlus$removeVanillaArms(Iterable<ModelPart> bodyParts, MatrixStack matrices, VertexConsumer vertices, int light) {
         return bodyParts;

@@ -7,6 +7,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 public class EntityUtil {
+
     /**
      * Writes information about the player's held entity to NBT.
      *
@@ -30,6 +31,8 @@ public class EntityUtil {
      */
     public static Entity copyEntity(Entity entity, World world) {
         NbtCompound entityNbt = serializeEntity(entity);
-        return EntityType.getEntityFromNbt(entityNbt, world).orElseThrow();
+        return EntityType.getEntityFromNbt(entityNbt, world).orElseThrow(
+                () -> new IllegalArgumentException("Entity with type " + entity.getType() + " produced invalid NBT:\n" + entityNbt)
+        );
     }
 }

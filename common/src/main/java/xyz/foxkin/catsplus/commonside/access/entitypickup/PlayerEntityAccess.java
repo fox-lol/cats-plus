@@ -23,6 +23,8 @@ public interface PlayerEntityAccess {
      */
     void catsPlus$setHeldEntity(@Nullable Entity entity);
 
+    void catsPlus$setRandomHeldPoseNumber();
+
     /**
      * Clears the held entity.
      */
@@ -42,6 +44,7 @@ public interface PlayerEntityAccess {
      *
      * @param pos The position to drop the entity at.
      */
+    @SuppressWarnings("unused")
     void catsPlus$dropHeldEntity(Vec3d pos);
 
     /**
@@ -50,5 +53,36 @@ public interface PlayerEntityAccess {
      *
      * @param speed The initial speed of the thrown entity.
      */
+    @SuppressWarnings("unused")
     void catsPlus$throwHeldEntity(double speed);
+
+    /**
+     * Gets the held pose number. Different numbers mean the
+     * entity will be seen held in a different pose.
+     *
+     * @return The held pose number.
+     */
+    int catsPlus$getHeldPoseNumber();
+
+    /**
+     * Sets the held pose number. Different numbers mean the
+     * entity will be seen held in a different pose.
+     *
+     * @param heldPoseNumber The held pose number.
+     */
+    void catsPlus$setHeldPoseNumber(int heldPoseNumber);
+
+    /**
+     * Whether the player is interacting with it's held entity.
+     *
+     * @return Whether the player is interacting with it's held entity.
+     */
+    boolean catsPlus$isInteractingWithHeldEntity();
+
+    /**
+     * Sets whether the player is interacting with it's held entity.
+     *
+     * @param interacting Whether the player is interacting with it's held entity.
+     */
+    void catsPlus$setInteractingWithHeldEntity(boolean interacting);
 }

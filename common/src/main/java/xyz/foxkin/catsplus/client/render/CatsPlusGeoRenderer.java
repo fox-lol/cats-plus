@@ -17,12 +17,12 @@ import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 
 @Environment(EnvType.CLIENT)
-public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable> implements IGeoRenderer<T> {
+public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extends CatsPlusModel<T>> implements IGeoRenderer<T> {
 
-    private final CatsPlusModel<T> modelProvider;
+    private final S modelProvider;
     private final Class<T> animatableClass;
 
-    public CatsPlusGeoRenderer(CatsPlusModel<T> modelProvider, Class<T> animatableClass) {
+    public CatsPlusGeoRenderer(S modelProvider, Class<T> animatableClass) {
         this.modelProvider = modelProvider;
         this.animatableClass = animatableClass;
     }
@@ -35,7 +35,7 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable> implemen
     }
 
     @Override
-    public CatsPlusModel<T> getGeoModelProvider() {
+    public S getGeoModelProvider() {
         return modelProvider;
     }
 
@@ -53,8 +53,10 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable> implemen
     @Nullable
     public IAnimatableModel<Object> modelFetcher(IAnimatable animatable) {
         if (animatableClass.isInstance(animatable)) {
-            CatsPlusGeoRenderer<?> renderer = ModGeoRenderers.getRenderer(animatableClass).orElseThrow();
-            return (IAnimatableModel<Object>) renderer.getGeoModelProvider();
+            return ModGeoRenderers.getRenderer(animatableClass)
+                    .map(renderer -> (CatsPlusGeoRenderer<?, ?>) renderer)
+                    .map(renderer -> (IAnimatableModel<Object>) renderer.getGeoModelProvider())
+                    .orElse(null);
         } else {
             return null;
         }

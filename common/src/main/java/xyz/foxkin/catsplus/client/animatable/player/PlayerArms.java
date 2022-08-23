@@ -7,12 +7,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.Animation;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.animatable.EntityAnimatable;
-import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
+
+import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
 public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
@@ -25,71 +28,62 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
     }
 
     @Override
-    protected <T extends IAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
-        super.animationPredicate(event);
-        if (event.getController().getAnimationState() == AnimationState.Stopped) {
+    protected <T extends CatsPlusAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
+        PlayState playState = super.animationPredicate(event);
+        if (playState == PlayState.STOP) {
+            return playState;
+        } else {
+            AnimationController<?> controller = event.getController();
+            Animation currentAnimation = controller.getCurrentAnimation();
+            String currentAnimationName = currentAnimation == null ? "" : currentAnimation.animationName;
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) getEntity();
             playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
-                EntityAccess heldEntityAccess = (EntityAccess) heldEntity;
-                int heldPoseNumber = heldEntityAccess.catsPlus$getHeldPoseNumber();
+                int heldPoseNumber = playerAccess.catsPlus$getHeldPoseNumber();
                 if (heldPoseNumber > 0) {
                     Identifier entityId = EntityType.getId(heldEntity.getType());
-                    boolean isBaby;
-                    if (heldEntity instanceof LivingEntity livingEntity) {
-                        isBaby = livingEntity.isBaby();
-                    } else {
-                        isBaby = false;
+                    boolean isBaby = heldEntity instanceof LivingEntity livingEntity && livingEntity.isBaby();
+                    int transitionLengthTicks = 10;
+                    if (playerAccess.catsPlus$isInteractingWithHeldEntity() && (currentAnimationName.contains("idle") || currentAnimationName.contains("interacting"))) {
+                        playAnimations(transitionLengthTicks, true,
+                                getAnimationPrefix()
+                                        + "holding."
+                                        + (isBaby ? "baby." : "")
+                                        + entityId.getNamespace()
+                                        + "_"
+                                        + entityId.getPath()
+                                        + "."
+                                        + "interacting"
+                                        + "."
+                                        + heldPoseNumber
+                        );
+                    } else if (controller.getAnimationState() == AnimationState.Stopped || currentAnimationName.contains("interacting")) {
+                        playAnimations(transitionLengthTicks, true,
+                                getAnimationPrefix()
+                                        + "holding."
+                                        + (isBaby ? "baby." : "")
+                                        + entityId.getNamespace()
+                                        + "_"
+                                        + entityId.getPath()
+                                        + "."
+                                        + "idle"
+                                        + "."
+                                        + heldPoseNumber
+                        );
                     }
-                    playAnimations(true,
-                            getAnimationPrefix()
-                                    + "holding."
-                                    + (isBaby ? "baby." : "")
-                                    + entityId.getNamespace()
-                                    + "_" + entityId.getPath()
-                                    + ".idle."
-                                    + heldPoseNumber
-                    );
                 }
             });
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
     }
-
-    @Override
-    public void playAnimations(boolean lastShouldLoop, String... animationNames) {
-        super.playAnimations(lastShouldLoop, animationNames);
-        clearOtherPerspectiveAnimations();
-    }
-
-    /**
-     * Clears all animations from the other perspective when the
-     * animations from this perspective have been played. This
-     * is to prevent the animations from being played a second time
-     * when the player switches perspectives.
-     */
-    protected abstract void clearOtherPerspectiveAnimations();
 
     @Override
     public Identifier getTexture() {
         return getEntity().getSkinTexture();
     }
 
-    /**
-     * Whether the player's skin has slim arms or not.
-     *
-     * @return Whether the player's skin has slim arms or not.
-     */
-    public boolean isSlimArms() {
-        return getEntity().getModel().equals("slim");
-    }
-
-    /**
-     * Whether the player is in the sneaking pose or not.
-     *
-     * @return Whether the player is in the sneaking pose or not.
-     */
-    public boolean isInSneakingPose() {
-        return getEntity().isInSneakingPose();
+    @Override
+    public int getUniqueId() {
+        return Objects.hash(super.getUniqueId(), firstPerson);
     }
 
     /**

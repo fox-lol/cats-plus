@@ -20,7 +20,6 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.animatable.player.FirstPersonPlayerArms;
-import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;
@@ -46,7 +45,7 @@ abstract class HeldItemRendererMixin {
         PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
         playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
             if (hand == Hand.MAIN_HAND) {
-                PlayerArms playerArms = FirstPersonPlayerArms.getInstance();
+                FirstPersonPlayerArms playerArms = FirstPersonPlayerArms.getInstance();
                 matrices.push();
                 matrices.translate(0, -2, -0.5);
                 catsPlus$renderFirstPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
@@ -65,8 +64,8 @@ abstract class HeldItemRendererMixin {
      * @param vertexConsumers The vertex consumer provider.
      * @param light           The light level.
      */
-    private void catsPlus$renderFirstPersonHoldingArms(PlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        CatsPlusGeoRenderer<PlayerArms> renderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
+    private void catsPlus$renderFirstPersonHoldingArms(FirstPersonPlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+        var renderer = ModGeoRenderers.getRenderer(FirstPersonPlayerArms.class).orElseThrow();
         renderer.render(playerArms, matrices, vertexConsumers, light);
     }
 
@@ -80,14 +79,14 @@ abstract class HeldItemRendererMixin {
      * @param light           The light level.
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    private void catsPlus$renderFirstPersonHeldEntity(PlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void catsPlus$renderFirstPersonHeldEntity(FirstPersonPlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);
         if (heldEntity instanceof AnimatableContainer<?> container) {
             CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
             Optional<? extends CatsPlusGeoRenderer> heldEntityRendererOptional = ModGeoRenderers.getRenderer(animatable.getClass());
             heldEntityRendererOptional.ifPresentOrElse(heldEntityRenderer -> {
-                CatsPlusGeoRenderer<PlayerArms> holderRenderer = ModGeoRenderers.getRenderer(PlayerArms.class).orElseThrow();
+                var holderRenderer = ModGeoRenderers.getRenderer(FirstPersonPlayerArms.class).orElseThrow();
                 GeoModel playerArmsModel = holderRenderer.getGeoModel(holder);
                 playerArmsModel.getBone("entity_placeholder").ifPresentOrElse(entityPlaceholder -> {
                     GeckoUtil.applyBoneTransformations(entityPlaceholder, matrices);

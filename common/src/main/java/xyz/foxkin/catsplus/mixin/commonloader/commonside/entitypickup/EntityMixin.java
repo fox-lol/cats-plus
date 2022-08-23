@@ -5,37 +5,28 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.animation.AnimationSyncing;
-import xyz.foxkin.catsplus.commonside.animation.EntityHeldPosesManager;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
-
-import java.util.Random;
 
 @Mixin(Entity.class)
 abstract class EntityMixin implements EntityAccess {
 
     @Unique
-    private static final String CATS_PLUS$HELD_POSE_NBT_KEY = "catsplus:heldPose";
-    @Unique
-    private static final Random CATS_PLUS$RANDOM = new Random();
-
-    @Unique
-    private int catsPlus$heldPoseNumber = 0;
+    @Nullable
+    private PlayerEntity catsPlus$holder;
 
     @Shadow
     public abstract EntityType<?> getType();
@@ -62,6 +53,7 @@ abstract class EntityMixin implements EntityAccess {
                 && player.getMainHandStack().isEmpty()
                 && player.getOffHandStack().isEmpty()
                 && playerAccess.catsPlus$getHeldEntity().isEmpty()
+                && !((Object) this instanceof PlayerEntity)
         ) {
             if ((Object) this instanceof TameableEntity thisTameable) {
                 if (thisTameable.isTamed()) {
@@ -71,19 +63,9 @@ abstract class EntityMixin implements EntityAccess {
                 }
             }
 
-            int heldPosesCount = EntityHeldPosesManager.INSTANCE.getEntityHeldPosesCount(getType());
-            if (heldPosesCount > 0) {
-                int heldPoseNumber;
-                if (heldPosesCount == 1) {
-                    heldPoseNumber = 1;
-                } else {
-                    heldPoseNumber = CATS_PLUS$RANDOM.nextInt(heldPosesCount - 1) + 1;
-                }
-                catsPlus$setHeldPoseNumber(heldPoseNumber);
-            }
-
             setPitch(0);
             playerAccess.catsPlus$setHeldEntity((Entity) (Object) this);
+            playerAccess.catsPlus$setRandomHeldPoseNumber();
 
             Identifier entityId = EntityType.getId(getType());
             boolean isBaby;
@@ -92,14 +74,17 @@ abstract class EntityMixin implements EntityAccess {
             } else {
                 isBaby = false;
             }
+
             if (!getWorld().isClient()) {
-                AnimationSyncing.syncArmsAnimationsToClients(player, false,
+                AnimationSyncing.cancelArmsAnimations(player);
+                AnimationSyncing.syncArmsAnimationsToClients(player, 0, false,
                         "holding."
                                 + (isBaby ? "baby." : "")
                                 + entityId.getNamespace()
-                                + "_" + entityId.getPath()
+                                + "_"
+                                + entityId.getPath()
                                 + ".picking_up."
-                                + catsPlus$getHeldPoseNumber());
+                                + playerAccess.catsPlus$getHeldPoseNumber());
             }
 
             discard();
@@ -107,31 +92,17 @@ abstract class EntityMixin implements EntityAccess {
         }
     }
 
-    /**
-     * Writes the held pose number to NBT.
-     */
-    @Inject(method = "writeNbt", at = @At("HEAD"))
-    private void catsPlus$writeBeingHeld(NbtCompound nbt, CallbackInfoReturnable<NbtCompound> cir) {
-        nbt.putInt(CATS_PLUS$HELD_POSE_NBT_KEY, catsPlus$heldPoseNumber);
-    }
-
-    /**
-     * Reads the held pose number from NBT.
-     */
-    @Inject(method = "readNbt", at = @At("HEAD"))
-    private void catsPlus$readBeingHeld(NbtCompound nbt, CallbackInfo ci) {
-        if (nbt.contains(CATS_PLUS$HELD_POSE_NBT_KEY, NbtElement.INT_TYPE)) {
-            catsPlus$heldPoseNumber = nbt.getInt(CATS_PLUS$HELD_POSE_NBT_KEY);
+    @Override
+    public PlayerEntity catsPlus$getHolder() {
+        if (catsPlus$holder == null) {
+            throw new IllegalStateException("Entity is not being held by a player");
+        } else {
+            return catsPlus$holder;
         }
     }
 
     @Override
-    public int catsPlus$getHeldPoseNumber() {
-        return catsPlus$heldPoseNumber;
-    }
-
-    @Override
-    public void catsPlus$setHeldPoseNumber(int heldPoseNumber) {
-        catsPlus$heldPoseNumber = heldPoseNumber;
+    public void catsPlus$setHolder(PlayerEntity holder) {
+        catsPlus$holder = holder;
     }
 }

@@ -16,14 +16,15 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public abstract class CatsPlusAnimatable implements IAnimatable {
 
     private static final String ANIMATION_CONTROLLER_NAME = "controller";
-    private static final int ANIMATION_TRANSITION_LENGTH_TICKS = 0;
-    private final AnimationFactory factory = new AnimationFactory(this);
-    protected String[] pendingAnimationNames = new String[0];
+    protected static final int DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS = 0;
+    private AnimationFactory factory = new AnimationFactory(this);
+    private String[] pendingAnimationNames = new String[0];
+    private int pendingAnimationTransitionLengthTicks = DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS;
     private boolean lastPendingAnimationShouldLoop = false;
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, ANIMATION_CONTROLLER_NAME, ANIMATION_TRANSITION_LENGTH_TICKS, this::animationPredicate));
+        animationData.addAnimationController(new AnimationController<>(this, ANIMATION_CONTROLLER_NAME, DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS, this::animationPredicate));
     }
 
     @Override
@@ -38,11 +39,10 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
      * @param <T>   The animatable type.
      * @return The play state.
      */
-    @SuppressWarnings("SameReturnValue")
-    protected <T extends IAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
+    protected <T extends CatsPlusAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
         if (pendingAnimationNames.length > 0) {
-            playAnimations(lastPendingAnimationShouldLoop, pendingAnimationNames);
-            pendingAnimationNames = new String[0];
+            playAnimations(pendingAnimationTransitionLengthTicks, lastPendingAnimationShouldLoop, pendingAnimationNames);
+            clearPendingAnimations();
         }
         return PlayState.CONTINUE;
     }
@@ -50,10 +50,11 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
     /**
      * Plays the given animations.
      *
-     * @param lastShouldLoop Whether the last animation should loop.
-     * @param animationNames The animation names.
+     * @param transitionLengthTicks The length of the animation transition.
+     * @param lastShouldLoop        Whether the last animation should loop.
+     * @param animationNames        The animation names.
      */
-    public void playAnimations(boolean lastShouldLoop, String... animationNames) {
+    protected void playAnimations(int transitionLengthTicks, boolean lastShouldLoop, String... animationNames) {
         AnimationController<?> controller = GeckoLibUtil.getControllerForID(getFactory(), getUniqueId(), ANIMATION_CONTROLLER_NAME);
         AnimationBuilder builder = new AnimationBuilder();
         for (int i = 0; i < animationNames.length; i++) {
@@ -64,6 +65,7 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
                 builder.addAnimation(animationName);
             }
         }
+        controller.transitionLengthTicks = transitionLengthTicks;
         controller.setAnimation(builder);
     }
 
@@ -84,18 +86,31 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
     /**
      * Sets animations to be played when {@link #animationPredicate(AnimationEvent)} is next run.
      *
-     * @param pendingAnimationNames The animation names.
+     * @param transitionLengthTicks The length of the animation transition.
+     * @param lastShouldLoop        Whether the last animation should loop.
+     * @param animationNames        The animation names. If no animations are given,
+     *                              the pending animations will be cleared.
      */
-    public void setPendingAnimations(String... pendingAnimationNames) {
-        this.pendingAnimationNames = pendingAnimationNames;
+    public void setPendingAnimations(int transitionLengthTicks, boolean lastShouldLoop, String... animationNames) {
+        pendingAnimationNames = animationNames;
+        pendingAnimationTransitionLengthTicks = transitionLengthTicks;
+        lastPendingAnimationShouldLoop = lastShouldLoop;
     }
 
     /**
-     * Sets whether the last pending animation should loop.
-     *
-     * @param lastShouldLoop Whether the last pending animation should loop.
+     * Clears the pending animations.
      */
-    public void setLastPendingAnimationShouldLoop(boolean lastShouldLoop) {
-        this.lastPendingAnimationShouldLoop = lastShouldLoop;
+    public void clearPendingAnimations() {
+        pendingAnimationNames = new String[0];
+        pendingAnimationTransitionLengthTicks = DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS;
+        lastPendingAnimationShouldLoop = false;
+    }
+
+    /**
+     * Cancels the current animation and clears the pending animations.
+     */
+    public void cancelAnimations() {
+        clearPendingAnimations();
+        factory = new AnimationFactory(this);
     }
 }

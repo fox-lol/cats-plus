@@ -31,8 +31,7 @@ public class ModClientNetworkReceivers {
             AnimationData animationData = decodeAnimationData(buf);
             context.queue(() -> {
                 PlayerArms firstPersonArms = FirstPersonPlayerArms.getInstance();
-                firstPersonArms.setPendingAnimations(animationData.animationNames());
-                firstPersonArms.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop());
+                firstPersonArms.setPendingAnimations(animationData.transitionLengthTicks(), animationData.lastShouldLoop(), animationData.animationNames());
             });
         });
 
@@ -46,10 +45,32 @@ public class ModClientNetworkReceivers {
                     Entity entity = world.getEntityById(entityId);
                     if (entity instanceof AnimatableContainer<?> container) {
                         CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
-                        animatable.setPendingAnimations(animationData.animationNames());
-                        animatable.setLastPendingAnimationShouldLoop(animationData.lastShouldLoop());
+                        animatable.setPendingAnimations(animationData.transitionLengthTicks(), animationData.lastShouldLoop(), animationData.animationNames());
                     } else {
-                        CatsPlus.LOGGER.error("Entity {} is not an animatable container.", entity);
+                        CatsPlus.LOGGER.error("Entity {} is not an animatable container", entity);
+                    }
+                }
+            });
+        });
+
+        // Cancels first person arm animations.
+        NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.CANCEL_FIRST_PERSON_ARMS_ANIMATIONS, (buf, context) -> context.queue(() -> {
+            PlayerArms firstPersonArms = FirstPersonPlayerArms.getInstance();
+            firstPersonArms.cancelAnimations();
+        }));
+
+        // Cancels entity animations.
+        NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.CANCEL_ANIMATIONS, (buf, context) -> {
+            int entityId = buf.readInt();
+            context.queue(() -> {
+                World world = MinecraftClient.getInstance().world;
+                if (world != null) {
+                    Entity entity = world.getEntityById(entityId);
+                    if (entity instanceof AnimatableContainer<?> container) {
+                        CatsPlusAnimatable animatable = container.catsPlus$getAnimatable();
+                        animatable.cancelAnimations();
+                    } else {
+                        CatsPlus.LOGGER.error("Entity {} is not an animatable container", entity);
                     }
                 }
             });
@@ -59,6 +80,7 @@ public class ModClientNetworkReceivers {
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, (buf, context) -> {
             UUID holdingPlayerUuid = buf.readUuid();
             NbtCompound newHeldEntityNbt = buf.readNbt();
+            int heldPoseNumber = buf.readInt();
             context.queue(() -> {
                 World world = MinecraftClient.getInstance().world;
                 if (world != null) {
@@ -75,9 +97,12 @@ public class ModClientNetworkReceivers {
                         });
                         if (!Objects.equals(currentHeldEntityUuidOptional, newHeldEntityUuidOptional)) {
                             if (newHeldEntityNbt.isEmpty()) {
-                                playerAccess.catsPlus$setHeldEntity(null);
+                                playerAccess.catsPlus$clearHeldEntity();
                             } else {
-                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
+                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(entity -> {
+                                    playerAccess.catsPlus$setHeldEntity(entity);
+                                    playerAccess.catsPlus$setHeldPoseNumber(heldPoseNumber);
+                                }, () -> {
                                     CatsPlus.LOGGER.error("Could not create entity from nbt {}", newHeldEntityNbt);
                                     playerAccess.catsPlus$clearHeldEntity();
                                 });
@@ -96,13 +121,14 @@ public class ModClientNetworkReceivers {
      * @return The decoded animation data.
      */
     private static AnimationData decodeAnimationData(PacketByteBuf buf) {
+        int transitionLengthTicks = buf.readInt();
         boolean lastShouldLoop = buf.readBoolean();
         int animationCount = buf.readInt();
         String[] animationNames = new String[animationCount];
         for (int i = 0; i < animationNames.length; i++) {
             animationNames[i] = buf.readString();
         }
-        return new AnimationData(lastShouldLoop, animationNames);
+        return new AnimationData(transitionLengthTicks, lastShouldLoop, animationNames);
     }
 
     /**
@@ -111,6 +137,6 @@ public class ModClientNetworkReceivers {
      * @param lastShouldLoop Whether the last animation should loop.
      * @param animationNames The names of the animations.
      */
-    private record AnimationData(boolean lastShouldLoop, String[] animationNames) {
+    private record AnimationData(int transitionLengthTicks, boolean lastShouldLoop, String[] animationNames) {
     }
 }

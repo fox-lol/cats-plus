@@ -34,8 +34,13 @@
 					"pivot": [0, 22, 0]
 				},
 				{
-					"name": "right_arm",
+					"name": "right_arm_root",
 					"parent": "arms",
+					"pivot": [-6, 22, 0]
+				},
+				{
+					"name": "right_arm",
+					"parent": "right_arm_root",
 					"pivot": [-6, 22, 0]
 				},
 				{
@@ -76,8 +81,13 @@
 					]
 				},
 				{
-					"name": "left_arm",
+					"name": "left_arm_root",
 					"parent": "arms",
+					"pivot": [6, 22, 0]
+				},
+				{
+					"name": "left_arm",
+					"parent": "left_arm_root",
 					"pivot": [6, 22, 0]
 				},
 				{
@@ -98,7 +108,7 @@
 				},
 				{
 					"name": "left_arm_layer",
-					"parent": "left_arm",
+					"parent": "left_arm_root",
 					"pivot": [4, 0, 3]
 				},
 				{
