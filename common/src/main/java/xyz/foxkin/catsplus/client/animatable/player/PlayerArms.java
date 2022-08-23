@@ -15,6 +15,8 @@ import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.animatable.EntityAnimatable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 
+import java.util.Objects;
+
 @Environment(EnvType.CLIENT)
 public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEntity> {
 
@@ -77,6 +79,11 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
     @Override
     public Identifier getTexture() {
         return getEntity().getSkinTexture();
+    }
+
+    @Override
+    public int getUniqueId() {
+        return Objects.hash(super.getUniqueId(), firstPerson);
     }
 
     /**

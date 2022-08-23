@@ -24,7 +24,9 @@ abstract class MinecraftClientMixin {
     @Nullable
     public ClientPlayerEntity player;
 
-    @Shadow @Final public GameOptions options;
+    @Shadow
+    @Final
+    public GameOptions options;
 
     /**
      * Prevents attacking while the player is holding an entity.

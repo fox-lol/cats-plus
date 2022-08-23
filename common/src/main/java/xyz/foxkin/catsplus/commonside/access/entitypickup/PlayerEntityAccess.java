@@ -44,6 +44,7 @@ public interface PlayerEntityAccess {
      *
      * @param pos The position to drop the entity at.
      */
+    @SuppressWarnings("unused")
     void catsPlus$dropHeldEntity(Vec3d pos);
 
     /**
@@ -52,6 +53,7 @@ public interface PlayerEntityAccess {
      *
      * @param speed The initial speed of the thrown entity.
      */
+    @SuppressWarnings("unused")
     void catsPlus$throwHeldEntity(double speed);
 
     /**

@@ -16,10 +16,13 @@ public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusMode
 
     @Override
     public void setUpModel(T animatable) {
+        tickOtherPerspectiveAnimations(animatable);
         super.setUpModel(animatable);
         hideParts();
         setArmThickness(animatable);
     }
+
+    protected abstract void tickOtherPerspectiveAnimations(T currentPerspective);
 
     private void hideParts() {
         setBoneHidden("entity_placeholder", true);
