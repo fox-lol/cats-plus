@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.mixin.commonloader.commonside.mainarmor;
+package xyz.foxkin.catsplus.mixin.commonloader.commonside.armor;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;

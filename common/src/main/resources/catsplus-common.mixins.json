@@ -21,7 +21,7 @@
         "commonside.entitypickup.creeperflee.CreeperEntityMixin",
         "commonside.entitypickup.creeperflee.TargetPredicateMixin",
         "commonside.goal.CatEntityMixin",
-        "commonside.mainarmor.ArmorItemMixin",
+        "commonside.armor.ArmorItemMixin",
         "commonside.tameablefollow.CatEntityMixin",
         "commonside.tameablefollow.FollowOwnerGoalMixin",
         "commonside.tameablefollow.ParrotEntityMixin",

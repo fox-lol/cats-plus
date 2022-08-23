@@ -18,11 +18,14 @@ public class PlayerLookupImpl {
     public static Collection<ServerPlayerEntity> tracking(Entity entity) {
         Objects.requireNonNull(entity, "Entity cannot be null");
         ChunkManager manager = entity.getWorld().getChunkManager();
-        if (manager instanceof ServerChunkManager) {
-            ThreadedAnvilChunkStorage storage = ((ServerChunkManager) manager).threadedAnvilChunkStorage;
+        if (manager instanceof ServerChunkManager serverManager) {
+            ThreadedAnvilChunkStorage storage = serverManager.threadedAnvilChunkStorage;
             EntityTrackerAccessor tracker = ((ThreadedAnvilChunkStorageAccessor) storage).catsPlus$getEntityTrackers().get(entity.getId());
             if (tracker != null) {
-                return tracker.catsPlus$getListeners().stream().map(EntityTrackingListener::getPlayer).collect(ImmutableSet.toImmutableSet());
+                return tracker.catsPlus$getListeners()
+                        .stream()
+                        .map(EntityTrackingListener::getPlayer)
+                        .collect(ImmutableSet.toImmutableSet());
             } else {
                 return ImmutableSet.of();
             }

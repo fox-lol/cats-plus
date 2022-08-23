@@ -38,6 +38,11 @@ public class AnimationSyncing {
         }
     }
 
+    /**
+     * Cancels {@link PlayerArms} animations for clients.
+     *
+     * @param armsOwner The player the arms belong to.
+     */
     public static void cancelArmsAnimations(PlayerEntity armsOwner) {
         if (armsOwner.getWorld().isClient()) {
             throw new IllegalStateException("Cannot cancel animations from the client");
@@ -48,6 +53,11 @@ public class AnimationSyncing {
         }
     }
 
+    /**
+     * Cancels an entity's animations for clients.
+     *
+     * @param animatable The entity to cancel animations for.
+     */
     public static void cancelAnimations(Entity animatable) {
         if (animatable.getWorld().isClient()) {
             throw new IllegalStateException("Cannot cancel animations from the client");

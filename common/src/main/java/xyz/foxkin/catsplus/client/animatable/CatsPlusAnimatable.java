@@ -97,15 +97,20 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
         lastPendingAnimationShouldLoop = lastShouldLoop;
     }
 
+    /**
+     * Clears the pending animations.
+     */
     public void clearPendingAnimations() {
         pendingAnimationNames = new String[0];
         pendingAnimationTransitionLengthTicks = DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS;
         lastPendingAnimationShouldLoop = false;
     }
 
+    /**
+     * Cancels the current animation and clears the pending animations.
+     */
     public void cancelAnimations() {
         clearPendingAnimations();
         factory = new AnimationFactory(this);
     }
-
 }

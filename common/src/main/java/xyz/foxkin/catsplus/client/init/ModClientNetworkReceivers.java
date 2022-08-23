@@ -53,11 +53,13 @@ public class ModClientNetworkReceivers {
             });
         });
 
+        // Cancels first person arm animations.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.CANCEL_FIRST_PERSON_ARMS_ANIMATIONS, (buf, context) -> context.queue(() -> {
             PlayerArms firstPersonArms = FirstPersonPlayerArms.getInstance();
             firstPersonArms.cancelAnimations();
         }));
 
+        // Cancels entity animations.
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.CANCEL_ANIMATIONS, (buf, context) -> {
             int entityId = buf.readInt();
             context.queue(() -> {

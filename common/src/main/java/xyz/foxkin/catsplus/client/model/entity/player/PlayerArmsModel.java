@@ -22,6 +22,12 @@ public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusMode
         setArmThickness(animatable);
     }
 
+    /**
+     * Continues playing the other perspective's animations even when not being rendered
+     * in order to prevent animations from replaying when the player changes perspective.
+     *
+     * @param currentPerspective The animatable representing the current perspective.
+     */
     protected abstract void tickOtherPerspectiveAnimations(T currentPerspective);
 
     private void hideParts() {
