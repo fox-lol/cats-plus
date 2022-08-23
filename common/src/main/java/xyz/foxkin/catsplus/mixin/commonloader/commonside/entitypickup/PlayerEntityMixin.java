@@ -102,7 +102,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
                 mobAccessor.catsPlus$invokeResetSoundDelay();
                 SoundEvent ambient = mobAccessor.catsPlus$invokeGetAmbientSound();
                 if (ambient != null) {
-                    getWorld().playSoundFromEntity(null, this, ambient, catsPlus$heldEntity.getSoundCategory(), mobAccessor.catsPlus$invokeGetSoundVolume(), mob.getSoundPitch());
+                    getWorld().playSoundFromEntity((PlayerEntity) (Object) this, this, ambient, catsPlus$heldEntity.getSoundCategory(), mobAccessor.catsPlus$invokeGetSoundVolume(), mob.getSoundPitch());
                 }
             }
         }
