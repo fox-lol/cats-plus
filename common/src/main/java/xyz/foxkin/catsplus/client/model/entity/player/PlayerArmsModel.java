@@ -43,7 +43,7 @@ public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusMode
     private void setArmThickness(PlayerArms playerArms) {
         boolean slimArms = playerArms.getEntity().getModel().equals("slim");
 
-        setBoneHidden("arm_right", slimArms);
+        setBoneHidden("right_arm_wide", slimArms);
         setBoneHidden("left_arm_wide", slimArms);
         setBoneHidden("right_arm_layer_wide", slimArms);
         setBoneHidden("left_arm_layer_wide", slimArms);
