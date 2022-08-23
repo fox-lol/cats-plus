@@ -16,6 +16,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -23,6 +24,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,6 +46,10 @@ import java.util.Optional;
 @Mixin(PlayerEntity.class)
 abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAccess {
 
+    @Shadow public abstract Text getName();
+
+    @Shadow public abstract void remove(RemovalReason reason);
+
     @Unique
     private static final Random CATS_PLUS$RANDOM = Random.create();
 
@@ -51,15 +57,14 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     private static final String CATS_PLUS$HELD_ENTITY_NBT_KEY = "catsplus:heldEntity";
     @Unique
     private static final String CATS_PLUS$HELD_POSE_NBT_KEY = "catsplus:heldPose";
-
-    @Unique
-    private static final TrackedData<Integer> CATS_PLUS$HELD_POSE_DATA_TRACKER_KEY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.INTEGER);
     @Unique
     private static final TrackedData<Boolean> CATS_PLUS$INTERACTING_WITH_HELD_ENTITY_DATA_TRACKER_KEY = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     @Unique
     @Nullable
     private Entity catsPlus$heldEntity;
+    @Unique
+    private int catsPlus$heldPoseNumber;
 
     @SuppressWarnings("unused")
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -69,7 +74,6 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     @Inject(method = "initDataTracker", at = @At("HEAD"))
     private void catsPlus$trackCustomData(CallbackInfo ci) {
         dataTracker.startTracking(CATS_PLUS$INTERACTING_WITH_HELD_ENTITY_DATA_TRACKER_KEY, false);
-        dataTracker.startTracking(CATS_PLUS$HELD_POSE_DATA_TRACKER_KEY, 0);
     }
 
     /**
@@ -89,6 +93,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             buf.writeUuid(getUuid());
             NbtCompound entityNbt = catsPlus$heldEntity == null ? new NbtCompound() : EntityUtil.serializeEntity(catsPlus$heldEntity);
             buf.writeNbt(entityNbt);
+            buf.writeInt(catsPlus$heldPoseNumber);
             NetworkManager.sendToPlayer((ServerPlayerEntity) (Object) this, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
             for (ServerPlayerEntity player : PlayerLookup.tracking(this)) {
                 NetworkManager.sendToPlayer(player, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
@@ -136,8 +141,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         if (nbt.contains(CATS_PLUS$HELD_ENTITY_NBT_KEY, NbtElement.COMPOUND_TYPE)) {
             NbtCompound entityNbt = nbt.getCompound(CATS_PLUS$HELD_ENTITY_NBT_KEY);
             if (!entityNbt.isEmpty()) {
-                EntityType.getEntityFromNbt(entityNbt, getWorld()).ifPresentOrElse(
-                        entity -> {
+                EntityType.getEntityFromNbt(entityNbt, getWorld()).ifPresentOrElse(entity -> {
                             catsPlus$setHeldEntity(entity);
 
                             int heldPoseNumber = 0;
@@ -182,14 +186,14 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
 
     @Override
     public void catsPlus$dropHeldEntity(double x, double y, double z) {
-        if (!getWorld().isClient()) {
-            catsPlus$getHeldEntity().ifPresent(entity -> {
+        catsPlus$getHeldEntity().ifPresent(entity -> {
+            if (!getWorld().isClient()) {
                 Entity copy = EntityUtil.copyEntity(entity, getWorld());
                 copy.setPosition(x, y, z);
                 getWorld().spawnEntity(copy);
-            });
-        }
-        catsPlus$clearHeldEntity();
+            }
+            catsPlus$clearHeldEntity();
+        });
     }
 
     @Override
@@ -199,8 +203,8 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
 
     @Override
     public void catsPlus$throwHeldEntity(double throwSpeed) {
-        if (!getWorld().isClient()) {
-            catsPlus$getHeldEntity().ifPresent(entity -> {
+        catsPlus$getHeldEntity().ifPresent(entity -> {
+            if (!getWorld().isClient()) {
                 Entity copy = EntityUtil.copyEntity(entity, getWorld());
 
                 Vec3d playerPosition = getPos();
@@ -231,18 +235,19 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
                         getWorld().playSoundFromEntity(null, this, hurt, copy.getSoundCategory(), livingEntityAccessor.catsPlus$invokeGetSoundVolume(), livingEntity.getSoundPitch());
                     }
                 }
-            });
-        }
-        catsPlus$clearHeldEntity();
+            }
+            catsPlus$clearHeldEntity();
+        });
     }
 
     @Override
     public int catsPlus$getHeldPoseNumber() {
-        return dataTracker.get(CATS_PLUS$HELD_POSE_DATA_TRACKER_KEY);
+        return catsPlus$heldPoseNumber;
     }
 
-    protected void catsPlus$setHeldPoseNumber(int heldPoseNumber) {
-        dataTracker.set(CATS_PLUS$HELD_POSE_DATA_TRACKER_KEY, heldPoseNumber);
+    @Override
+    public void catsPlus$setHeldPoseNumber(int heldPoseNumber) {
+        catsPlus$heldPoseNumber = heldPoseNumber;
     }
 
     @Override

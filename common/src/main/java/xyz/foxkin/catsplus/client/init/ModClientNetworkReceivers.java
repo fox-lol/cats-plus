@@ -80,6 +80,7 @@ public class ModClientNetworkReceivers {
         NetworkManager.registerReceiver(NetworkManager.serverToClient(), ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, (buf, context) -> {
             UUID holdingPlayerUuid = buf.readUuid();
             NbtCompound newHeldEntityNbt = buf.readNbt();
+            int heldPoseNumber = buf.readInt();
             context.queue(() -> {
                 World world = MinecraftClient.getInstance().world;
                 if (world != null) {
@@ -96,9 +97,12 @@ public class ModClientNetworkReceivers {
                         });
                         if (!Objects.equals(currentHeldEntityUuidOptional, newHeldEntityUuidOptional)) {
                             if (newHeldEntityNbt.isEmpty()) {
-                                playerAccess.catsPlus$setHeldEntity(null);
+                                playerAccess.catsPlus$clearHeldEntity();
                             } else {
-                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(playerAccess::catsPlus$setHeldEntity, () -> {
+                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(entity -> {
+                                    playerAccess.catsPlus$setHeldEntity(entity);
+                                    playerAccess.catsPlus$setHeldPoseNumber(heldPoseNumber);
+                                }, () -> {
                                     CatsPlus.LOGGER.error("Could not create entity from nbt {}", newHeldEntityNbt);
                                     playerAccess.catsPlus$clearHeldEntity();
                                 });

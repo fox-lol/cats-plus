@@ -64,7 +64,25 @@ public interface PlayerEntityAccess {
      */
     int catsPlus$getHeldPoseNumber();
 
+    /**
+     * Sets the held pose number. Different numbers mean the
+     * entity will be seen held in a different pose.
+     *
+     * @param heldPoseNumber The held pose number.
+     */
+    void catsPlus$setHeldPoseNumber(int heldPoseNumber);
+
+    /**
+     * Whether the player is interacting with it's held entity.
+     *
+     * @return Whether the player is interacting with it's held entity.
+     */
     boolean catsPlus$isInteractingWithHeldEntity();
 
+    /**
+     * Sets whether the player is interacting with it's held entity.
+     *
+     * @param interacting Whether the player is interacting with it's held entity.
+     */
     void catsPlus$setInteractingWithHeldEntity(boolean interacting);
 }
