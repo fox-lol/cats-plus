@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -28,11 +29,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
+import xyz.foxkin.catsplus.commonside.access.entitypickup.HoldableTickable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.animation.EntityHeldPosesManager;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 import xyz.foxkin.catsplus.commonside.util.EntityUtil;
 import xyz.foxkin.catsplus.commonside.util.PlayerLookup;
+import xyz.foxkin.catsplus.mixin.commonloader.commonside.accessor.LivingEntityAccessor;
 import xyz.foxkin.catsplus.mixin.commonloader.commonside.accessor.MobEntityAccessor;
 
 import java.util.Optional;
@@ -97,11 +100,15 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             if (mob.getRandom().nextInt(1000) < mob.ambientSoundChance++) {
                 MobEntityAccessor mobAccessor = (MobEntityAccessor) mob;
                 mobAccessor.catsPlus$invokeResetSoundDelay();
-                SoundEvent soundEvent = mobAccessor.catsPlus$invokeGetAmbientSound();
-                if (soundEvent != null) {
-                    playSound(soundEvent, mobAccessor.catsPlus$invokeGetSoundVolume(), mob.getSoundPitch());
+                SoundEvent ambient = mobAccessor.catsPlus$invokeGetAmbientSound();
+                if (ambient != null) {
+                    getWorld().playSoundFromEntity(null, this, ambient, catsPlus$heldEntity.getSoundCategory(), mobAccessor.catsPlus$invokeGetSoundVolume(), mob.getSoundPitch());
                 }
             }
+        }
+
+        if (catsPlus$heldEntity instanceof HoldableTickable tickable) {
+            tickable.catsPlus$heldTick((PlayerEntity) (Object) this);
         }
     }
 
@@ -217,6 +224,13 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
                 copy.setVelocity(entityVelocity);
                 getWorld().spawnEntity(copy);
                 swingHand(Hand.MAIN_HAND, true);
+                if (copy instanceof LivingEntity livingEntity) {
+                    LivingEntityAccessor livingEntityAccessor = (LivingEntityAccessor) livingEntity;
+                    SoundEvent hurt = livingEntityAccessor.catsPlus$invokeGetHurtSound(DamageSource.FALL);
+                    if (hurt != null) {
+                        getWorld().playSoundFromEntity(null, this, hurt, copy.getSoundCategory(), livingEntityAccessor.catsPlus$invokeGetSoundVolume(), livingEntity.getSoundPitch());
+                    }
+                }
             });
         }
         catsPlus$clearHeldEntity();
