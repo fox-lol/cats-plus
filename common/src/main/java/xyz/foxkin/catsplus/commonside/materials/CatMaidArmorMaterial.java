@@ -36,7 +36,7 @@ public class CatMaidArmorMaterial implements ArmorMaterial {
 
     @Override
     public Ingredient getRepairIngredient() {
-        return Ingredient.ofItems((ItemConvertible) ModItems.CAT_MAID_SCRAP);
+        return Ingredient.ofItems(ModItems.CAT_MAID_SCRAP.get());
     }
 
     @Override
