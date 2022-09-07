@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.mixin.commonloader.commonside.test;
+package xyz.foxkin.catsplus.mixin.commonloader.commonside.development;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,6 +11,7 @@ import net.minecraft.resource.ResourceReload;
 import net.minecraft.util.Unit;
 import org.apache.commons.io.FileUtils;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -72,6 +73,7 @@ abstract class ReloadableResourceManagerImplMixin {
      *
      * @return A {@code JsonElement} representing the pack.mcmeta file.
      */
+    @Unique
     private static JsonElement catsPlus$createPackMcMeta() {
         JsonObject packObject = new JsonObject();
         packObject.addProperty("description", "Mod assets copied to a resource pack");

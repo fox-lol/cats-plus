@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.TargetPredicate;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.creeperflee.TargetPredicateAccess;
 
 import java.util.function.Predicate;
@@ -17,6 +18,7 @@ abstract class TargetPredicateMixin implements TargetPredicateAccess {
     @Nullable
     private Predicate<LivingEntity> predicate;
 
+    @Unique
     @Override
     public void catsPlus$andPredicate(Predicate<LivingEntity> newPredicate) {
         if (predicate == null) {

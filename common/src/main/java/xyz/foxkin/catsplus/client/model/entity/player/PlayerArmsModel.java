@@ -5,19 +5,18 @@ import net.fabricmc.api.Environment;
 import software.bernie.geckolib3.core.processor.IBone;
 import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
-import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 @Environment(EnvType.CLIENT)
 public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusModel<T> {
 
-    public PlayerArmsModel() {
-        super(CatsPlus.MOD_ID, "geo/entity/player/entity_holding_arms.geo.json", "animations/entity/player/entity_holding_arms.animation.json");
+    public PlayerArmsModel(String modelPath, String animationPath) {
+        super(modelPath, animationPath);
     }
 
     @Override
-    public void setUpModel(T animatable) {
+    public void setUp(T animatable) {
         tickOtherPerspectiveAnimations(animatable);
-        super.setUpModel(animatable);
+        super.setUp(animatable);
         hideParts();
         setArmThickness(animatable);
     }

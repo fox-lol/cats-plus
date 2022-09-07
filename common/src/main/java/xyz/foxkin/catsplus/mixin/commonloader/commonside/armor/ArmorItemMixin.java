@@ -23,6 +23,7 @@ abstract class ArmorItemMixin {
     @Shadow
     @Final
     private static UUID[] MODIFIERS;
+
     @Shadow
     @Final
     protected float knockbackResistance;

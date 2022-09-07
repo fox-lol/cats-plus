@@ -46,7 +46,7 @@
 				{
 					"name": "right_arm_wide",
 					"parent": "right_arm",
-					"pivot": [-4, 0, 3],
+					"pivot": [-6, 22, 0],
 					"cubes": [
 						{"origin": [-8, 12, -2], "size": [4, 12, 4], "uv": [40, 16]}
 					]
@@ -54,7 +54,7 @@
 				{
 					"name": "right_arm_slim",
 					"parent": "right_arm",
-					"pivot": [-4, 0, 3],
+					"pivot": [-6, 22, 0],
 					"cubes": [
 						{"origin": [-7, 12, -2], "size": [3, 12, 4], "uv": [40, 16]}
 					]
@@ -62,12 +62,12 @@
 				{
 					"name": "right_arm_layer",
 					"parent": "right_arm",
-					"pivot": [-4, 0, 3]
+					"pivot": [-6, 22, 0]
 				},
 				{
 					"name": "right_arm_layer_wide",
 					"parent": "right_arm_layer",
-					"pivot": [-4, 0, 3],
+					"pivot": [-6, 22, 0],
 					"cubes": [
 						{"origin": [-8, 12, -2], "size": [4, 12, 4], "inflate": 0.25, "uv": [40, 32]}
 					]
@@ -75,7 +75,7 @@
 				{
 					"name": "right_arm_layer_slim",
 					"parent": "right_arm_layer",
-					"pivot": [-4, 0, 3],
+					"pivot": [-6, 22, 0],
 					"cubes": [
 						{"origin": [-7, 12, -2], "size": [3, 12, 4], "inflate": 0.25, "uv": [40, 32]}
 					]
@@ -93,7 +93,7 @@
 				{
 					"name": "left_arm_wide",
 					"parent": "left_arm",
-					"pivot": [4, 0, 3],
+					"pivot": [6, 22, 0],
 					"cubes": [
 						{"origin": [4, 12, -2], "size": [4, 12, 4], "uv": [32, 48]}
 					]
@@ -101,20 +101,20 @@
 				{
 					"name": "left_arm_slim",
 					"parent": "left_arm",
-					"pivot": [4, 0, 3],
+					"pivot": [5, 22, 0],
 					"cubes": [
-						{"origin": [5, 12, -2], "size": [3, 12, 4], "uv": [32, 48]}
+						{"origin": [4, 12, -2], "size": [3, 12, 4], "uv": [32, 48]}
 					]
 				},
 				{
 					"name": "left_arm_layer",
-					"parent": "left_arm_root",
-					"pivot": [4, 0, 3]
+					"parent": "left_arm",
+					"pivot": [6, 22, 0]
 				},
 				{
 					"name": "left_arm_layer_wide",
 					"parent": "left_arm_layer",
-					"pivot": [4, 0, 3],
+					"pivot": [6, 22, 0],
 					"cubes": [
 						{"origin": [4, 12, -2], "size": [4, 12, 4], "inflate": 0.25, "uv": [48, 48]}
 					]
@@ -122,9 +122,9 @@
 				{
 					"name": "left_arm_layer_slim",
 					"parent": "left_arm_layer",
-					"pivot": [4, 0, 3],
+					"pivot": [5, 22, 0],
 					"cubes": [
-						{"origin": [5, 12, -2], "size": [3, 12, 4], "inflate": 0.25, "uv": [48, 48]}
+						{"origin": [4, 12, -2], "size": [3, 12, 4], "inflate": 0.25, "uv": [48, 48]}
 					]
 				},
 				{

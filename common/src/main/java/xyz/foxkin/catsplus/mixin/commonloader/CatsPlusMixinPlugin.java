@@ -1,7 +1,9 @@
 package xyz.foxkin.catsplus.mixin.commonloader;
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
+import dev.architectury.platform.Platform;
 import io.github.shaksternano.noteblocklib.commonside.CustomInstrumentRegistry;
+import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -11,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
+
+    @Nullable
+    private String developmentMixinPackage;
 
     /**
      * Initialise MixinExtras and register custom instruments.
@@ -22,6 +27,8 @@ public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
         CustomInstrumentRegistry.registerInstruments(
                 ModCustomInstruments.CAT
         );
+
+        developmentMixinPackage = mixinPackage + ".commonside.development.";
     }
 
     @Override
@@ -31,7 +38,11 @@ public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return true;
+        if (developmentMixinPackage != null && mixinClassName.startsWith(developmentMixinPackage)) {
+            return Platform.isDevelopmentEnvironment();
+        } else {
+            return true;
+        }
     }
 
     @Override

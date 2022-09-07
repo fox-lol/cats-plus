@@ -13,13 +13,16 @@ import java.util.Objects;
 @Environment(EnvType.CLIENT)
 public class ThirdPersonPlayerArmsModel extends PlayerArmsModel<ThirdPersonPlayerArms> {
 
+    public ThirdPersonPlayerArmsModel() {
+        super("geo/entity/player/entity_holding_arms_third_person.geo.json", "animations/entity/player/entity_holding_arms_third_person.animation.json");
+    }
+
     @Override
     protected void tickOtherPerspectiveAnimations(ThirdPersonPlayerArms currentPerspective) {
         if (Objects.equals(currentPerspective.getEntity(), MinecraftClient.getInstance().player)) {
-            var renderer = ModGeoRenderers.getRenderer(FirstPersonPlayerArms.class).orElseThrow();
             FirstPersonPlayerArms animatable = FirstPersonPlayerArms.getInstance();
-            CatsPlusModel<FirstPersonPlayerArms> model = renderer.getGeoModelProvider();
-            model.setLivingAnimations(animatable, animatable.getUniqueId());
+            CatsPlusModel<FirstPersonPlayerArms> model = ModGeoRenderers.getModel(FirstPersonPlayerArms.class).orElseThrow();
+            model.setLivingAnimations(animatable);
         }
     }
 }

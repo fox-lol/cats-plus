@@ -7,9 +7,9 @@ import net.minecraft.util.Identifier;
 import xyz.foxkin.catsplus.client.animatable.HoldableEntityAnimatable;
 
 @Environment(EnvType.CLIENT)
-public class ReplacedCatEntity extends HoldableEntityAnimatable<CatEntity> {
+public class ReplacedCatAnimatable extends HoldableEntityAnimatable<CatEntity> {
 
-    public ReplacedCatEntity(CatEntity cat) {
+    public ReplacedCatAnimatable(CatEntity cat) {
         super(cat);
     }
 

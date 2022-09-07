@@ -2,9 +2,16 @@ package xyz.foxkin.catsplus.client.util;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.util.RenderUtils;
+import xyz.foxkin.catsplus.commonside.access.entitypickup.Matrix4fAccess;
+
+import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class GeckoUtil {
@@ -58,5 +65,60 @@ public class GeckoUtil {
             }
             return false;
         }
+    }
+
+    public static void applyBoneTransformations(GeoBone bone, ModelPart modelPart, @Nullable Consumer<Matrix4f> earlyTransformation) {
+        Matrix4f matrix = new Matrix4f();
+        matrix.loadIdentity();
+        if (earlyTransformation != null) {
+            earlyTransformation.accept(matrix);
+        }
+        applyBoneTransformationsForModelPart(bone, matrix);
+
+        Matrix4fAccess access = (Matrix4fAccess) (Object) matrix;
+        Vec3f translation = access.catsPlus$getTranslation();
+        Vec3f rotation = access.catsPlus$getEulerAngles();
+        Vec3f scale = access.catsPlus$getScale();
+
+        modelPart.pivotX += translation.getX();
+        modelPart.pivotY += translation.getY();
+        modelPart.pivotZ += translation.getZ();
+
+        modelPart.pitch = rotation.getX();
+        modelPart.yaw = rotation.getY();
+        modelPart.roll = rotation.getZ();
+
+        modelPart.xScale = scale.getX();
+        modelPart.yScale = scale.getY();
+        modelPart.zScale = scale.getZ();
+    }
+
+    private static void applyBoneTransformationsForModelPart(GeoBone bone, Matrix4f matrix) {
+        GeoBone parent = bone.getParent();
+        if (parent != null) {
+            applyBoneTransformationsForModelPart(parent, matrix);
+        }
+        applyBoneTransformationForModelPart(bone, matrix);
+    }
+
+    private static void applyBoneTransformationForModelPart(GeoBone bone, Matrix4f matrix) {
+        // Translate
+        matrix.multiplyByTranslation(bone.getPositionX(), -bone.getPositionY(), bone.getPositionZ());
+
+        // Moving to bone pivot breaks things, so we don't do that
+
+        // Rotate
+        if (bone.getRotationZ() != 0) {
+            matrix.multiply(Vec3f.POSITIVE_Z.getRadialQuaternion(bone.getRotationZ()));
+        }
+        if (bone.getRotationY() != 0) {
+            matrix.multiply(Vec3f.NEGATIVE_Y.getRadialQuaternion(bone.getRotationY()));
+        }
+        if (bone.getRotationX() != 0) {
+            matrix.multiply(Vec3f.NEGATIVE_X.getRadialQuaternion(bone.getRotationX()));
+        }
+
+        // Scale
+        matrix.multiply(Matrix4f.scale(bone.getScaleX(), bone.getScaleY(), bone.getScaleZ()));
     }
 }

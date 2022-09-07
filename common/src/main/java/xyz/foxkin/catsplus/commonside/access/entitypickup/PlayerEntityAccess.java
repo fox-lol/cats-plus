@@ -16,6 +16,8 @@ public interface PlayerEntityAccess {
      */
     Optional<Entity> catsPlus$getHeldEntity();
 
+    boolean catsPlus$isHoldingEntity();
+
     /**
      * Sets the held entity.
      *

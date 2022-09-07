@@ -45,8 +45,7 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
                     int transitionLengthTicks = 10;
                     if (playerAccess.catsPlus$isInteractingWithHeldEntity() && (currentAnimationName.contains("idle") || currentAnimationName.contains("interacting"))) {
                         playAnimations(transitionLengthTicks, true,
-                                getAnimationPrefix()
-                                        + "holding."
+                                "holding."
                                         + (isBaby ? "baby." : "")
                                         + entityId.getNamespace()
                                         + "_"
@@ -58,8 +57,7 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
                         );
                     } else if (controller.getAnimationState() == AnimationState.Stopped || currentAnimationName.contains("interacting")) {
                         playAnimations(transitionLengthTicks, true,
-                                getAnimationPrefix()
-                                        + "holding."
+                                "holding."
                                         + (isBaby ? "baby." : "")
                                         + entityId.getNamespace()
                                         + "_"
@@ -84,14 +82,5 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
     @Override
     public int getUniqueId() {
         return Objects.hash(super.getUniqueId(), firstPerson);
-    }
-
-    /**
-     * Gets the animation name prefix corresponding to the arm perspective.
-     *
-     * @return The animation name prefix corresponding to the arm perspective.
-     */
-    private String getAnimationPrefix() {
-        return (firstPerson ? "first" : "third") + "_person.";
     }
 }

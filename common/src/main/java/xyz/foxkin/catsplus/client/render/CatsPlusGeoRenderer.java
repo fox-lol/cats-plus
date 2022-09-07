@@ -28,7 +28,7 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
     }
 
     public void render(T animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        modelProvider.setUpModel(animatable);
+        modelProvider.setUp(animatable);
         GeoModel model = getGeoModel(animatable);
         RenderLayer renderLayer = getRenderType(animatable, 0, matrices, vertexConsumers, null, light, getTextureResource(animatable));
         render(model, animatable, 0, renderLayer, matrices, vertexConsumers, null, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
@@ -41,7 +41,7 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
 
     @Override
     public Identifier getTextureResource(T animatable) {
-        return animatable.getTexture();
+        return modelProvider.getTextureResource(animatable);
     }
 
     @Override

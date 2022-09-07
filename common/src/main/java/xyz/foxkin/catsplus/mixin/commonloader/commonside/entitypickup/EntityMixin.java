@@ -52,7 +52,7 @@ abstract class EntityMixin implements EntityAccess {
                 && player.isSneaking()
                 && player.getMainHandStack().isEmpty()
                 && player.getOffHandStack().isEmpty()
-                && playerAccess.catsPlus$getHeldEntity().isEmpty()
+                && !playerAccess.catsPlus$isHoldingEntity()
                 && !((Object) this instanceof PlayerEntity)
         ) {
             if ((Object) this instanceof TameableEntity thisTameable) {
@@ -92,6 +92,7 @@ abstract class EntityMixin implements EntityAccess {
         }
     }
 
+    @Unique
     @Override
     public PlayerEntity catsPlus$getHolder() {
         if (catsPlus$holder == null) {
@@ -101,6 +102,7 @@ abstract class EntityMixin implements EntityAccess {
         }
     }
 
+    @Unique
     @Override
     public void catsPlus$setHolder(PlayerEntity holder) {
         catsPlus$holder = holder;

@@ -12,14 +12,17 @@ import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
 @Environment(EnvType.CLIENT)
 public class FirstPersonPlayerArmsModel extends PlayerArmsModel<FirstPersonPlayerArms> {
 
+    public FirstPersonPlayerArmsModel() {
+        super("geo/entity/player/entity_holding_arms_first_person.geo.json", "animations/entity/player/entity_holding_arms_first_person.animation.json");
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected void tickOtherPerspectiveAnimations(FirstPersonPlayerArms currentPerspective) {
-        var renderer = ModGeoRenderers.getRenderer(ThirdPersonPlayerArms.class).orElseThrow();
         PlayerEntity player = currentPerspective.getEntity();
         AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) player;
         ThirdPersonPlayerArms animatable = animatableContainer.catsPlus$getAnimatable();
-        CatsPlusModel<ThirdPersonPlayerArms> model = renderer.getGeoModelProvider();
-        model.setLivingAnimations(animatable, animatable.getUniqueId());
+        CatsPlusModel<ThirdPersonPlayerArms> model = ModGeoRenderers.getModel(ThirdPersonPlayerArms.class).orElseThrow();
+        model.setLivingAnimations(animatable);
     }
 }
