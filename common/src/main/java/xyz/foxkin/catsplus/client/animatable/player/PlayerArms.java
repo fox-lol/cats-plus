@@ -44,30 +44,54 @@ public abstract class PlayerArms extends EntityAnimatable<AbstractClientPlayerEn
                     boolean isBaby = heldEntity instanceof LivingEntity livingEntity && livingEntity.isBaby();
                     int transitionLengthTicks = 10;
                     if (playerAccess.catsPlus$isInteractingWithHeldEntity() && (currentAnimationName.contains("idle") || currentAnimationName.contains("interacting"))) {
-                        playAnimations(transitionLengthTicks, true,
+                        playAnimations(controller, transitionLengthTicks, true,
                                 "holding."
                                         + (isBaby ? "baby." : "")
                                         + entityId.getNamespace()
                                         + "_"
                                         + entityId.getPath()
-                                        + "."
-                                        + "interacting"
-                                        + "."
+                                        + ".interacting."
                                         + heldPoseNumber
                         );
                     } else if (controller.getAnimationState() == AnimationState.Stopped || currentAnimationName.contains("interacting")) {
-                        playAnimations(transitionLengthTicks, true,
+                        playAnimations(controller, transitionLengthTicks, true,
                                 "holding."
                                         + (isBaby ? "baby." : "")
                                         + entityId.getNamespace()
                                         + "_"
                                         + entityId.getPath()
-                                        + "."
-                                        + "idle"
-                                        + "."
+                                        + ".idle."
                                         + heldPoseNumber
                         );
                     }
+                }
+            });
+            return PlayState.CONTINUE;
+        }
+    }
+
+    @Override
+    protected <T extends CatsPlusAnimatable> PlayState constantAnimationPredicate(AnimationEvent<T> event) {
+        PlayState playState = super.constantAnimationPredicate(event);
+        if (playState == PlayState.STOP) {
+            return playState;
+        } else {
+            AnimationController<?> controller = event.getController();
+            PlayerEntityAccess playerAccess = (PlayerEntityAccess) getEntity();
+            playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
+                int heldPoseNumber = playerAccess.catsPlus$getHeldPoseNumber();
+                if (heldPoseNumber > 0) {
+                    Identifier entityId = EntityType.getId(heldEntity.getType());
+                    boolean isBaby = heldEntity instanceof LivingEntity livingEntity && livingEntity.isBaby();
+                    playAnimations(controller, 0, true,
+                            "holding."
+                                    + (isBaby ? "baby." : "")
+                                    + entityId.getNamespace()
+                                    + "_"
+                                    + entityId.getPath()
+                                    + ".constant."
+                                    + heldPoseNumber
+                    );
                 }
             });
             return PlayState.CONTINUE;

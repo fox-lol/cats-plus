@@ -3,7 +3,6 @@ package xyz.foxkin.catsplus.mixin.commonloader;
 import com.llamalad7.mixinextras.MixinExtrasBootstrap;
 import dev.architectury.platform.Platform;
 import io.github.shaksternano.noteblocklib.commonside.CustomInstrumentRegistry;
-import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -13,8 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
-
-    @Nullable
+    
     private String developmentMixinPackage;
 
     /**
@@ -36,9 +34,12 @@ public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
         return null;
     }
 
+    /**
+     * Only apply development mixins if the game is running in a development environment.
+     */
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (developmentMixinPackage != null && mixinClassName.startsWith(developmentMixinPackage)) {
+        if (mixinClassName.startsWith(developmentMixinPackage)) {
             return Platform.isDevelopmentEnvironment();
         } else {
             return true;

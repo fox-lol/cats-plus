@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"holding.minecraft_cat.idle.1": {
+		"holding.minecraft_cat.constant.1": {
 			"loop": true,
 			"bones": {
 				"entity_placeholder": {
@@ -10,11 +10,6 @@
 					},
 					"position": {
 						"vector": [2, 22, -9]
-					}
-				},
-				"right_arm_root": {
-					"rotation": {
-						"vector": [-37.30484, 39.51141, -18.56541]
 					}
 				},
 				"left_arm_root": {
@@ -37,32 +32,26 @@
 				}
 			}
 		},
+		"holding.minecraft_cat.idle.1": {
+			"loop": true,
+			"bones": {
+				"right_arm_root": {
+					"rotation": {
+						"vector": [-37.30484, 39.51141, -18.56541]
+					}
+				}
+			}
+		},
 		"holding.minecraft_cat.picking_up.1": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 0.33333,
 			"bones": {
-				"entity_placeholder": {
-					"rotation": {
-						"vector": [-9.34608, -5.13144, -0.59089]
-					},
-					"position": {
-						"vector": [2, 22, -9]
-					}
-				},
 				"right_arm_root": {
 					"rotation": {
 						"vector": [-37.30484, 39.51141, -18.56541]
 					}
 				},
-				"left_arm_root": {
-					"rotation": {
-						"vector": [-14.33254, -75.50863, 40.31691]
-					},
-					"position": {
-						"vector": [0, -2, -1]
-					}
-				},
-				"arms_and_entity_placeholder": {
+				"arms_and_entity_placeholder_root": {
 					"rotation": {
 						"0.0": {
 							"vector": [50, 0, 0]
@@ -72,49 +61,18 @@
 							"easing": "easeOutSine"
 						}
 					}
-				},
-				"arms": {
-					"rotation": {
-						"vector": [-65, 0, 0]
-					}
 				}
 			}
 		},
 		"holding.minecraft_cat.interacting.1": {
 			"loop": true,
 			"bones": {
-				"entity_placeholder": {
-					"rotation": {
-						"vector": [-9.34608, -5.13144, -0.59089]
-					},
-					"position": {
-						"vector": [2, 22, -9]
-					}
-				},
 				"right_arm_root": {
 					"rotation": {
 						"vector": [-64.10854, -14.10836, 48.79169]
 					},
 					"position": {
 						"vector": [0, 1, -2]
-					}
-				},
-				"left_arm_root": {
-					"rotation": {
-						"vector": [-14.33254, -75.50863, 40.31691]
-					},
-					"position": {
-						"vector": [0, -2, -1]
-					}
-				},
-				"arms_and_entity_placeholder": {
-					"rotation": {
-						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"arms": {
-					"rotation": {
-						"vector": [-65, 0, 0]
 					}
 				},
 				"right_arm": {
@@ -124,7 +82,7 @@
 				}
 			}
 		},
-		"holding.baby.minecraft_cat.idle.1": {
+		"holding.baby.minecraft_cat.constant.1": {
 			"loop": true,
 			"bones": {
 				"entity_placeholder": {
@@ -133,11 +91,6 @@
 					},
 					"position": {
 						"vector": [0, 23, -9]
-					}
-				},
-				"right_arm_root": {
-					"rotation": {
-						"vector": [-31.07853, 51.71384, -30.91213]
 					}
 				},
 				"left_arm_root": {
@@ -160,32 +113,26 @@
 				}
 			}
 		},
+		"holding.baby.minecraft_cat.idle.1": {
+			"loop": true,
+			"bones": {
+				"right_arm_root": {
+					"rotation": {
+						"vector": [-31.07853, 51.71384, -30.91213]
+					}
+				}
+			}
+		},
 		"holding.baby.minecraft_cat.picking_up.1": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 0.33333,
 			"bones": {
-				"entity_placeholder": {
-					"rotation": {
-						"vector": [-9.34608, -5.13144, -0.59089]
-					},
-					"position": {
-						"vector": [0, 23, -9]
-					}
-				},
 				"right_arm_root": {
 					"rotation": {
 						"vector": [-31.07853, 51.71384, -30.91213]
 					}
 				},
-				"left_arm_root": {
-					"rotation": {
-						"vector": [-17.58046, -74.43955, 59.20595]
-					},
-					"position": {
-						"vector": [0, -2, -1]
-					}
-				},
-				"arms_and_entity_placeholder": {
+				"arms_and_entity_placeholder_root": {
 					"rotation": {
 						"0.0": {
 							"vector": [50, 0, 0]
@@ -195,49 +142,18 @@
 							"easing": "easeOutSine"
 						}
 					}
-				},
-				"arms": {
-					"rotation": {
-						"vector": [-65, 0, 0]
-					}
 				}
 			}
 		},
 		"holding.baby.minecraft_cat.interacting.1": {
 			"loop": true,
 			"bones": {
-				"entity_placeholder": {
-					"rotation": {
-						"vector": [-9.34608, -5.13144, -0.59089]
-					},
-					"position": {
-						"vector": [0, 23, -9]
-					}
-				},
 				"right_arm_root": {
 					"rotation": {
 						"vector": [-41.55473, -25.17108, 25.73072]
 					},
 					"position": {
 						"vector": [0, 1, -2]
-					}
-				},
-				"left_arm_root": {
-					"rotation": {
-						"vector": [-17.58046, -74.43955, 59.20595]
-					},
-					"position": {
-						"vector": [0, -2, -1]
-					}
-				},
-				"arms_and_entity_placeholder": {
-					"rotation": {
-						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"arms": {
-					"rotation": {
-						"vector": [-65, 0, 0]
 					}
 				},
 				"right_arm": {

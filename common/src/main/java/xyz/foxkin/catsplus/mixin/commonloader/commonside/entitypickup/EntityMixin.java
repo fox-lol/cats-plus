@@ -21,6 +21,8 @@ import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 import xyz.foxkin.catsplus.commonside.animation.AnimationSyncing;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 
+import java.util.Optional;
+
 @Mixin(Entity.class)
 abstract class EntityMixin implements EntityAccess {
 
@@ -94,12 +96,8 @@ abstract class EntityMixin implements EntityAccess {
 
     @Unique
     @Override
-    public PlayerEntity catsPlus$getHolder() {
-        if (catsPlus$holder == null) {
-            throw new IllegalStateException("Entity is not being held by a player");
-        } else {
-            return catsPlus$holder;
-        }
+    public Optional<PlayerEntity> catsPlus$getHolder() {
+        return Optional.ofNullable(catsPlus$holder);
     }
 
     @Unique

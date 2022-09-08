@@ -10,21 +10,19 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 @Environment(EnvType.CLIENT)
 public abstract class CatsPlusAnimatable implements IAnimatable {
 
-    private static final String ANIMATION_CONTROLLER_NAME = "controller";
-    protected static final int DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS = 0;
     private AnimationFactory factory = new AnimationFactory(this);
     private String[] pendingAnimationNames = new String[0];
-    private int pendingAnimationTransitionLengthTicks = DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS;
+    private int pendingAnimationTransitionLengthTicks = 0;
     private boolean lastPendingAnimationShouldLoop = false;
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(new AnimationController<>(this, ANIMATION_CONTROLLER_NAME, DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS, this::animationPredicate));
+        animationData.addAnimationController(new AnimationController<>(this, "controller", 0, this::animationPredicate));
+        animationData.addAnimationController(new AnimationController<>(this, "constant_animation_controller", 0, this::constantAnimationPredicate));
     }
 
     @Override
@@ -41,21 +39,26 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
      */
     protected <T extends CatsPlusAnimatable> PlayState animationPredicate(AnimationEvent<T> event) {
         if (pendingAnimationNames.length > 0) {
-            playAnimations(pendingAnimationTransitionLengthTicks, lastPendingAnimationShouldLoop, pendingAnimationNames);
+            AnimationController<?> controller = event.getController();
+            playAnimations(controller, pendingAnimationTransitionLengthTicks, lastPendingAnimationShouldLoop, pendingAnimationNames);
             clearPendingAnimations();
         }
+        return PlayState.CONTINUE;
+    }
+
+    protected <T extends CatsPlusAnimatable> PlayState constantAnimationPredicate(AnimationEvent<T> event) {
         return PlayState.CONTINUE;
     }
 
     /**
      * Plays the given animations.
      *
+     * @param controller            The animation controller.
      * @param transitionLengthTicks The length of the animation transition.
      * @param lastShouldLoop        Whether the last animation should loop.
      * @param animationNames        The animation names.
      */
-    protected void playAnimations(int transitionLengthTicks, boolean lastShouldLoop, String... animationNames) {
-        AnimationController<?> controller = GeckoLibUtil.getControllerForID(getFactory(), getUniqueId(), ANIMATION_CONTROLLER_NAME);
+    protected void playAnimations(AnimationController<?> controller, int transitionLengthTicks, boolean lastShouldLoop, String... animationNames) {
         AnimationBuilder builder = new AnimationBuilder();
         for (int i = 0; i < animationNames.length; i++) {
             String animationName = animationNames[i];
@@ -102,7 +105,7 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
      */
     public void clearPendingAnimations() {
         pendingAnimationNames = new String[0];
-        pendingAnimationTransitionLengthTicks = DEFAULT_ANIMATION_TRANSITION_LENGTH_TICKS;
+        pendingAnimationTransitionLengthTicks = 0;
         lastPendingAnimationShouldLoop = false;
     }
 

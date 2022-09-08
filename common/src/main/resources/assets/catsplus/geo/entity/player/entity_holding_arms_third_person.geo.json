@@ -16,8 +16,13 @@
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "arms_and_entity_placeholder",
+					"name": "arms_and_entity_placeholder_root",
 					"parent": "root",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "arms_and_entity_placeholder",
+					"parent": "arms_and_entity_placeholder_root",
 					"pivot": [0, 22, 0]
 				},
 				{
