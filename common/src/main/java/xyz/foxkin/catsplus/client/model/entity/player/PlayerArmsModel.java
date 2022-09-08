@@ -2,6 +2,8 @@ package xyz.foxkin.catsplus.client.model.entity.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.PlayerModelPart;
 import software.bernie.geckolib3.core.processor.IBone;
 import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
 import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
@@ -44,13 +46,13 @@ public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusMode
 
         setBoneHidden("right_arm_wide", slimArms);
         setBoneHidden("left_arm_wide", slimArms);
-        setBoneHidden("right_arm_layer_wide", slimArms);
-        setBoneHidden("left_arm_layer_wide", slimArms);
+        setBoneHidden("right_arm_layer_wide", slimArms || !MinecraftClient.getInstance().options.isPlayerModelPartEnabled(PlayerModelPart.RIGHT_SLEEVE));
+        setBoneHidden("left_arm_layer_wide", slimArms || !MinecraftClient.getInstance().options.isPlayerModelPartEnabled(PlayerModelPart.LEFT_SLEEVE));
 
         setBoneHidden("right_arm_slim", !slimArms);
         setBoneHidden("left_arm_slim", !slimArms);
-        setBoneHidden("right_arm_layer_slim", !slimArms);
-        setBoneHidden("left_arm_layer_slim", !slimArms);
+        setBoneHidden("right_arm_layer_slim", !slimArms || !MinecraftClient.getInstance().options.isPlayerModelPartEnabled(PlayerModelPart.RIGHT_SLEEVE));
+        setBoneHidden("left_arm_layer_slim", !slimArms || !MinecraftClient.getInstance().options.isPlayerModelPartEnabled(PlayerModelPart.LEFT_SLEEVE));
     }
 
     private void setBoneHidden(String boneName, boolean hidden) {
