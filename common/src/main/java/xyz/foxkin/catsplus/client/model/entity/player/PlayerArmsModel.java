@@ -5,8 +5,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.PlayerModelPart;
 import software.bernie.geckolib3.core.processor.IBone;
-import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
-import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
+import xyz.foxkin.catsplus.client.animatable.entity.player.PlayerArms;
+import xyz.foxkin.catsplus.client.model.CatsPlusModel;
 
 @Environment(EnvType.CLIENT)
 public abstract class PlayerArmsModel<T extends PlayerArms> extends CatsPlusModel<T> {

@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.client.render.matrixscript.exception;
+package xyz.foxkin.catsplus.client.matrixscript.exception;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

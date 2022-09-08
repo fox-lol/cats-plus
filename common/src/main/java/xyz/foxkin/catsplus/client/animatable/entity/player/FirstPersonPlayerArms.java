@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.client.animatable.player;
+package xyz.foxkin.catsplus.client.animatable.entity.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

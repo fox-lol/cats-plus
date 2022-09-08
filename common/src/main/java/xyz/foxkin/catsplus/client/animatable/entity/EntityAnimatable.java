@@ -1,8 +1,9 @@
-package xyz.foxkin.catsplus.client.animatable;
+package xyz.foxkin.catsplus.client.animatable.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
+import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 
 @Environment(EnvType.CLIENT)
 public abstract class EntityAnimatable<T extends Entity> extends CatsPlusAnimatable {

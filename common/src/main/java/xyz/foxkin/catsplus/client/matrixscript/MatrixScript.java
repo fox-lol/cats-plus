@@ -1,12 +1,12 @@
-package xyz.foxkin.catsplus.client.render.matrixscript;
+package xyz.foxkin.catsplus.client.matrixscript;
 
 import com.google.common.base.Enums;
 import com.google.common.collect.ImmutableList;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
-import xyz.foxkin.catsplus.client.render.matrixscript.exception.InvalidArgumentException;
-import xyz.foxkin.catsplus.client.render.matrixscript.exception.InvalidInstructionException;
+import xyz.foxkin.catsplus.client.matrixscript.exception.InvalidArgumentException;
+import xyz.foxkin.catsplus.client.matrixscript.exception.InvalidInstructionException;
 
 import java.io.BufferedReader;
 import java.io.IOException;

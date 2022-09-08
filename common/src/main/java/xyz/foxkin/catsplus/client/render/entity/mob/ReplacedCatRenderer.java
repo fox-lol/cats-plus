@@ -11,7 +11,7 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.util.RenderUtils;
-import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatAnimatable;
+import xyz.foxkin.catsplus.client.animatable.entity.mob.ReplacedCatAnimatable;
 import xyz.foxkin.catsplus.client.model.entity.mob.ReplacedCatModel;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;

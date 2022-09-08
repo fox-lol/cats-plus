@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib3.core.processor.AnimationProcessor;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
-import xyz.foxkin.catsplus.client.animatable.player.ThirdPersonPlayerArms;
+import xyz.foxkin.catsplus.client.animatable.entity.player.ThirdPersonPlayerArms;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
-import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
+import xyz.foxkin.catsplus.client.model.CatsPlusModel;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 

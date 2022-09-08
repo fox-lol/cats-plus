@@ -7,7 +7,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import xyz.foxkin.catsplus.client.animatable.player.PlayerArms;
+import xyz.foxkin.catsplus.client.animatable.entity.player.PlayerArms;
 import xyz.foxkin.catsplus.commonside.init.ModNetworkReceivers;
 import xyz.foxkin.catsplus.commonside.util.PlayerLookup;
 

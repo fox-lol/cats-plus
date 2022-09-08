@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.client.render.matrixscript;
+package xyz.foxkin.catsplus.client.matrixscript;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -7,7 +7,7 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.SynchronousResourceReloader;
 import net.minecraft.util.Identifier;
-import xyz.foxkin.catsplus.client.render.matrixscript.exception.InvalidScriptLineException;
+import xyz.foxkin.catsplus.client.matrixscript.exception.InvalidScriptLineException;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 import java.io.IOException;

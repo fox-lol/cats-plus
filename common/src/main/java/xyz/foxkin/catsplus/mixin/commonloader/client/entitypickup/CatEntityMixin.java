@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
-import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatAnimatable;
+import xyz.foxkin.catsplus.client.animatable.entity.mob.ReplacedCatAnimatable;
 
 @SuppressWarnings("unused")
 @Mixin(CatEntity.class)

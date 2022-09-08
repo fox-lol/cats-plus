@@ -14,7 +14,7 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
-import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
+import xyz.foxkin.catsplus.client.model.CatsPlusModel;
 
 @Environment(EnvType.CLIENT)
 public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extends CatsPlusModel<T>> implements IGeoRenderer<T> {

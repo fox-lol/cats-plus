@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.client.animatable.player;
+package xyz.foxkin.catsplus.client.animatable.entity.player;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -12,7 +12,7 @@ import software.bernie.geckolib3.core.builder.Animation;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
-import xyz.foxkin.catsplus.client.animatable.EntityAnimatable;
+import xyz.foxkin.catsplus.client.animatable.entity.EntityAnimatable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
 
 import java.util.Objects;
