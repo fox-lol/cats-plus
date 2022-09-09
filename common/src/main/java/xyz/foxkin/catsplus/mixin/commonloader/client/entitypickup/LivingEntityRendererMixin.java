@@ -7,6 +7,7 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -51,7 +52,17 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity> extends EntityR
                     matrices.translate(0, -0.08, 0.6);
                     matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(-0.4F));
                 }
-                catsPlus$renderThirdPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+
+                boolean heldEntityVisible;
+                if (heldEntity instanceof LivingEntity livingEntity) {
+                    heldEntityVisible = !livingEntity.hasStatusEffect(StatusEffects.INVISIBILITY);
+                } else {
+                    heldEntityVisible = true;
+                }
+                if (heldEntityVisible) {
+                    catsPlus$renderThirdPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                }
+
                 matrices.pop();
             });
         }

@@ -7,6 +7,8 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3f;
@@ -49,7 +51,17 @@ abstract class HeldItemRendererMixin {
                 matrices.push();
                 matrices.translate(0, -2, -1);
                 catsPlus$renderFirstPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
-                catsPlus$renderFirstPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+
+                boolean heldEntityVisible;
+                if (heldEntity instanceof LivingEntity livingEntity) {
+                    heldEntityVisible = !livingEntity.hasStatusEffect(StatusEffects.INVISIBILITY);
+                } else {
+                    heldEntityVisible = true;
+                }
+                if (heldEntityVisible) {
+                    catsPlus$renderFirstPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                }
+
                 matrices.pop();
                 ci.cancel();
             }
