@@ -13,6 +13,7 @@ import xyz.foxkin.catsplus.client.animatable.entity.mob.ReplacedCatAnimatable;
 @Mixin(CatEntity.class)
 abstract class CatEntityMixin extends TameableEntity implements AnimatableContainer<ReplacedCatAnimatable> {
 
+    @SuppressWarnings("ConstantConditions")
     @Unique
     private final ReplacedCatAnimatable catsPlus$replacedCat = new ReplacedCatAnimatable((CatEntity) (Object) this);
 

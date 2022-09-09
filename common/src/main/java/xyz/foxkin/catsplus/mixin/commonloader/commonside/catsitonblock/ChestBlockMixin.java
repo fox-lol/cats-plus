@@ -17,7 +17,7 @@ abstract class ChestBlockMixin {
     /**
      * Allows chests to be opened by a player even when a cat is sitting on it, if enabled in config.
      */
-    @Inject(method = "hasCatOnTop", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hasOcelotOnTop", at = @At("HEAD"), cancellable = true)
     private static void catsPlus$allowCatSitOnChestOpen(WorldAccess world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (CatsPlus.getConfig().isCatSittingOnChestAllowsOpening()) {
             cir.setReturnValue(false);
@@ -27,7 +27,7 @@ abstract class ChestBlockMixin {
     /**
      * A cat of top of a chest in the sleeping pose will prevent the chest from being opened.
      */
-    @Redirect(method = "hasCatOnTop", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;isInSittingPose()Z"))
+    @Redirect(method = "hasOcelotOnTop", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/CatEntity;isInSittingPose()Z"))
     private static boolean catsPlus$preventChestOpenCatSleeping(CatEntity cat) {
         return cat.isInSittingPose() || cat.isInSleepingPose();
     }

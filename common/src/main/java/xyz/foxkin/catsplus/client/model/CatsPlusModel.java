@@ -20,17 +20,17 @@ public class CatsPlusModel<T extends CatsPlusAnimatable> extends AnimatedGeoMode
     }
 
     @Override
-    public Identifier getModelResource(T animatable) {
+    public Identifier getModelLocation(T animatable) {
         return model;
     }
 
     @Override
-    public Identifier getTextureResource(T animatable) {
+    public Identifier getTextureLocation(T animatable) {
         return animatable.getTexture();
     }
 
     @Override
-    public Identifier getAnimationResource(T animatable) {
+    public Identifier getAnimationFileLocation(T animatable) {
         return animation;
     }
 
@@ -48,6 +48,6 @@ public class CatsPlusModel<T extends CatsPlusAnimatable> extends AnimatedGeoMode
     }
 
     public GeoModel getModel(T animatable) {
-        return getModel(getModelResource(animatable));
+        return getModel(getModelLocation(animatable));
     }
 }

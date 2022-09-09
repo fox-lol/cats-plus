@@ -85,7 +85,7 @@ public class GeckoUtil {
         Matrix4fAccess access = (Matrix4fAccess) (Object) matrix;
         Vec3f translation = access.catsPlus$getTranslation();
         Vec3f rotation = access.catsPlus$getEulerAngles();
-        Vec3f scale = access.catsPlus$getScale();
+        // Vec3f scale = access.catsPlus$getScale();
 
         modelPart.pivotX += translation.getX();
         modelPart.pivotY += translation.getY();
@@ -95,9 +95,12 @@ public class GeckoUtil {
         modelPart.yaw = rotation.getY();
         modelPart.roll = rotation.getZ();
 
+        /*
+        Scale is unsupported in 1.18
         modelPart.xScale = scale.getX();
         modelPart.yScale = scale.getY();
         modelPart.zScale = scale.getZ();
+         */
     }
 
     /**

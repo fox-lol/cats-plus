@@ -19,7 +19,6 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,13 +38,14 @@ import xyz.foxkin.catsplus.mixin.commonloader.commonside.accessor.LivingEntityAc
 import xyz.foxkin.catsplus.mixin.commonloader.commonside.accessor.MobEntityAccessor;
 
 import java.util.Optional;
+import java.util.Random;
 
 @SuppressWarnings("WrongEntityDataParameterClass")
 @Mixin(PlayerEntity.class)
 abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAccess {
 
     @Unique
-    private static final Random CATS_PLUS$RANDOM = Random.create();
+    private static final Random CATS_PLUS$RANDOM = new Random();
 
     @Unique
     private static final String CATS_PLUS$HELD_ENTITY_NBT_KEY = "catsplus:heldEntity";
@@ -165,6 +165,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         return catsPlus$heldEntity != null;
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Unique
     @Override
     public void catsPlus$setHeldEntity(@Nullable Entity entity) {
