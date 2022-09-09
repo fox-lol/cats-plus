@@ -63,6 +63,6 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
     }
 
     public GeoModel getGeoModel(T animatable) {
-        return modelProvider.getModel(modelProvider.getModelResource(animatable));
+        return modelProvider.getModel(animatable);
     }
 }

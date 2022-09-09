@@ -20,9 +20,11 @@ public class FirstPersonPlayerArmsModel extends PlayerArmsModel<FirstPersonPlaye
     @Override
     protected void tickOtherPerspectiveAnimations(FirstPersonPlayerArms currentPerspective) {
         PlayerEntity player = currentPerspective.getEntity();
-        AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) player;
-        ThirdPersonPlayerArms animatable = animatableContainer.catsPlus$getAnimatable();
-        CatsPlusModel<ThirdPersonPlayerArms> model = ModGeoRenderers.getModel(ThirdPersonPlayerArms.class).orElseThrow();
-        model.setLivingAnimations(animatable);
+        AnimatableContainer<ThirdPersonPlayerArms> container = (AnimatableContainer<ThirdPersonPlayerArms>) player;
+        ThirdPersonPlayerArms otherPerspective = container.catsPlus$getAnimatable();
+        CatsPlusModel<ThirdPersonPlayerArms> otherPerspectiveModel = ModGeoRenderers.getModel(ThirdPersonPlayerArms.class).orElseThrow();
+        // This initializes the model which prevents the animation from replaying when the player switches perspectives for the first time.
+        otherPerspectiveModel.getModel(otherPerspective);
+        otherPerspectiveModel.setLivingAnimations(otherPerspective);
     }
 }

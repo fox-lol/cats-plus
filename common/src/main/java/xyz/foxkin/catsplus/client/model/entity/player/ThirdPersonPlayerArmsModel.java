@@ -20,9 +20,11 @@ public class ThirdPersonPlayerArmsModel extends PlayerArmsModel<ThirdPersonPlaye
     @Override
     protected void tickOtherPerspectiveAnimations(ThirdPersonPlayerArms currentPerspective) {
         if (Objects.equals(currentPerspective.getEntity(), MinecraftClient.getInstance().player)) {
-            FirstPersonPlayerArms animatable = FirstPersonPlayerArms.getInstance();
-            CatsPlusModel<FirstPersonPlayerArms> model = ModGeoRenderers.getModel(FirstPersonPlayerArms.class).orElseThrow();
-            model.setLivingAnimations(animatable);
+            FirstPersonPlayerArms otherPerspective = FirstPersonPlayerArms.getInstance();
+            CatsPlusModel<FirstPersonPlayerArms> otherPerspectiveModel = ModGeoRenderers.getModel(FirstPersonPlayerArms.class).orElseThrow();
+            // This initializes the model which prevents the animation from replaying when the player switches perspectives for the first time.
+            otherPerspectiveModel.getModel(otherPerspective);
+            otherPerspectiveModel.setLivingAnimations(otherPerspective);
         }
     }
 }

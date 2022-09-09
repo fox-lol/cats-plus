@@ -3,6 +3,7 @@ package xyz.foxkin.catsplus.client.model;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.Identifier;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
@@ -44,5 +45,9 @@ public class CatsPlusModel<T extends CatsPlusAnimatable> extends AnimatedGeoMode
 
     public void setLivingAnimations(T animatable) {
         setLivingAnimations(animatable, animatable.getUniqueId());
+    }
+
+    public GeoModel getModel(T animatable) {
+        return getModel(getModelResource(animatable));
     }
 }
