@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CatsPlusMixinPlugin implements IMixinConfigPlugin {
-    
+
     private String developmentMixinPackage;
 
     /**

@@ -49,6 +49,10 @@ abstract class MinecraftClientMixin {
         }
     }
 
+    /**
+     * Sends a packet to the server letting it know if the player is
+     * interacting with it's held entity if the attack key is pressed.
+     */
     @Inject(method = "handleInputEvents", at = @At("HEAD"))
     private void catsPlus$setInteractWithHeldEntity(CallbackInfo ci) {
         PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());

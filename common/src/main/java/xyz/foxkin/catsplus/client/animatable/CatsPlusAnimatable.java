@@ -46,6 +46,13 @@ public abstract class CatsPlusAnimatable implements IAnimatable {
         return PlayState.CONTINUE;
     }
 
+    /**
+     * The animation predicate which plays animations that should always be playing.
+     *
+     * @param event The animation event.
+     * @param <T>   The animatable type.
+     * @return The play state.
+     */
     protected <T extends CatsPlusAnimatable> PlayState constantAnimationPredicate(AnimationEvent<T> event) {
         return PlayState.CONTINUE;
     }

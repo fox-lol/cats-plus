@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 public class GeckoUtil {
 
     /**
-     * Applies the transformations of the given bone and it's parents.
+     * Applies the transformations of a {@code GeoBone} and it's parents to a {@code MatrixStack}.
      *
      * @param bone     The bone to apply the transformations from.
      * @param matrices The matrix stack to apply the transformations to.
@@ -31,7 +31,7 @@ public class GeckoUtil {
     }
 
     /**
-     * Applies the transformations of the given bone.
+     * Applies the transformations of a {@code GeoBone} to a {@code MatrixStack}.
      *
      * @param bone     The bone to apply the transformations from.
      * @param matrices The matrix stack to apply the transformations to.
@@ -67,6 +67,13 @@ public class GeckoUtil {
         }
     }
 
+    /**
+     * Translates {@code GeoBone} transformations to {@code ModelPart} transformations.
+     *
+     * @param bone                The bone to translate the transformations from.
+     * @param modelPart           The model part to translate the transformations to.
+     * @param earlyTransformation An optional transformation to apply before the bone transformations.
+     */
     public static void applyBoneTransformations(GeoBone bone, ModelPart modelPart, @Nullable Consumer<Matrix4f> earlyTransformation) {
         Matrix4f matrix = new Matrix4f();
         matrix.loadIdentity();
@@ -93,6 +100,13 @@ public class GeckoUtil {
         modelPart.zScale = scale.getZ();
     }
 
+    /**
+     * Applies the transformations of a {@code GeoBone} and it's parents to a {@code Matrix4f}.
+     * Used for translating {@code GeoBone} transformations to {@code ModelPart} transformations.
+     *
+     * @param bone   The bone to translate the transformations from.
+     * @param matrix The matrix to translate the transformations to.
+     */
     private static void applyBoneTransformationsForModelPart(GeoBone bone, Matrix4f matrix) {
         GeoBone parent = bone.getParent();
         if (parent != null) {
@@ -101,6 +115,13 @@ public class GeckoUtil {
         applyBoneTransformationForModelPart(bone, matrix);
     }
 
+    /**
+     * Applies the transformations of a {@code GeoBone} to a {@code Matrix4f}.
+     * Used for translating {@code GeoBone} transformations to {@code ModelPart} transformations.
+     *
+     * @param bone   The bone to translate the transformations from.
+     * @param matrix The matrix to translate the transformations to.
+     */
     private static void applyBoneTransformationForModelPart(GeoBone bone, Matrix4f matrix) {
         // Translate
         matrix.multiplyByTranslation(bone.getPositionX(), -bone.getPositionY(), bone.getPositionZ());

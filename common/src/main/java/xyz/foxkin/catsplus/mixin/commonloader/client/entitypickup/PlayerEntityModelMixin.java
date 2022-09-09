@@ -31,6 +31,9 @@ abstract class PlayerEntityModelMixin<T extends LivingEntity> extends BipedEntit
         super(root);
     }
 
+    /**
+     * Translates third person {@link GeoBone} transformations to {@link ModelPart} transformations.
+     */
     @SuppressWarnings("unchecked")
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/model/BipedEntityModel;setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", shift = At.Shift.AFTER))
     private void catsPlus$translateGeoModelToMinecraftModel(T livingEntity, float f, float g, float h, float i, float j, CallbackInfo ci) {
@@ -45,6 +48,11 @@ abstract class PlayerEntityModelMixin<T extends LivingEntity> extends BipedEntit
         }
     }
 
+    /**
+     * Applies addition transformations when the player is sneaking.
+     *
+     * @param matrix The matrix to apply the transformations to.
+     */
     @Unique
     private void catsPlus$sneakTransformation(Matrix4f matrix) {
         if (sneaking) {
@@ -52,6 +60,14 @@ abstract class PlayerEntityModelMixin<T extends LivingEntity> extends BipedEntit
         }
     }
 
+    /**
+     * Translates a {@link GeoBone} transformation to a {@code ModelPart} transformation if the {@code GeoBone} exists.
+     *
+     * @param processor           The {@code AnimationProcessor} to get the {@link GeoBone} from.
+     * @param boneName            The name of the {@code GeoBone}.
+     * @param modelPart           The {@code ModelPart} to apply the transformation to.
+     * @param earlyTransformation An additional transformation to apply before the {@code GeoBone} transformation.
+     */
     @Unique
     private static void catsPlus$applyBoneTransformations(AnimationProcessor<?> processor, String boneName, ModelPart modelPart, @Nullable Consumer<Matrix4f> earlyTransformation) {
         if (processor.getBone(boneName) instanceof GeoBone armBone) {
