@@ -18,7 +18,7 @@
 				{
 					"name": "arms_and_entity_placeholder_root",
 					"parent": "root",
-					"pivot": [0, 0, 0]
+					"pivot": [0, 22, 0]
 				},
 				{
 					"name": "arms_and_entity_placeholder",
