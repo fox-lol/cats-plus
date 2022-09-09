@@ -4,20 +4,20 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
-import xyz.foxkin.catsplus.client.animatable.player.ThirdPersonPlayerArms;
+import xyz.foxkin.catsplus.client.animatable.entity.player.ThirdPersonPlayerArms;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;
@@ -28,8 +28,9 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(LivingEntityRenderer.class)
-abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends EntityModel<T>> extends EntityRenderer<T> implements FeatureRendererContext<T, M> {
+abstract class LivingEntityRendererMixin<T extends LivingEntity> extends EntityRenderer<T> {
 
+    @SuppressWarnings("unused")
     protected LivingEntityRendererMixin(EntityRendererFactory.Context ctx) {
         super(ctx);
     }
@@ -51,24 +52,20 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
                     matrices.translate(0, -0.08, 0.6);
                     matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(-0.4F));
                 }
-                catsPlus$renderThirdPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
-                catsPlus$renderThirdPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+
+                boolean heldEntityVisible;
+                if (heldEntity instanceof LivingEntity livingEntity) {
+                    heldEntityVisible = !livingEntity.hasStatusEffect(StatusEffects.INVISIBILITY);
+                } else {
+                    heldEntityVisible = true;
+                }
+                if (heldEntityVisible) {
+                    catsPlus$renderThirdPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                }
+
                 matrices.pop();
             });
         }
-    }
-
-    /**
-     * Renders the third-person perspective of the players arms in a holding position.
-     *
-     * @param playerArms      The animatable representing the player's arms.
-     * @param matrices        The matrix transformations stack.
-     * @param vertexConsumers The vertex consumer provider.
-     * @param light           The light level.
-     */
-    private void catsPlus$renderThirdPersonHoldingArms(ThirdPersonPlayerArms playerArms, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        var renderer = ModGeoRenderers.getRenderer(ThirdPersonPlayerArms.class).orElseThrow();
-        renderer.render(playerArms, matrices, vertexConsumers, light);
     }
 
     /**
@@ -81,6 +78,7 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity, M extends Entit
      * @param light           The light level.
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
+    @Unique
     private void catsPlus$renderThirdPersonHeldEntity(ThirdPersonPlayerArms holder, Entity heldEntity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         AtomicBoolean renderedHeldEntity = new AtomicBoolean(false);

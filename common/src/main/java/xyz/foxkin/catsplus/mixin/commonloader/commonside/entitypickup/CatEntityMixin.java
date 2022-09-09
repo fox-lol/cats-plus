@@ -22,6 +22,7 @@ abstract class CatEntityMixin extends TameableEntity implements HoldableTickable
         super(entityType, world);
     }
 
+    @Unique
     @Override
     public void catsPlus$heldTick(PlayerEntity holder) {
         if (heldSoundCooldown > 0) {

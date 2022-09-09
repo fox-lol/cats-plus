@@ -14,9 +14,11 @@
         "commonside.catsitonblock.CatEntityMixin",
         "commonside.catsitonblock.CatSitOnBlockGoalMixin",
         "commonside.catsitonblock.ChestBlockMixin",
+        "commonside.development.ReloadableResourceManagerImplMixin",
         "commonside.entitypickup.AbstractBlockStateMixin",
         "commonside.entitypickup.CatEntityMixin",
         "commonside.entitypickup.EntityMixin",
+        "commonside.entitypickup.Matrix4fMixin",
         "commonside.entitypickup.PlayerEntityMixin",
         "commonside.entitypickup.PlayerInventoryMixin",
         "commonside.entitypickup.ServerPlayerEntityMixin",
@@ -27,20 +29,16 @@
         "commonside.tameablefollow.FollowOwnerGoalMixin",
         "commonside.tameablefollow.ParrotEntityMixin",
         "commonside.tameablefollow.TameableEntityMixin",
-        "commonside.tameablefollow.WolfEntityMixin",
-        "commonside.test.ReloadableResourceManagerImplMixin"
+        "commonside.tameablefollow.WolfEntityMixin"
     ],
     "client": [
         "client.accessor.CatCollarFeatureRendererAccessor",
         "client.entitypickup.AbstractPlayerEntityMixin",
-        "client.entitypickup.AnimalModelMixin",
-        "client.entitypickup.BipedEntityModelMixin",
         "client.entitypickup.CatEntityMixin",
         "client.entitypickup.HeldItemRendererMixin",
         "client.entitypickup.LivingEntityRendererMixin",
         "client.entitypickup.MinecraftClientMixin",
-        "client.entitypickup.PlayerEntityModelMixin",
-        "client.entitypickup.PlayerEntityRendererMixin"
+        "client.entitypickup.PlayerEntityModelMixin"
     ],
     "injectors": {
         "defaultRequire": 1

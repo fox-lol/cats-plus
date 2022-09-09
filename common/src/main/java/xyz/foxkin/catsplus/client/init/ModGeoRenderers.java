@@ -4,10 +4,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
-import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatEntity;
-import xyz.foxkin.catsplus.client.animatable.player.FirstPersonPlayerArms;
-import xyz.foxkin.catsplus.client.animatable.player.ThirdPersonPlayerArms;
-import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
+import xyz.foxkin.catsplus.client.animatable.entity.mob.ReplacedCatAnimatable;
+import xyz.foxkin.catsplus.client.animatable.entity.player.FirstPersonPlayerArms;
+import xyz.foxkin.catsplus.client.animatable.entity.player.ThirdPersonPlayerArms;
+import xyz.foxkin.catsplus.client.model.CatsPlusModel;
 import xyz.foxkin.catsplus.client.model.entity.mob.ReplacedCatModel;
 import xyz.foxkin.catsplus.client.model.entity.player.FirstPersonPlayerArmsModel;
 import xyz.foxkin.catsplus.client.model.entity.player.ThirdPersonPlayerArmsModel;
@@ -28,7 +28,7 @@ public class ModGeoRenderers {
     public static void registerRenderers() {
         registerRenderer(FirstPersonPlayerArms.class, new FirstPersonPlayerArmsRenderer(new FirstPersonPlayerArmsModel()));
         registerRenderer(ThirdPersonPlayerArms.class, new ThirdPersonPlayerArmsRenderer(new ThirdPersonPlayerArmsModel()));
-        registerRenderer(ReplacedCatEntity.class, new ReplacedCatRenderer(new ReplacedCatModel()));
+        registerRenderer(ReplacedCatAnimatable.class, new ReplacedCatRenderer(new ReplacedCatModel()));
     }
 
     private static <T extends CatsPlusAnimatable, S extends CatsPlusModel<T>> void registerRenderer(Class<T> animatableClass, CatsPlusGeoRenderer<T, S> renderer) {
@@ -39,5 +39,9 @@ public class ModGeoRenderers {
     @SuppressWarnings("unchecked")
     public static <T extends CatsPlusAnimatable, S extends CatsPlusModel<T>> Optional<CatsPlusGeoRenderer<T, S>> getRenderer(Class<T> animatableClass) {
         return Optional.ofNullable((CatsPlusGeoRenderer<T, S>) RENDERERS.get(animatableClass));
+    }
+
+    public static <T extends CatsPlusAnimatable> Optional<CatsPlusModel<T>> getModel(Class<T> animatableClass) {
+        return getRenderer(animatableClass).map(CatsPlusGeoRenderer::getGeoModelProvider);
     }
 }

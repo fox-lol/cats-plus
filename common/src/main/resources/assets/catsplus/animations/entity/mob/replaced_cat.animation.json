@@ -1,6 +1,59 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
+		"held.constant.1": {
+			"loop": true,
+			"bones": {
+				"root": {
+					"rotation": {
+						"vector": [90.00001, -75, 89.99999]
+					},
+					"position": {
+						"vector": [-1, 10, 3]
+					}
+				},
+				"front_legs": {
+					"rotation": {
+						"vector": [25, 0, 0]
+					}
+				},
+				"back_legs": {
+					"rotation": {
+						"vector": [25, 0, 0]
+					}
+				},
+				"tail": {
+					"rotation": {
+						"vector": ["15 * math.cos(90 * query.anim_time) + 85 ", 0, 0]
+					}
+				},
+				"tail_end": {
+					"rotation": {
+						"vector": ["30 * math.cos(90 * query.anim_time)", 0, 0]
+					}
+				},
+				"front_right_leg": {
+					"rotation": {
+						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
+					}
+				},
+				"front_left_leg": {
+					"rotation": {
+						"vector": ["-2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
+					}
+				},
+				"back_right_leg": {
+					"rotation": {
+						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
+					}
+				},
+				"back_left_leg": {
+					"rotation": {
+						"vector": ["-2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
+					}
+				}
+			}
+		},
 		"held.idle.1": {
 			"loop": true,
 			"animation_length": 12,
@@ -36,57 +89,6 @@
 					"position": {
 						"vector": [0, -5, 1]
 					}
-				},
-				"root": {
-					"rotation": {
-						"vector": [90.00001, -75, 89.99999]
-					},
-					"position": {
-						"vector": [-1, 10, 3]
-					}
-				},
-				"front_legs": {
-					"rotation": {
-						"vector": [25, 0, 0]
-					}
-				},
-				"back_legs": {
-					"rotation": {
-						"vector": [25, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"tail": {
-					"rotation": {
-						"vector": ["15 * math.cos(90 * query.anim_time) + 85 ", 0, 0]
-					}
-				},
-				"tail_end": {
-					"rotation": {
-						"vector": ["30 * math.cos(90 * query.anim_time)", 0, 0]
-					}
-				},
-				"front_right_leg": {
-					"rotation": {
-						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"front_left_leg": {
-					"rotation": {
-						"vector": ["-2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"back_right_leg": {
-					"rotation": {
-						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"back_left_leg": {
-					"rotation": {
-						"vector": ["-2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
 				}
 			}
 		},
@@ -95,74 +97,16 @@
 			"bones": {
 				"head_root": {
 					"rotation": {
-						"vector": [141.91155, 19.62388, -47.57082]
+						"vector": [142.56702, 18.02547, -45.53983]
 					},
 					"position": {
 						"vector": [0, -5, 1]
-					}
-				},
-				"root": {
-					"rotation": {
-						"vector": [90.00001, -75, 89.99999]
-					},
-					"position": {
-						"vector": [-1, 10, 3]
-					}
-				},
-				"front_legs": {
-					"rotation": {
-						"vector": [25, 0, 0]
-					}
-				},
-				"back_legs": {
-					"rotation": {
-						"vector": [25, 0, 0]
-					},
-					"position": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"tail": {
-					"rotation": {
-						"vector": ["15 * math.cos(90 * query.anim_time) + 85 ", 0, 0]
-					}
-				},
-				"tail_end": {
-					"rotation": {
-						"vector": ["30 * math.cos(90 * query.anim_time)", 0, 0]
-					}
-				},
-				"front_right_leg": {
-					"rotation": {
-						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"front_left_leg": {
-					"rotation": {
-						"vector": ["-2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"back_right_leg": {
-					"rotation": {
-						"vector": ["2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
-					}
-				},
-				"back_left_leg": {
-					"rotation": {
-						"vector": ["-2.5 * math.cos(90 * query.anim_time) - 2.5", 0, 0]
 					}
 				}
 			}
 		},
 		"no_change": {
-			"loop": true,
-			"bones": {
-				"root": {
-					"rotation": {
-						"vector": [0, 90, 0]
-					}
-				}
-			}
+			"loop": true
 		}
 	},
 	"geckolib_format_version": 2

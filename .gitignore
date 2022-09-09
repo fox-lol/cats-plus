@@ -27,8 +27,9 @@ bin/
 
 *.DS_Store
 
-# Architectury
+# Other
 
 .architectury-transformer/
 run/
 remappedSrc/
+logs/

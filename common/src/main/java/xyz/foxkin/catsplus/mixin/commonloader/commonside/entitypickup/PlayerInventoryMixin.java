@@ -28,7 +28,8 @@ abstract class PlayerInventoryMixin {
     private Object catsPlus$preventSelectedSlotPickupIfHoldingEntity(DefaultedList<ItemStack> mainInventory, int slotIndex) {
         if (slotIndex == selectedSlot) {
             PlayerEntityAccess playerAccess = (PlayerEntityAccess) player;
-            if (playerAccess.catsPlus$getHeldEntity().isPresent()) {
+            if (playerAccess.catsPlus$isHoldingEntity()) {
+                // Return a non-empty stack to prevent an item being placed in the selected slot.
                 return new ItemStack(Items.STONE);
             }
         }

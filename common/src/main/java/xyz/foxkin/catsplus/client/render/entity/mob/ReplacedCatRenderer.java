@@ -11,21 +11,21 @@ import software.bernie.geckolib3.geo.render.built.GeoBone;
 import software.bernie.geckolib3.geo.render.built.GeoCube;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.util.RenderUtils;
-import xyz.foxkin.catsplus.client.animatable.mob.ReplacedCatEntity;
+import xyz.foxkin.catsplus.client.animatable.entity.mob.ReplacedCatAnimatable;
 import xyz.foxkin.catsplus.client.model.entity.mob.ReplacedCatModel;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;
 import xyz.foxkin.catsplus.mixin.commonloader.client.accessor.CatCollarFeatureRendererAccessor;
 
 @Environment(EnvType.CLIENT)
-public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity, ReplacedCatModel> {
+public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatAnimatable, ReplacedCatModel> {
 
     public ReplacedCatRenderer(ReplacedCatModel modelProvider) {
-        super(modelProvider, ReplacedCatEntity.class);
+        super(modelProvider, ReplacedCatAnimatable.class);
     }
 
     @Override
-    public void render(ReplacedCatEntity animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(ReplacedCatAnimatable animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
         float modelScale = 0.8F;
         matrices.scale(modelScale, modelScale, modelScale);
@@ -44,7 +44,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity, 
      * @param vertexConsumers The vertex consumer provider.
      * @param light           The light level.
      */
-    private void renderCollar(ReplacedCatEntity animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void renderCollar(ReplacedCatAnimatable animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         GeoModel model = getGeoModel(animatable);
         RenderLayer collarLayer = RenderLayer.getEntityCutoutNoCull(CatCollarFeatureRendererAccessor.catsPlus$getSkin());
         float[] collarColor = animatable.getEntity().getCollarColor().getColorComponents();
@@ -52,7 +52,7 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatEntity, 
     }
 
     @Override
-    public void render(GeoModel model, ReplacedCatEntity animatable, float tickDelta, RenderLayer renderLayer, MatrixStack matrices, VertexConsumerProvider vertexConsumers, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(GeoModel model, ReplacedCatAnimatable animatable, float tickDelta, RenderLayer renderLayer, MatrixStack matrices, VertexConsumerProvider vertexConsumers, VertexConsumer vertices, int light, int overlay, float red, float green, float blue, float alpha) {
         renderEarly(animatable, matrices, tickDelta, vertexConsumers, vertices, light, overlay, red, green, blue, alpha);
 
         if (vertexConsumers != null) {

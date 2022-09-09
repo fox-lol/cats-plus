@@ -7,6 +7,8 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3f;
@@ -19,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import xyz.foxkin.catsplus.client.access.render.AnimatableContainer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
-import xyz.foxkin.catsplus.client.animatable.player.FirstPersonPlayerArms;
+import xyz.foxkin.catsplus.client.animatable.entity.player.FirstPersonPlayerArms;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
 import xyz.foxkin.catsplus.client.render.CatsPlusGeoRenderer;
 import xyz.foxkin.catsplus.client.util.GeckoUtil;
@@ -47,12 +49,22 @@ abstract class HeldItemRendererMixin {
             if (hand == Hand.MAIN_HAND) {
                 FirstPersonPlayerArms playerArms = FirstPersonPlayerArms.getInstance();
                 matrices.push();
-                matrices.translate(0, -2, -0.5);
+                matrices.translate(0, -2, -1);
                 catsPlus$renderFirstPersonHoldingArms(playerArms, matrices, vertexConsumers, light);
-                catsPlus$renderFirstPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+
+                boolean heldEntityVisible;
+                if (heldEntity instanceof LivingEntity livingEntity) {
+                    heldEntityVisible = !livingEntity.hasStatusEffect(StatusEffects.INVISIBILITY);
+                } else {
+                    heldEntityVisible = true;
+                }
+                if (heldEntityVisible) {
+                    catsPlus$renderFirstPersonHeldEntity(playerArms, heldEntity, matrices, vertexConsumers, light);
+                }
+
                 matrices.pop();
+                ci.cancel();
             }
-            ci.cancel();
         });
     }
 

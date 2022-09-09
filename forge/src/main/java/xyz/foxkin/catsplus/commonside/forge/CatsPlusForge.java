@@ -4,7 +4,7 @@ import dev.architectury.platform.forge.EventBuses;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ConfigGuiHandler;
+import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -39,9 +39,8 @@ public class CatsPlusForge {
     @OnlyIn(Dist.CLIENT)
     private static void registerConfigScreen() {
         ModLoadingContext.get().registerExtensionPoint(
-                ConfigGuiHandler.ConfigGuiFactory.class,
-                () -> new ConfigGuiHandler.ConfigGuiFactory(
-                        (client, parent) -> AutoConfig.getConfigScreen(CatsPlusConfig.class, parent).get()
+                ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(
+                        (client, screen) -> AutoConfig.getConfigScreen(CatsPlusConfig.class, screen).get()
                 )
         );
     }

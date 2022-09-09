@@ -16,7 +16,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -24,7 +23,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -45,10 +43,6 @@ import java.util.Optional;
 @SuppressWarnings("WrongEntityDataParameterClass")
 @Mixin(PlayerEntity.class)
 abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAccess {
-
-    @Shadow public abstract Text getName();
-
-    @Shadow public abstract void remove(RemovalReason reason);
 
     @Unique
     private static final Random CATS_PLUS$RANDOM = Random.create();
@@ -159,11 +153,19 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         }
     }
 
+    @Unique
     @Override
     public Optional<Entity> catsPlus$getHeldEntity() {
         return Optional.ofNullable(catsPlus$heldEntity);
     }
 
+    @Unique
+    @Override
+    public boolean catsPlus$isHoldingEntity() {
+        return catsPlus$heldEntity != null;
+    }
+
+    @Unique
     @Override
     public void catsPlus$setHeldEntity(@Nullable Entity entity) {
         if (entity == null) {
@@ -179,11 +181,13 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         catsPlus$heldEntity = entity;
     }
 
+    @Unique
     @Override
     public void catsPlus$clearHeldEntity() {
         catsPlus$setHeldEntity(null);
     }
 
+    @Unique
     @Override
     public void catsPlus$dropHeldEntity(double x, double y, double z) {
         catsPlus$getHeldEntity().ifPresent(entity -> {
@@ -196,11 +200,13 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         });
     }
 
+    @Unique
     @Override
     public void catsPlus$dropHeldEntity(Vec3d pos) {
         catsPlus$dropHeldEntity(pos.getX(), pos.getY(), pos.getZ());
     }
 
+    @Unique
     @Override
     public void catsPlus$throwHeldEntity(double throwSpeed) {
         catsPlus$getHeldEntity().ifPresent(entity -> {
@@ -240,16 +246,19 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         });
     }
 
+    @Unique
     @Override
     public int catsPlus$getHeldPoseNumber() {
         return catsPlus$heldPoseNumber;
     }
 
+    @Unique
     @Override
     public void catsPlus$setHeldPoseNumber(int heldPoseNumber) {
         catsPlus$heldPoseNumber = heldPoseNumber;
     }
 
+    @Unique
     @Override
     public void catsPlus$setRandomHeldPoseNumber() {
         if (catsPlus$heldEntity == null) {
@@ -268,11 +277,13 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         }
     }
 
+    @Unique
     @Override
     public boolean catsPlus$isInteractingWithHeldEntity() {
         return dataTracker.get(CATS_PLUS$INTERACTING_WITH_HELD_ENTITY_DATA_TRACKER_KEY);
     }
 
+    @Unique
     @Override
     public void catsPlus$setInteractingWithHeldEntity(boolean interacting) {
         dataTracker.set(CATS_PLUS$INTERACTING_WITH_HELD_ENTITY_DATA_TRACKER_KEY, interacting);

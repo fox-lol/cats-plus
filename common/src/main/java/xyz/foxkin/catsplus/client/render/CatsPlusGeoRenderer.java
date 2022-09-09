@@ -14,7 +14,7 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import xyz.foxkin.catsplus.client.animatable.CatsPlusAnimatable;
 import xyz.foxkin.catsplus.client.init.ModGeoRenderers;
-import xyz.foxkin.catsplus.client.model.entity.CatsPlusModel;
+import xyz.foxkin.catsplus.client.model.CatsPlusModel;
 
 @Environment(EnvType.CLIENT)
 public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extends CatsPlusModel<T>> implements IGeoRenderer<T> {
@@ -28,7 +28,7 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
     }
 
     public void render(T animatable, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        modelProvider.setUpModel(animatable);
+        modelProvider.setUp(animatable);
         GeoModel model = getGeoModel(animatable);
         RenderLayer renderLayer = getRenderType(animatable, 0, matrices, vertexConsumers, null, light, getTextureResource(animatable));
         render(model, animatable, 0, renderLayer, matrices, vertexConsumers, null, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
@@ -41,7 +41,7 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
 
     @Override
     public Identifier getTextureResource(T animatable) {
-        return animatable.getTexture();
+        return modelProvider.getTextureResource(animatable);
     }
 
     @Override
@@ -63,6 +63,6 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
     }
 
     public GeoModel getGeoModel(T animatable) {
-        return modelProvider.getModel(modelProvider.getModelResource(animatable));
+        return modelProvider.getModel(animatable);
     }
 }

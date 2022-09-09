@@ -4,7 +4,7 @@ import dev.architectury.registry.ReloadListenerRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.resource.ResourceType;
-import xyz.foxkin.catsplus.client.render.matrixscript.MatrixScriptManager;
+import xyz.foxkin.catsplus.client.matrixscript.MatrixScriptManager;
 
 @Environment(EnvType.CLIENT)
 public class ModClientResourceReloaders {

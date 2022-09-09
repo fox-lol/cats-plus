@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -85,6 +86,7 @@ abstract class CreeperEntityMixin extends HostileEntity {
      * @param entity The entity to check.
      * @return Whether the entity is a player and is holding a cat or ocelot.
      */
+    @Unique
     private boolean catsPlus$isPlayerHoldingCat(Entity entity) {
         if (entity instanceof PlayerEntityAccess playerAccess) {
             return playerAccess.catsPlus$getHeldEntity()

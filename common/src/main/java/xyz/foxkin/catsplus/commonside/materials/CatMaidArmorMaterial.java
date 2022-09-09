@@ -2,7 +2,6 @@ package xyz.foxkin.catsplus.commonside.materials;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -36,7 +35,7 @@ public class CatMaidArmorMaterial implements ArmorMaterial {
 
     @Override
     public Ingredient getRepairIngredient() {
-        return Ingredient.ofItems((ItemConvertible) ModItems.CAT_MAID_SCRAP);
+        return Ingredient.ofItems(ModItems.CAT_MAID_SCRAP.get());
     }
 
     @Override
