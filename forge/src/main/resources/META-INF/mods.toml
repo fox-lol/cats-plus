@@ -32,19 +32,19 @@ license = "GPL-3.0"
     modId = "architectury"
     mandatory = true
     versionRange = "[4.9.0,)"
-    ordering = "AFTER"
+    ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.catsplus]]
     modId = "cloth_config"
     mandatory = true
     versionRange = "[6.4.0,)"
-    ordering = "AFTER"
+    ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.catsplus]]
     modId = "noteblocklib"
     mandatory = true
     versionRange = "[1.0.0,)"
-    ordering = "AFTER"
+    ordering = "NONE"
     side = "BOTH"

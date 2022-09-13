@@ -1,4 +1,4 @@
-package xyz.foxkin.catsplus.commonside.materials;
+package xyz.foxkin.catsplus.commonside.material;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterial;

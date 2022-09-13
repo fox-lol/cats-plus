@@ -27,7 +27,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CAT_MAID_HELMET = ITEMS.register(
             "cat_maid_helmet",
             () -> new ArmorItem(
-                    ModMaterials.CAT_MAID_ARMOR,
+                    ModArmorMaterials.CAT_MAID_ARMOR,
                     EquipmentSlot.HEAD,
                     new Item.Settings().group(CATS_PLUS_GROUP).maxCount(1)
             )
@@ -36,7 +36,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CAT_MAID_CHESTPLATE = ITEMS.register(
             "cat_maid_chestplate",
             () -> new ArmorItem(
-                    ModMaterials.CAT_MAID_ARMOR,
+                    ModArmorMaterials.CAT_MAID_ARMOR,
                     EquipmentSlot.CHEST,
                     new Item.Settings().group(CATS_PLUS_GROUP).maxCount(1)
             )
@@ -45,7 +45,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CAT_MAID_LEGGINGS = ITEMS.register(
             "cat_maid_leggings",
             () -> new ArmorItem(
-                    ModMaterials.CAT_MAID_ARMOR,
+                    ModArmorMaterials.CAT_MAID_ARMOR,
                     EquipmentSlot.LEGS,
                     new Item.Settings().group(CATS_PLUS_GROUP).maxCount(1)
             )
@@ -54,7 +54,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CAT_MAID_BOOTS = ITEMS.register(
             "cat_maid_boots",
             () -> new ArmorItem(
-                    ModMaterials.CAT_MAID_ARMOR,
+                    ModArmorMaterials.CAT_MAID_ARMOR,
                     EquipmentSlot.FEET,
                     new Item.Settings().group(CATS_PLUS_GROUP).maxCount(1)
             )
