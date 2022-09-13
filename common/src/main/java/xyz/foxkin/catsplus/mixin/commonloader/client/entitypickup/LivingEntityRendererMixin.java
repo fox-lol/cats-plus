@@ -36,11 +36,11 @@ abstract class LivingEntityRendererMixin<T extends LivingEntity> extends EntityR
     }
 
     /**
-     * Renders the third-person perspective of the players arms in a holding position along with the held entity.
+     * Renders the third-person perspective of the held entity if one is being held by the player.
      */
     @SuppressWarnings("unchecked")
     @Inject(method = "render(Lnet/minecraft/entity/LivingEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;pop()V"))
-    protected void catsPlus$renderThirdPersonHoldingArmsAndEntity(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
+    protected void catsPlus$renderThirdPersonHeldEntity(T entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
         if (entity instanceof PlayerEntityAccess playerAccess) {
             playerAccess.catsPlus$getHeldEntity().ifPresent(heldEntity -> {
                 AnimatableContainer<ThirdPersonPlayerArms> animatableContainer = (AnimatableContainer<ThirdPersonPlayerArms>) entity;

@@ -10,6 +10,7 @@ import xyz.foxkin.catsplus.client.animatable.entity.player.ThirdPersonPlayerArms
 @Mixin(AbstractClientPlayerEntity.class)
 abstract class AbstractPlayerEntityMixin implements AnimatableContainer<ThirdPersonPlayerArms> {
 
+    @SuppressWarnings("ConstantConditions")
     @Unique
     private final ThirdPersonPlayerArms catsPlus$playerArms = new ThirdPersonPlayerArms((AbstractClientPlayerEntity) (Object) this);
 

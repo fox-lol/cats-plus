@@ -11,7 +11,7 @@ import xyz.foxkin.catsplus.client.matrixscript.exception.InvalidScriptLineExcept
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -26,17 +26,15 @@ public enum MatrixScriptManager implements SynchronousResourceReloader {
     @Override
     public void reload(ResourceManager manager) {
         scripts.clear();
-        Map<Identifier, Resource> resources = manager.findResources("matrixscripts", path -> path.getPath().endsWith(".matrixscript"));
-        for (Map.Entry<Identifier, Resource> resourceEntry : resources.entrySet()) {
-            Identifier identifier = resourceEntry.getKey();
-            Resource resource = resourceEntry.getValue();
-            try (InputStream inputStream = resource.getInputStream()) {
-                MatrixScript script = MatrixScript.Builder.parseInstructions(inputStream);
-                scripts.put(identifier.getPath(), script);
+        Collection<Identifier> resourceIds = manager.findResources("matrixscripts", path -> path.endsWith(".matrixscript"));
+        for (Identifier resourceId : resourceIds) {
+            try (Resource resource = manager.getResource(resourceId)) {
+                MatrixScript script = MatrixScript.Builder.parseInstructions(resource.getInputStream());
+                scripts.put(resourceId.getPath(), script);
             } catch (InvalidScriptLineException e) {
-                CatsPlus.LOGGER.error("Line {} in script {} is invalid! Details: {}", e.getLine(), identifier.getPath(), e.getMessage());
+                CatsPlus.LOGGER.error("Line {} in script {} is invalid! Details: {}", e.getLine(), resourceId.getPath(), e.getMessage());
             } catch (IOException e) {
-                CatsPlus.LOGGER.error("Error occurred while loading resource file " + identifier, e);
+                CatsPlus.LOGGER.error("Error occurred while loading resource file " + resourceId, e);
             }
         }
     }

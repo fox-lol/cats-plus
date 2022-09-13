@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import xyz.foxkin.catsplus.commonside.init.ModMaterials;
+import xyz.foxkin.catsplus.commonside.init.ModArmorMaterials;
 
 import java.util.UUID;
 
@@ -29,11 +29,11 @@ abstract class ArmorItemMixin {
     protected float knockbackResistance;
 
     /**
-     * Adds additional knockback resistance to armor whose material is {@link ModMaterials#CAT_MAID_ARMOR}.
+     * Adds additional knockback resistance to armor whose material is {@link ModArmorMaterials#CAT_MAID_ARMOR}.
      */
-    @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMultimap;builder()Lcom/google/common/collect/ImmutableMultimap$Builder;"))
+    @ModifyExpressionValue(method = "<init>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMultimap;builder()Lcom/google/common/collect/ImmutableMultimap$Builder;", remap = false))
     private ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> catsPlus$addCatMaidArmorModifiers(ImmutableMultimap.Builder<EntityAttribute, EntityAttributeModifier> attributeBuilder, ArmorMaterial material, EquipmentSlot slot) {
-        if (material.equals(ModMaterials.CAT_MAID_ARMOR)) {
+        if (material.equals(ModArmorMaterials.CAT_MAID_ARMOR)) {
             UUID uuid = MODIFIERS[slot.getEntitySlotId()];
             attributeBuilder.put(
                     EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,

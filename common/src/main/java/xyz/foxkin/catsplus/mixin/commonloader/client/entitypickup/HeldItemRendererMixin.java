@@ -37,7 +37,7 @@ abstract class HeldItemRendererMixin {
 
     @Shadow
     @Final
-    private EntityRenderDispatcher entityRenderDispatcher;
+    private EntityRenderDispatcher renderManager;
 
     /**
      * Renders the first-person perspective of the players arms in a holding position along with the held entity.
@@ -110,7 +110,7 @@ abstract class HeldItemRendererMixin {
         if (!renderedHeldEntity.get()) {
             matrices.translate(0, -0.5, -1);
             matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
-            EntityRenderer<? super Entity> entityRenderer = entityRenderDispatcher.getRenderer(heldEntity);
+            EntityRenderer<? super Entity> entityRenderer = renderManager.getRenderer(heldEntity);
             entityRenderer.render(heldEntity, 0, 0, matrices, vertexConsumers, light);
         }
         matrices.pop();

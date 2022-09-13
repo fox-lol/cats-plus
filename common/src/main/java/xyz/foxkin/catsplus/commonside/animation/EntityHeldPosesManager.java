@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,14 +28,12 @@ public enum EntityHeldPosesManager implements SynchronousResourceReloader {
     @Override
     public void reload(ResourceManager manager) {
         entityHeldPosesCounts.clear();
-        Map<Identifier, Resource> resources = manager.findResources("entityheldposes", path -> path.getPath().endsWith(".json"));
-        for (Map.Entry<Identifier, Resource> resourceEntry : resources.entrySet()) {
-            Identifier identifier = resourceEntry.getKey();
-            Resource resource = resourceEntry.getValue();
-            try (InputStream inputStream = resource.getInputStream()) {
-                parseEntityHeldPosesCounts(inputStream, identifier);
+        Collection<Identifier> resourceIds = manager.findResources("entityheldposes", path -> path.endsWith(".json"));
+        for (Identifier resourceId : resourceIds) {
+            try (Resource resource = manager.getResource(resourceId)) {
+                parseEntityHeldPosesCounts(resource.getInputStream(), resourceId);
             } catch (IOException e) {
-                CatsPlus.LOGGER.error("Error occurred while loading resource file " + identifier, e);
+                CatsPlus.LOGGER.error("Error occurred while loading resource file " + resourceId, e);
             }
         }
     }
