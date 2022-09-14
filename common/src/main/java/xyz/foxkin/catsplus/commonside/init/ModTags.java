@@ -1,6 +1,7 @@
 package xyz.foxkin.catsplus.commonside.init;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.ParrotEntity;
 import net.minecraft.entity.passive.WolfEntity;
@@ -32,4 +33,5 @@ public class ModTags {
      * Represents items that will toggle whether a {@link ParrotEntity} follows its owner or not when used to interact with the {@code ParrotEntity}.
      */
     public static final TagKey<Item> TOGGLE_PARROT_FOLLOWING = TagKey.of(Registry.ITEM_KEY, new Identifier(CatsPlus.MOD_ID, "toggle_parrot_following"));
+    public static final TagKey<EntityType<?>> CAN_PICK_UP = TagKey.of(Registry.ENTITY_TYPE_KEY, new Identifier(CatsPlus.MOD_ID, "can_pick_up"));
 }

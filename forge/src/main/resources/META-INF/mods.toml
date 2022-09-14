@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[41,)"
+loaderVersion = "[40,)"
 issueTrackerURL = "https://github.com/fox-lol/cats-plus/issues"
 license = "GPL-3.0"
 
@@ -17,27 +17,34 @@ license = "GPL-3.0"
 [[dependencies.catsplus]]
     modId = "forge"
     mandatory = true
-    versionRange = "[41,)"
+    versionRange = "[40,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.catsplus]]
     modId = "minecraft"
     mandatory = true
-    versionRange = "[1.19,)"
+    versionRange = "[1.18,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.catsplus]]
     modId = "architectury"
     mandatory = true
-    versionRange = "[5.7.0,)"
-    ordering = "AFTER"
+    versionRange = "[4.9.0,)"
+    ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.catsplus]]
     modId = "cloth_config"
     mandatory = true
-    versionRange = "[7.0.0,)"
-    ordering = "AFTER"
+    versionRange = "[6.4.0,)"
+    ordering = "NONE"
+    side = "BOTH"
+
+[[dependencies.catsplus]]
+    modId = "noteblocklib"
+    mandatory = true
+    versionRange = "[1.0.0,)"
+    ordering = "NONE"
     side = "BOTH"

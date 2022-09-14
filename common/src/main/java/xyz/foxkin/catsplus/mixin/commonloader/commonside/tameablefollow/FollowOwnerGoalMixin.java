@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.foxkin.catsplus.commonside.access.TameableEntityAccess;
+import xyz.foxkin.catsplus.commonside.access.tameablefollow.TameableEntityAccess;
 
 @Mixin(FollowOwnerGoal.class)
 abstract class FollowOwnerGoalMixin {
@@ -23,8 +23,8 @@ abstract class FollowOwnerGoalMixin {
      */
     @Inject(method = {"canStart", "shouldContinue"}, at = @At("HEAD"), cancellable = true)
     private void catsPlus$onlyStartIfFollowing(CallbackInfoReturnable<Boolean> cir) {
-        TameableEntityAccess access = (TameableEntityAccess) tameable;
-        if (!access.catsPlus$isFollowing()) {
+        TameableEntityAccess tameableAccess = (TameableEntityAccess) tameable;
+        if (!tameableAccess.catsPlus$isFollowing()) {
             cir.setReturnValue(false);
         }
     }

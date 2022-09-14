@@ -5,7 +5,7 @@ import net.minecraft.entity.ai.goal.CatSitOnBlockGoal;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.tag.TagKey;
-import xyz.foxkin.catsplus.commonside.access.CatSitOnBlockGoalAccess;
+import xyz.foxkin.catsplus.commonside.access.catsitonblock.CatSitOnBlockGoalAccess;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 import xyz.foxkin.catsplus.mixin.commonloader.commonside.accessor.CatSitOnBlockGoalAccessor;
 import xyz.foxkin.catsplus.mixin.commonloader.commonside.catsitonblock.CatSitOnBlockGoalMixin;

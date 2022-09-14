@@ -22,6 +22,9 @@
         "main": [
             "xyz.foxkin.catsplus.commonside.fabric.CatsPlusFabric"
         ],
+        "client": [
+            "xyz.foxkin.catsplus.client.fabric.CatsPlusFabricClient"
+        ],
         "modmenu": [
             "xyz.foxkin.catsplus.client.plugin.modmenu.fabric.CatsPlusModMenuPlugin"
         ]
@@ -37,9 +40,10 @@
     "depends": {
         "fabricloader": ">=0.14.0",
         "fabric": ">=0.56.0",
-        "minecraft": ">=1.19",
+        "minecraft": ">=1.18",
         "java": ">=17",
-        "architectury": ">=5.7.0",
-        "cloth-config": ">=7.0.0"
+        "architectury": ">=4.9.0",
+        "cloth-config": ">=6.4.0",
+        "noteblocklib": ">=1.0.0"
     }
 }

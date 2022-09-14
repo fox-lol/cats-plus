@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.foxkin.catsplus.commonside.access.CatEntityAccess;
+import xyz.foxkin.catsplus.commonside.access.catsitonblock.CatEntityAccess;
 
 @Mixin(CatEntity.class)
 abstract class CatEntityMixin implements CatEntityAccess {

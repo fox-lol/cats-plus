@@ -22,8 +22,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import xyz.foxkin.catsplus.commonside.access.CatEntityAccess;
-import xyz.foxkin.catsplus.commonside.access.CatSitOnBlockGoalAccess;
+import xyz.foxkin.catsplus.commonside.access.catsitonblock.CatEntityAccess;
+import xyz.foxkin.catsplus.commonside.access.catsitonblock.CatSitOnBlockGoalAccess;
 import xyz.foxkin.catsplus.commonside.init.ModTags;
 
 import java.util.List;
@@ -96,8 +96,8 @@ public abstract class CatSitOnBlockGoalMixin implements CatSitOnBlockGoalAccess 
     @SuppressWarnings("unused")
     @ModifyReturnValue(method = "canStart", at = @At("RETURN"))
     private boolean catsPlus$addExtraStartConditions(boolean canStart) {
-        CatEntityAccess access = (CatEntityAccess) cat;
-        return canStart && access.catsPlus$canSitOrSleep() && catsPlus$extraStartCondition();
+        CatEntityAccess catAccess = (CatEntityAccess) cat;
+        return canStart && catAccess.catsPlus$canSitOrSleep() && catsPlus$extraStartCondition();
     }
 
     /**

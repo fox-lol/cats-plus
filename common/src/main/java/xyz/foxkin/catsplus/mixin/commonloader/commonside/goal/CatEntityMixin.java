@@ -21,6 +21,7 @@ abstract class CatEntityMixin extends TameableEntity {
     /**
      * Adds custom goals to the cat's AI.
      */
+    @SuppressWarnings("ConstantConditions")
     @Inject(method = "initGoals", at = @At("HEAD"))
     private void catsPlus$addCatUseFurnitureGoal(CallbackInfo ci) {
         goalSelector.add(7, new CatSleepInBedGoal((CatEntity) (Object) this, 0.8));

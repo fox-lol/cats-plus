@@ -8,7 +8,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
-import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
-import xyz.foxkin.catsplus.commonside.access.TameableEntityAccess;
+import xyz.foxkin.catsplus.commonside.access.tameablefollow.TameableEntityAccess;
 
 @Mixin(TameableEntity.class)
 abstract class TameableEntityMixin extends AnimalEntity implements Tameable, TameableEntityAccess {
@@ -73,7 +73,7 @@ abstract class TameableEntityMixin extends AnimalEntity implements Tameable, Tam
             String translationKey = catsPlus$following ?
                     "catsplus.message.actionBar.following" :
                     "catsplus.message.actionBar.wandering";
-            owner.sendMessage(Text.translatable(translationKey), true);
+            owner.sendMessage(new TranslatableText(translationKey), true);
         } else {
             CatsPlus.LOGGER.error("Could not send following status message because the owner is not a player, this shouldn't happen");
         }

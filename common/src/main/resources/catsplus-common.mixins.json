@@ -5,11 +5,25 @@
     "compatibilityLevel": "JAVA_17",
     "plugin": "xyz.foxkin.catsplus.mixin.commonloader.CatsPlusMixinPlugin",
     "mixins": [
-        "commonside.ArmorItemMixin",
+        "commonside.accessor.ActiveTargetGoalAccessor",
         "commonside.accessor.CatSitOnBlockGoalAccessor",
+        "commonside.accessor.LivingEntityAccessor",
+        "commonside.accessor.LookAtEntityGoalAccessor",
+        "commonside.accessor.MobEntityAccessor",
+        "commonside.armor.ArmorItemMixin",
         "commonside.catsitonblock.CatEntityMixin",
         "commonside.catsitonblock.CatSitOnBlockGoalMixin",
         "commonside.catsitonblock.ChestBlockMixin",
+        "commonside.development.ReloadableResourceManagerImplMixin",
+        "commonside.entitypickup.AbstractBlockStateMixin",
+        "commonside.entitypickup.CatEntityMixin",
+        "commonside.entitypickup.EntityMixin",
+        "commonside.entitypickup.Matrix4fMixin",
+        "commonside.entitypickup.PlayerEntityMixin",
+        "commonside.entitypickup.PlayerInventoryMixin",
+        "commonside.entitypickup.ServerPlayerEntityMixin",
+        "commonside.entitypickup.creeperflee.CreeperEntityMixin",
+        "commonside.entitypickup.creeperflee.TargetPredicateMixin",
         "commonside.goal.CatEntityMixin",
         "commonside.tameablefollow.CatEntityMixin",
         "commonside.tameablefollow.FollowOwnerGoalMixin",
@@ -18,6 +32,13 @@
         "commonside.tameablefollow.WolfEntityMixin"
     ],
     "client": [
+        "client.accessor.CatCollarFeatureRendererAccessor",
+        "client.entitypickup.AbstractPlayerEntityMixin",
+        "client.entitypickup.CatEntityMixin",
+        "client.entitypickup.HeldItemRendererMixin",
+        "client.entitypickup.LivingEntityRendererMixin",
+        "client.entitypickup.MinecraftClientMixin",
+        "client.entitypickup.PlayerEntityModelMixin"
     ],
     "injectors": {
         "defaultRequire": 1

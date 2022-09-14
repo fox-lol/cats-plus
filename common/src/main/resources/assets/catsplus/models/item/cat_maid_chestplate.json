@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "catsplus:item/cat_maid_chestplate"
-  }
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "catsplus:item/cat_maid_chestplate"
+    }
 }
