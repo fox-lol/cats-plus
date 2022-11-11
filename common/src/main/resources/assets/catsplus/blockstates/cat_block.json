@@ -1,7 +1,27 @@
 {
     "variants": {
-        "": {
+        "facing=east": {
+            "model": "catsplus:block/cat_block",
+            "y": 90
+        },
+        "facing=north": {
             "model": "catsplus:block/cat_block"
+        },
+        "facing=south": {
+            "model": "catsplus:block/cat_block",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "catsplus:block/cat_block",
+            "y": 270
+        },
+        "facing=up": {
+            "model": "catsplus:block/cat_block",
+            "x": 270
+        },
+        "facing=down": {
+            "model": "catsplus:block/cat_block",
+            "x": 90
         }
     }
 }

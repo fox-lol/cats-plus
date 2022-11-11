@@ -2,7 +2,6 @@ package xyz.foxkin.catsplus.commonside.init;
 
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
-import io.github.shaksternano.noteblocklib.commonside.InstrumentBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -10,6 +9,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.registry.Registry;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
+import xyz.foxkin.catsplus.commonside.block.CatBlock;
 
 public class ModBlocks {
 
@@ -17,7 +17,7 @@ public class ModBlocks {
 
     public static final RegistrySupplier<Block> CAT_BLOCK = BLOCKS.register(
             "cat_block",
-            () -> new InstrumentBlock(ModCustomInstruments.CAT, AbstractBlock.Settings.of(Material.WOOD).strength(6).requiresTool().sounds(
+            () -> new CatBlock(ModCustomInstruments.CAT, AbstractBlock.Settings.of(Material.WOOD).strength(6).requiresTool().sounds(
                     new BlockSoundGroup(
                             1,
                             1,
