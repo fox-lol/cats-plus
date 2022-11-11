@@ -28,7 +28,7 @@ abstract class CatEntityMixin extends TameableEntity implements CatEntityAccess 
     }
 
     @Inject(method = "initGoals", at = @At("HEAD"))
-    private void catsPlus$addSprayFleeGoal(CallbackInfo ci) {
+    private void catsPlus$addSprayDangerGoal(CallbackInfo ci) {
         goalSelector.add(1, new SprayDangerGoal(this, 2));
     }
 
