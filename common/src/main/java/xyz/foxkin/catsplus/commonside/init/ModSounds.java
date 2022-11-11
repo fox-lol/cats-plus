@@ -16,6 +16,11 @@ public class ModSounds {
             () -> new SoundEvent(new Identifier(CatsPlus.MOD_ID, "cat_laughter"))
     );
 
+    public static final RegistrySupplier<SoundEvent> SPRAY = SOUNDS.register(
+            "spray",
+            () -> new SoundEvent(new Identifier(CatsPlus.MOD_ID, "spray"))
+    );
+
     public static void registerSounds() {
         SOUNDS.register();
     }

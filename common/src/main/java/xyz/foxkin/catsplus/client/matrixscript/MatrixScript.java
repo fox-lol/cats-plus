@@ -116,8 +116,7 @@ public class MatrixScript {
                                     throw new InvalidArgumentException("Too many arguments, expected " + (expectedPartCount - 1), lineNumber);
                                 }
                             }
-                            default ->
-                                    throw new InvalidInstructionException("Instruction \"" + instruction + "\" is invalid", lineNumber);
+                            default -> throw new InvalidInstructionException("Instruction \"" + instruction + "\" is invalid", lineNumber);
                         }
                     }
                 }

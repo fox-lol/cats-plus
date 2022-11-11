@@ -4,5 +4,11 @@
         "sounds": [
             "catsplus:cat_laughter"
         ]
+    },
+    "spray": {
+        "subtitle": "catsplus.sounds.spray",
+        "sounds": [
+            "catsplus:spray"
+        ]
     }
 }

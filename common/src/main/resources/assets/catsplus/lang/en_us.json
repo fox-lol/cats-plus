@@ -7,6 +7,7 @@
     "text.autoconfig.catsplus.option.catSittingOnChestAllowsOpening": "Cats sitting or sleeping on chest allows opening",
 
     "catsplus.sounds.cat_laughter": "Cat laughter",
+    "catsplus.sounds.spray": "Spray",
 
     "catsplus.message.actionBar.following": "Following",
     "catsplus.message.actionBar.wandering": "Wandering",
@@ -15,5 +16,6 @@
     "item.catsplus.cat_maid_chestplate": "Cat Maid Chestplate",
     "item.catsplus.cat_maid_helmet": "Cat Maid Helmet",
     "item.catsplus.cat_maid_leggings": "Cat Maid Leggings",
-    "item.catsplus.cat_maid_scraps": "Cat Maid Scraps"
+    "item.catsplus.cat_maid_scraps": "Cat Maid Scraps",
+    "item.catsplus.spray_bottle": "Spray Bottle"
 }

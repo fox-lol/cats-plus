@@ -8,6 +8,7 @@ import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
+import xyz.foxkin.catsplus.commonside.item.SprayBottleItem;
 
 @SuppressWarnings("unused")
 public class ModItems {
@@ -58,6 +59,11 @@ public class ModItems {
                     EquipmentSlot.FEET,
                     new Item.Settings().group(CATS_PLUS_GROUP).maxCount(1)
             )
+    );
+
+    public static final RegistrySupplier<SprayBottleItem> SPRAY_BOTTLE = ITEMS.register(
+            "spray_bottle",
+            () -> new SprayBottleItem(new Item.Settings().group(CATS_PLUS_GROUP))
     );
 
     // Block items
