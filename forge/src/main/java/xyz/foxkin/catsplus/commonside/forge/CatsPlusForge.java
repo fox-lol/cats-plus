@@ -9,6 +9,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLLoader;
+import xyz.foxkin.catsplus.client.CatsPlusClient;
 import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.config.CatsPlusConfig;
 
@@ -29,7 +30,7 @@ public class CatsPlusForge {
 
     @OnlyIn(Dist.CLIENT)
     private static void clientInit() {
-        CatsPlus.clientInit();
+        CatsPlusClient.init();
         registerConfigScreen();
     }
 
