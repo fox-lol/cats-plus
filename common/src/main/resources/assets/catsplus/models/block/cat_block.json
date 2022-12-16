@@ -4,7 +4,8 @@
         "front": "catsplus:block/cat_block_face",
         "side": "catsplus:block/cat_block_side",
         "top":  "catsplus:block/cat_block_side",
-        "bottom": "catsplus:block/cat_block_side"
+        "bottom": "catsplus:block/cat_block_side",
+        "particle": "catsplus:block/cat_block_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],
