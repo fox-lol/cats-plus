@@ -21,6 +21,7 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
 
     private final S modelProvider;
     private final Class<T> animatableClass;
+    private VertexConsumerProvider rtb;
 
     public CatsPlusGeoRenderer(S modelProvider, Class<T> animatableClass) {
         this.modelProvider = modelProvider;
@@ -45,8 +46,18 @@ public abstract class CatsPlusGeoRenderer<T extends CatsPlusAnimatable, S extend
     }
 
     @Override
-    public Integer getUniqueID(T animatable) {
+    public int getInstanceId(T animatable) {
         return animatable.getUniqueId();
+    }
+
+    @Override
+    public VertexConsumerProvider getCurrentRTB() {
+        return rtb;
+    }
+
+    @Override
+    public void setCurrentRTB(VertexConsumerProvider bufferSource) {
+        rtb = bufferSource;
     }
 
     @SuppressWarnings("unchecked")

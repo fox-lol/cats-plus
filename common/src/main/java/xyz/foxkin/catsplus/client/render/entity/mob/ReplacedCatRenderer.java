@@ -133,11 +133,11 @@ public class ReplacedCatRenderer extends CatsPlusGeoRenderer<ReplacedCatAnimatab
             }
         }
 
-        RenderUtils.translate(bone, matrices);
-        RenderUtils.moveToPivot(bone, matrices);
-        RenderUtils.rotate(bone, matrices);
-        RenderUtils.scale(bone, matrices);
-        RenderUtils.moveBackFromPivot(bone, matrices);
+        RenderUtils.translateMatrixToBone(matrices, bone);
+        RenderUtils.translateToPivotPoint(matrices, bone);
+        RenderUtils.rotateMatrixAroundBone(matrices, bone);
+        RenderUtils.scaleMatrixForBone(matrices, bone);
+        RenderUtils.translateAwayFromPivotPoint(matrices, bone);
 
         if (!bone.isHidden()) {
             for (GeoCube cube : bone.childCubes) {
