@@ -59,6 +59,10 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     private Entity catsPlus$heldEntity;
     @Unique
     private int catsPlus$heldPoseNumber;
+    @Unique
+    private int catsPlus$heldEntitySyncCooldown;
+    @Unique
+    private boolean catsPlus$forceUpdateHeldEntity;
 
     @SuppressWarnings("unused")
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -81,8 +85,11 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             catsPlus$dropHeldEntity(getPos());
         }
 
-        if (!getWorld().isClient()) {
-            // Syncs the held entity to clients.
+        // Syncs the held entity to clients.
+        if (catsPlus$heldEntitySyncCooldown > 0) {
+            catsPlus$heldEntitySyncCooldown--;
+        }
+        if (!getWorld().isClient() && (catsPlus$forceUpdateHeldEntity || catsPlus$heldEntitySyncCooldown <= 0)) {
             PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
             buf.writeUuid(getUuid());
             NbtCompound entityNbt = catsPlus$heldEntity == null ? new NbtCompound() : EntityUtil.serializeEntity(catsPlus$heldEntity);
@@ -92,6 +99,8 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             for (ServerPlayerEntity player : PlayerLookup.tracking(this)) {
                 NetworkManager.sendToPlayer(player, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
             }
+            catsPlus$heldEntitySyncCooldown = 200; // Every 10 seconds.
+            catsPlus$forceUpdateHeldEntity = false;
         }
 
         // Play the ambient sound of the held entity if it is a mob entity.
@@ -180,6 +189,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
             newHeldEntityAccess.catsPlus$setHolder((PlayerEntity) (Object) this);
         }
         catsPlus$heldEntity = entity;
+        catsPlus$forceUpdateHeldEntity = true;
     }
 
     @Unique
