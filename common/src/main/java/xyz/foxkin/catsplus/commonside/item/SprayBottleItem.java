@@ -25,7 +25,7 @@ public class SprayBottleItem extends Item {
 
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand) {
-        sprayEffects(user);
+        doSprayEffects(user);
         if (entity instanceof CatEntity cat) {
             CatEntityAccess access = (CatEntityAccess) cat;
             access.catsPlus$setFleeTicks(60);
@@ -36,11 +36,11 @@ public class SprayBottleItem extends Item {
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
-        sprayEffects(user);
+        doSprayEffects(user);
         return super.use(world, user, hand);
     }
 
-    private static void sprayEffects(PlayerEntity user) {
+    private static void doSprayEffects(PlayerEntity user) {
         World world = user.getWorld();
         world.playSound(user, user.getX(), user.getY(), user.getZ(), ModSounds.SPRAY.get(), SoundCategory.NEUTRAL, 1, 1);
         PlayerEntityAccess access = (PlayerEntityAccess) user;
