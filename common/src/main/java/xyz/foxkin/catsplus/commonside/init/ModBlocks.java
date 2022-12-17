@@ -17,7 +17,7 @@ public class ModBlocks {
 
     public static final RegistrySupplier<Block> CAT_BLOCK = BLOCKS.register(
             "cat_block",
-            () -> new CatBlock(ModCustomInstruments.CAT, AbstractBlock.Settings.of(Material.WOOD).strength(6).requiresTool().sounds(
+            () -> new CatBlock(ModCustomInstruments.CAT, AbstractBlock.Settings.of(Material.STONE).strength(3).requiresTool().sounds(
                     new BlockSoundGroup(
                             1,
                             1,
