@@ -17,5 +17,12 @@
     "item.catsplus.cat_maid_helmet": "Cat Maid Helmet",
     "item.catsplus.cat_maid_leggings": "Cat Maid Leggings",
     "item.catsplus.cat_maid_scraps": "Cat Maid Scraps",
-    "item.catsplus.spray_bottle": "Spray Bottle"
+    "item.catsplus.spray_bottle": "Spray Bottle",
+
+    "advancements.catsplus.root": "Cats Plus",
+    "advancements.catsplus.root.desc": "A mod about cats!",
+    "advancements.catsplus.spray_bottle": "Psht psht",
+    "advancements.catsplus.spray_bottle.desc": "Obtain a spray bottle",
+    "advancements.catsplus.cat_block": "Meow!",
+    "advancements.catsplus.cat_block.desc": "Obtain a cat block"
 }

@@ -1,0 +1,30 @@
+{
+    "display": {
+        "icon": {
+            "item": "catsplus:cat_block"
+        },
+        "title": {
+            "translate": "advancements.catsplus.cat_block"
+        },
+        "description": {
+            "translate": "advancements.catsplus.cat_block.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "catsplus:root",
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "catsplus:cat_block"
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

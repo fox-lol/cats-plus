@@ -1,0 +1,30 @@
+{
+    "display": {
+        "icon": {
+            "item": "catsplus:spray_bottle"
+        },
+        "title": {
+            "translate": "advancements.catsplus.spray_bottle"
+        },
+        "description": {
+            "translate": "advancements.catsplus.spray_bottle.desc"
+        },
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "parent": "catsplus:root",
+    "criteria": {
+        "requirement": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "catsplus:spray_bottle"
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "display": {
+        "icon": {
+            "item": "minecraft:cod"
+        },
+        "title": {
+            "translate": "advancements.catsplus.root"
+        },
+        "description": {
+            "translate": "advancements.catsplus.root.desc"
+        },
+        "background": "minecraft:textures/block/white_wool.png",
+        "show_toast": true,
+        "announce_to_chat": true
+    },
+    "criteria": {
+        "fish_in_inventory": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "tag": "minecraft:fishes"
+                    }
+                ]
+            }
+        }
+    }
+}
