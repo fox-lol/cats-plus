@@ -18,12 +18,19 @@ public enum LootTableEventHandler implements LootEvent.ModifyLootTable {
     @Override
     public void modifyLootTable(LootManager lootTables, Identifier id, LootEvent.LootTableModificationContext context, boolean builtin) {
         if (builtin && id.getPath().startsWith("chests/")) {
-            LootPool.Builder poolBuilder = LootPool.builder()
+            LootPool.Builder sprayPool = LootPool.builder()
                     .rolls(ConstantLootNumberProvider.create(1))
                     .conditionally(RandomChanceLootCondition.builder(0.05F))
                     .with(ItemEntry.builder(ModItems.SPRAY_BOTTLE.get()))
                     .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1, 1)));
-            context.addPool(poolBuilder);
+            context.addPool(sprayPool);
+
+            LootPool.Builder catBlockPool = LootPool.builder()
+                    .rolls(ConstantLootNumberProvider.create(1))
+                    .conditionally(RandomChanceLootCondition.builder(0.01F))
+                    .with(ItemEntry.builder(ModItems.CAT_BLOCK.get()))
+                    .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(1, 1)));
+            context.addPool(catBlockPool);
         }
     }
 }
