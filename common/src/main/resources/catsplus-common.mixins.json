@@ -26,6 +26,7 @@
     "commonside.entitypickup.creeperflee.TargetPredicateMixin",
     "commonside.goal.CatEntityMixin",
     "commonside.spraybottle.CatEntityMixin",
+    "commonside.spraybottle.PlayerEntityMixin",
     "commonside.tameablefollow.CatEntityMixin",
     "commonside.tameablefollow.FollowOwnerGoalMixin",
     "commonside.tameablefollow.ParrotEntityMixin",

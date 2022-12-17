@@ -37,11 +37,11 @@ public class GeckoUtil {
      * @param matrices The matrix stack to apply the transformations to.
      */
     private static void applyBoneTransformation(GeoBone bone, MatrixStack matrices) {
-        RenderUtils.translate(bone, matrices);
-        RenderUtils.moveToPivot(bone, matrices);
-        RenderUtils.rotate(bone, matrices);
-        RenderUtils.scale(bone, matrices);
-        RenderUtils.moveBackFromPivot(bone, matrices);
+        RenderUtils.translateMatrixToBone(matrices, bone);
+        RenderUtils.translateToPivotPoint(matrices, bone);
+        RenderUtils.rotateMatrixAroundBone(matrices, bone);
+        RenderUtils.scaleMatrixForBone(matrices, bone);
+        RenderUtils.translateAwayFromPivotPoint(matrices, bone);
     }
 
     /**
