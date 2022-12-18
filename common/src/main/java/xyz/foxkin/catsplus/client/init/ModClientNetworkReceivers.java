@@ -99,13 +99,13 @@ public class ModClientNetworkReceivers {
                             if (newHeldEntityNbt.isEmpty()) {
                                 playerAccess.catsPlus$clearHeldEntity();
                             } else {
-                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(entity -> {
-                                    playerAccess.catsPlus$setHeldEntity(entity);
-                                    playerAccess.catsPlus$setHeldPoseNumber(heldPoseNumber);
-                                }, () -> {
-                                    CatsPlus.LOGGER.error("Could not create entity from nbt {}", newHeldEntityNbt);
-                                    playerAccess.catsPlus$clearHeldEntity();
-                                });
+                                EntityType.getEntityFromNbt(newHeldEntityNbt, holdingPlayer.getWorld()).ifPresentOrElse(
+                                        entity -> playerAccess.catsPlus$setHeldEntity(entity, heldPoseNumber),
+                                        () -> {
+                                            CatsPlus.LOGGER.error("Could not create entity from nbt {}", newHeldEntityNbt);
+                                            playerAccess.catsPlus$clearHeldEntity();
+                                        }
+                                );
                             }
                         }
                     }

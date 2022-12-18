@@ -26,7 +26,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import xyz.foxkin.catsplus.commonside.CatsPlus;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.EntityAccess;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.HoldableTickable;
 import xyz.foxkin.catsplus.commonside.access.entitypickup.PlayerEntityAccess;
@@ -60,9 +59,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     @Unique
     private int catsPlus$heldPoseNumber;
     @Unique
-    private int catsPlus$heldEntitySyncCooldown;
-    @Unique
-    private boolean catsPlus$forceUpdateHeldEntity;
+    private boolean catsPlus$queueSyncHeldEntity;
 
     @SuppressWarnings("unused")
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
@@ -86,21 +83,9 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         }
 
         // Syncs the held entity to clients.
-        if (catsPlus$heldEntitySyncCooldown > 0) {
-            catsPlus$heldEntitySyncCooldown--;
-        }
-        if (!getWorld().isClient() && (catsPlus$forceUpdateHeldEntity || catsPlus$heldEntitySyncCooldown <= 0)) {
-            PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
-            buf.writeUuid(getUuid());
-            NbtCompound entityNbt = catsPlus$heldEntity == null ? new NbtCompound() : EntityUtil.serializeEntity(catsPlus$heldEntity);
-            buf.writeNbt(entityNbt);
-            buf.writeInt(catsPlus$heldPoseNumber);
-            NetworkManager.sendToPlayer((ServerPlayerEntity) (Object) this, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
-            for (ServerPlayerEntity player : PlayerLookup.tracking(this)) {
-                NetworkManager.sendToPlayer(player, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
-            }
-            catsPlus$heldEntitySyncCooldown = 200; // Every 10 seconds.
-            catsPlus$forceUpdateHeldEntity = false;
+        if (!getWorld().isClient() && catsPlus$queueSyncHeldEntity) {
+            catsPlus$syncHeldEntityToClients();
+            catsPlus$queueSyncHeldEntity = false;
         }
 
         // Play the ambient sound of the held entity if it is a mob entity.
@@ -120,15 +105,28 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
+    @Unique
+    public void catsPlus$syncHeldEntityToClients() {
+        PacketByteBuf buf = new PacketByteBuf(Unpooled.buffer());
+        buf.writeUuid(getUuid());
+        NbtCompound entityNbt = catsPlus$heldEntity == null ? new NbtCompound() : EntityUtil.writeEntity(catsPlus$heldEntity);
+        buf.writeNbt(entityNbt);
+        buf.writeInt(catsPlus$heldPoseNumber);
+        NetworkManager.sendToPlayer((ServerPlayerEntity) (Object) this, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
+        for (ServerPlayerEntity player : PlayerLookup.tracking(this)) {
+            NetworkManager.sendToPlayer(player, ModNetworkReceivers.SYNC_HELD_ENTITY_TO_CLIENT, buf);
+        }
+    }
+
     /**
      * Writes custom data to NBT.
      */
     @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
     private void catsPlus$writeCustomData(NbtCompound nbt, CallbackInfo ci) {
         if (catsPlus$heldEntity != null) {
-            NbtCompound entityNbt = EntityUtil.serializeEntity(catsPlus$heldEntity);
+            NbtCompound entityNbt = EntityUtil.writeEntity(catsPlus$heldEntity);
             nbt.put(CATS_PLUS$HELD_ENTITY_NBT_KEY, entityNbt);
-
             int heldPoseNumber = catsPlus$getHeldPoseNumber();
             if (heldPoseNumber > 0) {
                 nbt.putInt(CATS_PLUS$HELD_POSE_NBT_KEY, heldPoseNumber);
@@ -142,23 +140,15 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     @Inject(method = "readCustomDataFromNbt", at = @At("HEAD"))
     private void catsPlus$readCustomData(NbtCompound nbt, CallbackInfo ci) {
         if (nbt.contains(CATS_PLUS$HELD_ENTITY_NBT_KEY, NbtElement.COMPOUND_TYPE)) {
-            NbtCompound entityNbt = nbt.getCompound(CATS_PLUS$HELD_ENTITY_NBT_KEY);
-            if (!entityNbt.isEmpty()) {
-                EntityType.getEntityFromNbt(entityNbt, getWorld()).ifPresentOrElse(entity -> {
-                            catsPlus$setHeldEntity(entity);
-
-                            int heldPoseNumber = 0;
-                            if (nbt.contains(CATS_PLUS$HELD_POSE_NBT_KEY, NbtElement.INT_TYPE)) {
-                                heldPoseNumber = nbt.getInt(CATS_PLUS$HELD_POSE_NBT_KEY);
-                                catsPlus$setHeldPoseNumber(heldPoseNumber);
-                            }
-                            if (heldPoseNumber <= 0) {
-                                catsPlus$setRandomHeldPoseNumber();
-                            }
-                        },
-                        () -> CatsPlus.LOGGER.warn("Failed to deserialize held entity from NBT: " + entityNbt)
-                );
-            }
+            NbtCompound heldEntityNbt = nbt.getCompound(CATS_PLUS$HELD_ENTITY_NBT_KEY);
+            EntityUtil.readEntity(heldEntityNbt, getWorld()).ifPresent(heldEntity -> {
+                        int heldPoseNumber = 0;
+                        if (nbt.contains(CATS_PLUS$HELD_POSE_NBT_KEY, NbtElement.INT_TYPE)) {
+                            heldPoseNumber = nbt.getInt(CATS_PLUS$HELD_POSE_NBT_KEY);
+                        }
+                        catsPlus$setHeldEntity(heldEntity, heldPoseNumber);
+                    }
+            );
         }
     }
 
@@ -177,25 +167,29 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     @SuppressWarnings("ConstantConditions")
     @Unique
     @Override
-    public void catsPlus$setHeldEntity(@Nullable Entity entity) {
+    public void catsPlus$setHeldEntity(@Nullable Entity entity, int heldPoseNumber) {
         if (entity == null) {
             if (catsPlus$heldEntity != null) {
                 EntityAccess currentHeldEntityAccess = (EntityAccess) catsPlus$heldEntity;
                 currentHeldEntityAccess.catsPlus$setHolder(null);
             }
-            catsPlus$setHeldPoseNumber(0);
         } else {
             EntityAccess newHeldEntityAccess = (EntityAccess) entity;
             newHeldEntityAccess.catsPlus$setHolder((PlayerEntity) (Object) this);
         }
         catsPlus$heldEntity = entity;
-        catsPlus$forceUpdateHeldEntity = true;
+        if (heldPoseNumber > 0) {
+            catsPlus$heldPoseNumber = heldPoseNumber;
+        } else {
+            catsPlus$setRandomHeldPoseNumber();
+        }
+        catsPlus$queueSyncHeldEntity = true;
     }
 
     @Unique
     @Override
     public void catsPlus$clearHeldEntity() {
-        catsPlus$setHeldEntity(null);
+        catsPlus$setHeldEntity(null, 1);
     }
 
     @Unique
@@ -264,17 +258,8 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
     }
 
     @Unique
-    @Override
-    public void catsPlus$setHeldPoseNumber(int heldPoseNumber) {
-        catsPlus$heldPoseNumber = heldPoseNumber;
-    }
-
-    @Unique
-    @Override
     public void catsPlus$setRandomHeldPoseNumber() {
-        if (catsPlus$heldEntity == null) {
-            throw new IllegalStateException("Cannot set random pose number when no held entity is set.");
-        } else {
+        if (catsPlus$heldEntity != null) {
             int heldPosesCount = EntityHeldPosesManager.INSTANCE.getEntityHeldPosesCount(catsPlus$heldEntity.getType());
             if (heldPosesCount > 0) {
                 int heldPoseNumber;
@@ -283,7 +268,7 @@ abstract class PlayerEntityMixin extends LivingEntity implements PlayerEntityAcc
                 } else {
                     heldPoseNumber = CATS_PLUS$RANDOM.nextInt(heldPosesCount - 1) + 1;
                 }
-                catsPlus$setHeldPoseNumber(heldPoseNumber);
+                catsPlus$heldPoseNumber = heldPoseNumber;
             }
         }
     }

@@ -29,8 +29,8 @@ abstract class ServerPlayerEntityMixin extends PlayerEntityMixin {
     private void catsPlus$copyHeldEntity(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
         PlayerEntityAccess oldPlayerAccess = (PlayerEntityAccess) oldPlayer;
         oldPlayerAccess.catsPlus$getHeldEntity().ifPresent(entity -> {
-            catsPlus$setHeldEntity(entity);
-            catsPlus$setHeldPoseNumber(oldPlayerAccess.catsPlus$getHeldPoseNumber());
+            int heldPoseNumber = oldPlayerAccess.catsPlus$getHeldPoseNumber();
+            catsPlus$setHeldEntity(entity, heldPoseNumber);
         });
     }
 

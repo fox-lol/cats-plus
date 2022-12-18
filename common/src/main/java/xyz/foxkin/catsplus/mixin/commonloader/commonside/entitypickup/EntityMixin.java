@@ -66,8 +66,7 @@ abstract class EntityMixin implements EntityAccess {
             }
 
             setPitch(0);
-            playerAccess.catsPlus$setHeldEntity((Entity) (Object) this);
-            playerAccess.catsPlus$setRandomHeldPoseNumber();
+            playerAccess.catsPlus$setHeldEntity((Entity) (Object) this, 0);
 
             Identifier entityId = EntityType.getId(getType());
             boolean isBaby;

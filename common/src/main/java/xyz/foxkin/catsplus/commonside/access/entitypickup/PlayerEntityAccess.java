@@ -21,11 +21,12 @@ public interface PlayerEntityAccess {
     /**
      * Sets the held entity.
      *
-     * @param entity The entity to set.
+     * @param entity         The entity to set.
+     * @param heldPoseNumber The held pose number. Different numbers mean the
+     *                       entity will be seen held in a different pose.
+     *                       Set to 0 to use a random pose.
      */
-    void catsPlus$setHeldEntity(@Nullable Entity entity);
-
-    void catsPlus$setRandomHeldPoseNumber();
+    void catsPlus$setHeldEntity(@Nullable Entity entity, int heldPoseNumber);
 
     /**
      * Clears the held entity.
@@ -65,14 +66,6 @@ public interface PlayerEntityAccess {
      * @return The held pose number.
      */
     int catsPlus$getHeldPoseNumber();
-
-    /**
-     * Sets the held pose number. Different numbers mean the
-     * entity will be seen held in a different pose.
-     *
-     * @param heldPoseNumber The held pose number.
-     */
-    void catsPlus$setHeldPoseNumber(int heldPoseNumber);
 
     /**
      * Whether the player is interacting with it's held entity.
